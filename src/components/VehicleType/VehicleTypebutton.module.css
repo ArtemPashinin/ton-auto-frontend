@@ -1,0 +1,13 @@
+.vehicleTypeButton {
+  color: var(--tg-theme-text-color);
+  font-size: 12px;
+  background-color: var(--tg-theme-bg-color);
+}
+
+.disabled {
+  border-color:  var(--tg-theme-hint-color) !important;
+}
+
+.enabled {
+  border-color: #F8A917 !important;
+}

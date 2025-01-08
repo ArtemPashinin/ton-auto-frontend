@@ -1,0 +1,18 @@
+.icon {
+  font-size: 24px;
+  color : var(--tg-theme-text-color);
+}
+
+.buttonTitle {
+  font-size: 14px;
+  color : var(--tg-theme-text-color);
+}
+
+.pressed {
+  background-color: var(--tg-theme-secondary-bg-color);
+  border-radius: 10px;
+}
+
+.searchMenu {
+  background-color: var(--tg-theme-bg-color);;
+}

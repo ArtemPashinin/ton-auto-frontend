@@ -9,12 +9,12 @@ import {
   useReducer,
   SetStateAction,
 } from "react";
-import axios from "axios";
-import WebApp from "@twa-dev/sdk";
 import { AdvertisementDto } from "../../interfaces/dto/advertisement.dto";
-import { User } from "../../interfaces/user.interface";
 import { MediaDto } from "../../interfaces/dto/media.dto";
+import { User } from "../../interfaces/vehicle-info.interface";
+import { fetchUser } from "../../utils/fetch-user";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export enum Step {
   FORM = "form",
   MEDIA = "media",
@@ -61,10 +61,9 @@ const advertisementReducer = (
 };
 
 export const PlaceProvider = ({ children }: { children: ReactNode }) => {
-  const [advertisementData, dispatch] = useReducer(
-    advertisementReducer,
-    {} as AdvertisementDto
-  );
+  const [advertisementData, dispatch] = useReducer(advertisementReducer, {
+    commercial: false,
+  } as AdvertisementDto);
   const [user, setUser] = useState<User | null>(null);
   const [step, setStep] = useState<Step>(Step.FORM);
   const [images, setImages] = useState<File[]>([]);
@@ -78,21 +77,10 @@ export const PlaceProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const setUpUser = useCallback(async () => {
-    try {
-      const webAppUser = WebApp.initDataUnsafe.user as User;
-      const response = await axios.get<User>(
-        `${import.meta.env.VITE_APP_API_URL}/user`,
-        {
-          params: { tgId: webAppUser.id },
-        }
-      );
-
-      console.log("API User:", response.data);
-      updateField("user_id", response.data.id);
-      setUser(response.data);
-    } catch (err) {
-      console.error("Failed to set up user:", err);
-    }
+    const user = await fetchUser();
+    console.log("API User:", user);
+    updateField("user_id", user.id);
+    setUser(user);
   }, [updateField]);
 
   const isAdvertisementDataValid = useMemo(() => {

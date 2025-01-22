@@ -14,6 +14,8 @@ import { Location } from "./components/Location/Location";
 import { useMenuContext } from "./components/Menu/MenuContext";
 import { PlaceProvider } from "./components/Place/PlaceContext";
 import { SearchProvider } from "./components/Search/SearchContext";
+import { FavoritesProvider } from "./components/Favorites/FavoritesContext";
+import { MyAdsProvider } from "./components/MyAds/MyAdsContext";
 
 function App() {
   const { isVisible: isMenuVisible, tab } = useMenuContext();
@@ -45,13 +47,21 @@ function App() {
         <Search />
       </SearchProvider>
     ),
-    [Tab.FAVORITES]: <Favorites />,
+    [Tab.FAVORITES]: (
+      <FavoritesProvider>
+        <Favorites />
+      </FavoritesProvider>
+    ),
     [Tab.PLACE]: (
       <PlaceProvider>
         <Place />
       </PlaceProvider>
     ),
-    [Tab.MY_ADS]: <MyAds />,
+    [Tab.MY_ADS]: (
+      <MyAdsProvider>
+        <MyAds />
+      </MyAdsProvider>
+    ),
     [Tab.ACCOUNT]: <Account />,
   };
 

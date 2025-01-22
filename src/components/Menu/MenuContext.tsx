@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
 import { Tab } from "../../enums/Tab.enum";
+import WebApp from "@twa-dev/sdk";
 
 interface MenuContextState {
   isVisible: boolean;
@@ -22,8 +23,11 @@ export const MenuProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const setTabState = (newTab: Tab) => {
-    setPreviousTab(tab);
-    setTab(newTab);
+    if (newTab !== tab) {
+      WebApp.BackButton.hide();
+      setPreviousTab(tab);
+      setTab(newTab);
+    }
   };
 
   return (

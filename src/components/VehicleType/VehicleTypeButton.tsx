@@ -17,7 +17,7 @@ export const VehicleTypeButton = ({
       onClick={onClick}
       className={`${style.vehicleTypeButton} ${
         isACtive ? style.enabled : style.disabled
-      } border rounded-pill user-select-none p-0 py-1 mx-1`}
+      } border rounded-pill user-select-none p-0 py-1`}
     >
       <p>{title}</p>
     </Col>

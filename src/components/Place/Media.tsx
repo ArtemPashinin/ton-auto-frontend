@@ -1,22 +1,41 @@
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./Media.module.css";
 import { Row, Stack, Form, Image, Button } from "react-bootstrap";
 import { MediaPreview } from "./MediaPreview";
-import { usePlaceContext } from "./PlaceContext";
+import { Step, usePlaceContext } from "./PlaceContext";
 import axios from "axios";
+import backgroundImage from "../../assets/images/from-background.png";
+import WebApp from "@twa-dev/sdk";
 
 export const Media = () => {
-  const { images, setImages, imagesOrder, setImagesOrder, advertisementData } =
-    usePlaceContext();
+  const {
+    images,
+    setImages,
+    imagesOrder,
+    setImagesOrder,
+    advertisementData,
+    setStep,
+  } = usePlaceContext();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const filesArray = Array.from(event.target.files);
-      setImages((prevImages) => [...prevImages, ...filesArray]);
+
+      const imageFiles = filesArray.filter((file) =>
+        file.type.startsWith("image/")
+      );
+
+      if (images.length + imageFiles.length > 10) {
+        WebApp.showAlert("You can upload up to 10 images");
+        return;
+      }
+
+      setImages((prevImages) => [...prevImages, ...imageFiles]);
+
       setImagesOrder((prevImagesOrder) => [
         ...prevImagesOrder,
-        ...filesArray.map((file, index) => ({
+        ...imageFiles.map((file, index) => ({
           order: prevImagesOrder.length + index,
           main: prevImagesOrder.length === 0 && index === 0,
           fileName: file.name,
@@ -42,6 +61,7 @@ export const Media = () => {
     });
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onDragEnd = (result: any) => {
     if (!result.destination) return;
 
@@ -97,13 +117,20 @@ export const Media = () => {
 
     try {
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/advertisements`,
+        `${import.meta.env.VITE_APP_API_URL}/advertisements`,
         formData
       );
+      setStep(Step.SUCCESS);
     } catch (error) {
       console.error("Ошибка при отправке данных:", error);
     }
   };
+
+  useEffect(() => {
+    WebApp.BackButton.onClick(() => {
+      setStep(Step.FORM);
+    });
+  }, [setStep]);
 
   return (
     <Stack className="p-2">
@@ -122,7 +149,7 @@ export const Media = () => {
           onClick={() => document.getElementById("fileInput")!.click()}
         >
           <Image
-            src={require("../../assets/images/from-background.png")}
+            src={backgroundImage}
             alt="Выберите файл"
             className="upload-image"
             fluid
@@ -159,7 +186,7 @@ export const Media = () => {
       </DragDropContext>
       <Button
         disabled={images.length === 0}
-        className="defaultText"
+        className="main-button"
         onClick={() => {
           handleUpload();
         }}

@@ -5,7 +5,7 @@ import { VehicleTypeButton } from "./VehicleTypeButton";
 
 export interface VehicleTypeListProps {
   onVehicleTypeChange: (vehicleType: VehicleType) => void;
-  activeVehicleType: VehicleType;
+  activeVehicleType: VehicleType | string;
 }
 
 export const VehicleTypeList = ({
@@ -14,7 +14,7 @@ export const VehicleTypeList = ({
 }: VehicleTypeListProps) => {
   return (
     <Container className="mb-3">
-      <Row>
+      <Row className="gap-1">
         {vehicleTypeButtonData.map(({ title, type }, index) => (
           <VehicleTypeButton
             onClick={() => {

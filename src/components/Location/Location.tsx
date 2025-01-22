@@ -1,11 +1,12 @@
-import { Button, Form, InputGroup, SplitButton, Stack } from "react-bootstrap";
+import { Button, Form, InputGroup, Stack } from "react-bootstrap";
 import style from "./Location.module.css";
 import { useCallback, useEffect, useState } from "react";
-import { Country } from "../../interfaces/country.interface";
 import axios from "axios";
-import { City } from "../../interfaces/city.interface";
 import WebApp from "@twa-dev/sdk";
 import { UserDto } from "../../interfaces/dto/user.dto";
+import { City, Country } from "../../interfaces/vehicle-info.interface";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMapLocationDot } from "@awesome.me/kit-7090d2ba88/icons/classic/thin";
 
 interface LocationProps {
   setUserRegistred: (registered: boolean) => void;
@@ -20,6 +21,7 @@ export const Location = ({ setUserRegistred }: LocationProps) => {
   const [selectedCity, setSelectedCity] = useState<string>("");
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleContactRequested = (data: any) => {
       const contactNumber = data.responseUnsafe?.contact?.phone_number;
       if (contactNumber) {
@@ -52,7 +54,7 @@ export const Location = ({ setUserRegistred }: LocationProps) => {
       };
 
       const { data } = await axios.post<boolean>(
-        `${process.env.REACT_APP_API_URL}/user`,
+        `${import.meta.env.REACT_APP_API_URL}/user`,
         user
       );
 
@@ -69,7 +71,7 @@ export const Location = ({ setUserRegistred }: LocationProps) => {
   const fetchCountries = useCallback(async () => {
     try {
       const { data } = await axios.get<Country[]>(
-        `${process.env.REACT_APP_API_URL}/user/countries`
+        `${import.meta.env.VITE_APP_API_URL}/user/countries`
       );
       setCountries(data);
     } catch (err) {
@@ -82,7 +84,7 @@ export const Location = ({ setUserRegistred }: LocationProps) => {
 
     try {
       const { data } = await axios.get<City[]>(
-        `${process.env.REACT_APP_API_URL}/user/cities/${selectedCountryId}`
+        `${import.meta.env.VITE_APP_API_URL}/user/cities/${selectedCountryId}`
       );
       setCities(data);
     } catch (err) {
@@ -117,10 +119,12 @@ export const Location = ({ setUserRegistred }: LocationProps) => {
   }, [fetchCities]);
 
   return (
-    <Stack className="p-3" gap={2}>
-      <i
-        className={`fa-solid fa-map-location-dot ${style.mapIcon} text-center pt-4 pb-5`}
-      ></i>
+    <Stack className="p-2" gap={2}>
+      <FontAwesomeIcon
+        icon={faMapLocationDot}
+        className="my-5 subtitleText"
+        size="6x"
+      />
 
       <Form.Select
         aria-label="Select your country"
@@ -165,13 +169,16 @@ export const Location = ({ setUserRegistred }: LocationProps) => {
           maxLength={14}
         />
 
-        <Button onClick={shareNumber}>Share</Button>
+        <Button className="main-button" onClick={shareNumber}>
+          Share
+        </Button>
       </InputGroup>
 
       <p className={`text-start ${style.text}`}>
         You can change settings later
       </p>
       <Button
+        className="main-button"
         onClick={userRegister}
         disabled={!(selectedCity && selectedCountryId && phoneNumber)}
       >

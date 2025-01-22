@@ -8,10 +8,32 @@ body {
   font-family: "Rubik", sans-serif;
 }
 
+body {
+  overflow-x: hidden;
+}
+
+html,
+body {
+  overscroll-behavior-y: contain; /* Предотвращает перетягивание на iOS */
+  height: -webkit-fill-available;
+  min-height: 100%;
+}
+
+html {
+  overflow: hidden;
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Скрыть скроллбар в Webkit (например, Safari, Chrome) */
+}
 
 p {
   padding: 0;
   margin: 0;
+}
+
+.tab {
+  padding-bottom: 6rem !important;
 }
 
 .defaultText {
@@ -22,10 +44,76 @@ p {
   color: var(--tg-theme-subtitle-text-color);
 }
 
+.mainText {
+  color: var(--tg-theme-button-color)
+}
+
+.fw-300 {
+  font-weight: 300;
+}
+
+.fw-400 {
+  font-weight: 400;
+}
+
+.fs-12 {
+  font-size: 12px;
+}
+
 .fs-14 {
   font-size: 14px;
 }
 
 .fs-17 {
   font-size: 17px;
+}
+
+.fs-20 {
+  font-size: 20px;
+}
+
+.lh-14 {
+  line-height: 14px;
+}
+
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.swiper-container {
+  height: 15rem;
+}
+
+.swiper-pagination-bullet-active{
+  background-color: #F8A917 !important;
+  width: 6px !important;
+  height: 6px !important;
+  margin-left: 2px !important;
+  margin-right: 2px !important;
+}
+
+.swiper-pagination-bullet { 
+  width: 6px !important;
+  height: 6px !important;
+  margin-left: 2px !important;
+  margin-right: 2px !important;
+}
+
+.large-icon {
+  font-size: 5rem;
+  color: var(--tg-theme-hint-color);
 }

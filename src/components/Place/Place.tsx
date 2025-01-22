@@ -1,33 +1,32 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { AdForm } from "./Form";
 import WebApp from "@twa-dev/sdk";
 import { useMenuContext } from "../Menu/MenuContext";
 import { Step, usePlaceContext } from "./PlaceContext";
 import { Media } from "./Media";
+import { Success } from "./Success";
 
 export const Place = () => {
   const { setMenuVisibility, previousTab, setTabState } = useMenuContext();
   const { step } = usePlaceContext();
 
-  useEffect(() => {
-    WebApp.BackButton.show();
-    WebApp.BackButton.onClick(() => {
-      setMenuVisibility(true);
-      setTabState(previousTab);
-    });
-    setMenuVisibility(false);
-
-    return () => {
-      WebApp.BackButton.hide();
-    };
+  const back = useCallback(() => {
+    setMenuVisibility(true);
+    setTabState(previousTab);
+    WebApp.BackButton.hide();
+    WebApp.BackButton.offClick(back);
   }, [previousTab, setMenuVisibility, setTabState]);
 
-  const Placeholder: React.FC = () => <div>No content available</div>;
+  useEffect(() => {
+    WebApp.BackButton.show();
+    WebApp.BackButton.onClick(back);
+    setMenuVisibility(false);
+  }, [back, previousTab, setMenuVisibility, setTabState]);
 
   const components: Record<Step, JSX.Element> = {
-    [Step.FORM]: <AdForm />,
+    [Step.FORM]: <Media />,
     [Step.MEDIA]: <Media />,
-    [Step.SUCCESS]: <Placeholder />,
+    [Step.SUCCESS]: <Success />,
   };
 
   return <>{components[step]}</>;

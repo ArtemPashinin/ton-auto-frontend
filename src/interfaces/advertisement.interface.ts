@@ -1,14 +1,15 @@
-import { Color } from "./color.interface";
-import { EngineType } from "./engine-type.interface";
-import { Make } from "./make.interface";
-import { Media } from "./media.interface";
-import { Model } from "./model.interface";
-import { User } from "./user.interface";
+import {
+  User,
+  Model,
+  EngineType,
+  Color,
+  Media,
+  Condition,
+} from "./vehicle-info.interface";
 
 export interface Advertisement {
   id: string;
   user: User;
-  make: Make;
   model: Model;
   year: number;
   hp: number;
@@ -19,5 +20,7 @@ export interface Advertisement {
   description: string;
   createdAt: string;
   media: Media[];
-  favoritesBy?: User[];
+  favoritedBy: User[];
+  commercial: boolean;
+  condition: Condition;
 }

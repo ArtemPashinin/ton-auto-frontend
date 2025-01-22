@@ -1,0 +1,65 @@
+.form-select {
+  background-color: var(--tg-theme-secondary-bg-color);
+  color:  var(--tg-theme-text-color);
+  border: 0;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+
+.form-select:disabled {
+  background-color: var(--tg-theme-secondary-bg-color);
+  color:  var(--tg-theme-hint-color);
+}
+
+.form-select:focus {
+  box-shadow: none;
+}
+
+.form-control,
+.form-control:active,
+.form-control:focus {
+  background-color: var(--tg-theme-secondary-bg-color);
+  border: 0;
+  color:  var(--tg-theme-text-color);
+  box-shadow: none;
+  z-index: 0 !important;
+}
+
+.form-control::placeholder {
+  color: var(--tg-theme-hint-color);
+}
+
+.input-group-text {
+  background-color: var(--tg-theme-secondary-bg-color);
+  border: 0;
+  color:  var(--tg-theme-text-color);
+}
+
+.incorrect-form-select {
+  box-shadow: 0px 0px 2px 2px red !important;
+}
+
+textarea.form-control {
+  min-height: 12rem;
+  resize: none;
+}
+
+.form-check-input[type=checkbox] {
+  background-color: var(--tg-theme-bg-color);
+  border: 2.6px solid var(--tg-theme-hint-color);
+}
+
+.form-check-input,
+.form-check-input:active,
+.form-check-input:focus {
+  margin-right: 5%;
+  margin-top: -0.3%;
+  box-shadow: none;
+  width: 26px;
+  height: 26px;
+}
+
+.form-check-input:checked[type=checkbox] {
+  --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 10 3 3 6-6'/%3e%3c/svg%3e") !important;
+  background-color: var(--tg-theme-button-color);
+  border-color: var(--tg-theme-button-color);
+}

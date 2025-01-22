@@ -9,27 +9,57 @@ import {
 } from "react";
 import { Advertisement } from "../../interfaces/advertisement.interface";
 import { QueryDto } from "../../interfaces/dto/query.dto";
-import { Make } from "../../interfaces/make.interface";
-import { EngineType } from "../../interfaces/engine-type.interface";
-import { Model } from "../../interfaces/model.interface";
+
 import { fetchAdvertisements } from "../../utils/fetch-advertisements";
 import { fetchModels } from "../../utils/fetch-models";
 import {
   fetchVehicleData,
   VehicleEndpoint,
 } from "../../utils/fetch-vehicle-data";
+import {
+  Make,
+  Model,
+  EngineType,
+  Condition,
+  City,
+  Country,
+  User,
+  Color,
+} from "../../interfaces/vehicle-info.interface";
+import { fetchCities } from "../../utils/fetch-cities";
+import { fetchUser } from "../../utils/fetch-user";
+import WebApp from "@twa-dev/sdk";
+import { VehicleType } from "../../enums/VehicleType.enum";
 
 interface SearchData {
   makes: Make[];
   models: Model[];
   engineTypes: EngineType[];
+  colors: Color[];
+  conditions: Condition[];
+  cities: City[];
+  countries: Country[];
+  years: number[];
+  mileage: number[];
 }
 
 interface SearchContextState {
   advertisements: Advertisement[];
   searchData: SearchData;
   virtualQuery: QueryDto;
-  fetchNexPageAdvertisements: () => void;
+  currentQuery: QueryDto;
+  isDetailCardOpened: boolean;
+  openedAdvertisement: Advertisement;
+  user: User;
+  loading: boolean;
+  vehicleType: VehicleType | string;
+  advertisementsCount: number;
+  fetchNextPageAdvertisements: () => void;
+  updateVehicleType: (type: VehicleType) => void;
+  searchAdvertisements: () => void;
+  setUpAdvertisements: () => void;
+  toggleIsDetailCardOpened: (advertisementId: string) => void;
+  toggleFavorite: (advertisementId: string) => void;
   updateQuery: <T extends keyof QueryDto>(key: T, value: QueryDto[T]) => void;
 }
 
@@ -39,45 +69,155 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
   const startUpQuery = useMemo(() => {
     return { page: 1 } as QueryDto;
   }, []);
+  const [vehicleType, setVehicleType] = useState<VehicleType | string>("");
+  const [loading, setLoading] = useState<boolean>(true);
+  const [user, setUser] = useState<User>({} as User);
   const [advertisements, setAdvertisements] = useState<Advertisement[]>([]);
   const [searchData, setSearchData] = useState<SearchData>({
-    makes: [] as Make[],
-    models: [] as Model[],
-    engineTypes: [] as EngineType[],
-  } as SearchData);
+    makes: [],
+    models: [],
+    engineTypes: [],
+    countries: [],
+    cities: [],
+    colors: [],
+    conditions: [],
+    years: useMemo(() => {
+      const currentYear = new Date().getFullYear();
+      return Array.from(
+        { length: currentYear - 1960 + 1 },
+        (_, i) => currentYear - i
+      );
+    }, []),
+    mileage: [
+      0, 20, 10000, 25000, 50000, 75000, 100000, 150000, 200000, 250000, 300000,
+      500000, 1000000,
+    ],
+  });
   const [currentQuery, setCurrentQuery] = useState<QueryDto>(startUpQuery);
   const [virtualQuery, setVirtualQuery] = useState<QueryDto>(startUpQuery);
+  const [openedAdvertisement, setOpenedAdvertisement] = useState<Advertisement>(
+    {} as Advertisement
+  );
+  const [isDetailCardOpened, setIsDetailCardOpened] = useState<boolean>(false);
+  const [advertisementsCount, setAdvertisementsCount] = useState<number>(0);
+
+  const updateVehicleType = useCallback((type: VehicleType) => {
+    setVehicleType(type);
+  }, []);
+
+  const back = useCallback(() => {
+    WebApp.BackButton.offClick(back);
+    WebApp.BackButton.hide();
+    setOpenedAdvertisement({} as Advertisement);
+    setIsDetailCardOpened(false);
+  }, []);
+
+  const toggleIsDetailCardOpened = useCallback(
+    (advertisementId: string) => {
+      setIsDetailCardOpened(!isDetailCardOpened);
+      setOpenedAdvertisement(
+        advertisements.find((ad) => ad.id === advertisementId) ||
+          ({} as Advertisement)
+      );
+      WebApp.BackButton.show();
+      WebApp.BackButton.onClick(back);
+    },
+    [advertisements, back, isDetailCardOpened]
+  );
 
   const fetchData = useCallback(
     async (endpoint: VehicleEndpoint, key: keyof SearchData) => {
-      const vehicleData = await fetchVehicleData(endpoint);
-      setSearchData((prev) => ({ ...prev, [key]: vehicleData }));
+      try {
+        const vehicleData = await fetchVehicleData(endpoint);
+        setSearchData((prev) => ({ ...prev, [key]: vehicleData }));
+      } catch (error) {
+        console.error(`Error fetching ${key}:`, error);
+      }
     },
     []
   );
 
-  const setUpAdvertisements = useCallback(async (query: QueryDto) => {
-    const advertisements = await fetchAdvertisements(query);
+  const setUpAdvertisements = useCallback(async () => {
+    setLoading(true);
+    const user = await fetchUser();
+    const { city } = user;
+    const query = {
+      ...startUpQuery,
+      country: city.country.id,
+      city: city.id,
+      userId: user.id,
+    };
+    const { advertisements, count } = await fetchAdvertisements(query);
+    setAdvertisementsCount(count);
     setAdvertisements(advertisements);
-  }, []);
+    setCurrentQuery(query);
+    setVirtualQuery(query);
+    setUser(user);
+    setVehicleType("");
+    setLoading(false);
+  }, [startUpQuery]);
 
-  const fetchNexPageAdvertisements = useCallback(async () => {
-    const nextPageQuery = { ...currentQuery, page: currentQuery.page + 1 };
-    const newAdvertisements = await fetchAdvertisements(nextPageQuery);
-    setAdvertisements((prevAdvertisements) => [
-      ...prevAdvertisements,
-      ...newAdvertisements,
-    ]);
-    setCurrentQuery(nextPageQuery);
+  const searchAdvertisements = useCallback(async () => {
+    setLoading(true);
+    const { advertisements, count } = await fetchAdvertisements(virtualQuery);
+    setAdvertisementsCount(count);
+    setAdvertisements(advertisements);
+    setCurrentQuery(virtualQuery);
+    setLoading(false);
+  }, [virtualQuery]);
+
+  const fetchNextPageAdvertisements = useCallback(async () => {
+    try {
+      const nextPageQuery = { ...currentQuery, page: currentQuery.page + 1 };
+      const { advertisements: newAdvertisements } = await fetchAdvertisements(
+        nextPageQuery
+      );
+      setAdvertisements((prevAdvertisements) => [
+        ...prevAdvertisements,
+        ...newAdvertisements,
+      ]);
+      setCurrentQuery(nextPageQuery);
+    } catch (error) {
+      console.error("Error fetching next page of advertisements:", error);
+    }
   }, [currentQuery]);
 
   const updateModels = useCallback(async () => {
-    const models = await fetchModels(virtualQuery.make);
-    setSearchData((prevSearchData) => ({
-      ...prevSearchData,
-      models: models,
-    }));
+    if (virtualQuery.make) {
+      const models = await fetchModels(virtualQuery.make);
+      setSearchData((prevSearchData) => ({
+        ...prevSearchData,
+        models,
+      }));
+    }
   }, [virtualQuery.make]);
+
+  const updateCities = useCallback(async () => {
+    if (virtualQuery.country) {
+      const cities = await fetchCities(virtualQuery.country);
+      setSearchData((prevSearchData) => ({
+        ...prevSearchData,
+        cities,
+      }));
+    }
+  }, [virtualQuery.country]);
+
+  const toggleFavorite = useCallback(
+    (advertisementId: string) => {
+      setAdvertisements((prevAdvertisements) =>
+        prevAdvertisements.map((ad) =>
+          ad.id === advertisementId
+            ? {
+                ...ad,
+                favoritedBy:
+                  ad.favoritedBy && ad.favoritedBy.length > 0 ? [] : [user],
+              }
+            : ad
+        )
+      );
+    },
+    [user]
+  );
 
   const updateQuery = <T extends keyof QueryDto>(
     key: T,
@@ -90,23 +230,62 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    setUpAdvertisements(startUpQuery);
     fetchData("makes", "makes");
     fetchData("engineTypes", "engineTypes");
-  }, [fetchData, setUpAdvertisements, startUpQuery]);
+    fetchData("countries", "countries");
+  }, [fetchData, setUpAdvertisements, updateVehicleType]);
+
+  useEffect(() => {
+    setUpAdvertisements();
+  }, [setUpAdvertisements]);
 
   useEffect(() => {
     updateModels();
-  }, [updateModels]);
+    updateCities();
+  }, [updateCities, updateModels]);
+
+  useEffect(() => {
+    if (vehicleType === VehicleType.NEW_CARS) {
+      updateQuery("mileageFrom", 0);
+      updateQuery("mileageTo", 20);
+      updateQuery("commercial", false);
+    } else if (vehicleType === VehicleType.USED_CARS) {
+      updateQuery("mileageTo", 1000000);
+      updateQuery("mileageFrom", 10000);
+      updateQuery("commercial", false);
+    } else if (vehicleType === VehicleType.COMMERCIAL) {
+      updateQuery("mileageTo", "");
+      updateQuery("mileageFrom", "");
+      updateQuery("commercial", true);
+    }
+  }, [vehicleType]);
+
+  useEffect(() => {
+    return () => {
+      WebApp.BackButton.offClick(back);
+    };
+  }, [back]);
 
   return (
     <SearchContext.Provider
       value={{
+        vehicleType,
+        updateVehicleType,
         advertisements,
+        currentQuery,
+        advertisementsCount,
         searchData,
+        loading,
+        isDetailCardOpened,
         virtualQuery,
-        fetchNexPageAdvertisements,
+        openedAdvertisement,
+        user,
+        fetchNextPageAdvertisements,
+        toggleIsDetailCardOpened,
+        setUpAdvertisements,
         updateQuery,
+        toggleFavorite,
+        searchAdvertisements,
       }}
     >
       {children}
@@ -117,7 +296,7 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
 export const useSearchContext = (): SearchContextState => {
   const context = useContext(SearchContext);
   if (!context) {
-    throw new Error("usePlaceContext must be used within a PlaceProvider");
+    throw new Error("useSearchContext must be used within a SearchProvider");
   }
   return context;
 };

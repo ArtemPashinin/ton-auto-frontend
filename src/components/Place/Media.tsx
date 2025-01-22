@@ -101,7 +101,8 @@ export const Media = () => {
     const formData = new FormData();
 
     Object.keys(advertisementData).forEach((key) => {
-      formData.append(key, advertisementData[key]);
+      const value = advertisementData[key] as string | Blob;
+      formData.append(key, value);
     });
 
     const metaData = imagesOrder.map((image) => ({

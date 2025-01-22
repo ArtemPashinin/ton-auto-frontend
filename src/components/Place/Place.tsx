@@ -24,7 +24,7 @@ export const Place = () => {
   }, [back, previousTab, setMenuVisibility, setTabState]);
 
   const components: Record<Step, JSX.Element> = {
-    [Step.FORM]: <Media />,
+    [Step.FORM]: <AdForm />,
     [Step.MEDIA]: <Media />,
     [Step.SUCCESS]: <Success />,
   };

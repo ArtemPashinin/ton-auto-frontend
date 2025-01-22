@@ -42,9 +42,11 @@ export const Search = () => {
               toggleIsDetailCardOpened={toggleIsDetailCardOpened}
             />
           ) : (
-            <Spinner animation="border" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </Spinner>
+            <div className="mainText d-flex align-items-center justify-content-center vh-55">
+              <Spinner animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            </div>
           )}
         </>
       )}

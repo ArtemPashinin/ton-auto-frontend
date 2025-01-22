@@ -117,3 +117,7 @@ p {
   font-size: 5rem;
   color: var(--tg-theme-hint-color);
 }
+
+.vh-55 {
+  height: 55vh;
+}

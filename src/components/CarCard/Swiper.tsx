@@ -1,7 +1,8 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
+
+import "swiper/swiper-bundle.css"; // Общий стиль
+
 import style from "./CarCard.module.css";
 import { Media } from "../../interfaces/vehicle-info.interface";
 import { useState } from "react";

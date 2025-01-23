@@ -8,6 +8,8 @@ import { MenuProvider } from "./components/Menu/MenuContext";
 import WebApp from "@twa-dev/sdk";
 WebApp.ready();
 WebApp.disableVerticalSwipes();
+WebApp.setBackgroundColor("secondary_bg_color");
+WebApp.setHeaderColor("secondary_bg_color");
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );

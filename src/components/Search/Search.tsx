@@ -33,14 +33,24 @@ export const Search = () => {
           <SearchBar />
           <InfoBar />
           {!loading ? (
-            <CarCardList
-              advertisementsCount={advertisementsCount}
-              toggleFavorite={toggleFavorite}
-              userId={currentQuery.userId}
-              advertisements={advertisements}
-              fetchNextPageAdvertisements={fetchNextPageAdvertisements}
-              toggleIsDetailCardOpened={toggleIsDetailCardOpened}
-            />
+            <>
+              {advertisementsCount > 0 ? (
+                <CarCardList
+                  advertisementsCount={advertisementsCount}
+                  toggleFavorite={toggleFavorite}
+                  userId={currentQuery.userId}
+                  advertisements={advertisements}
+                  fetchNextPageAdvertisements={fetchNextPageAdvertisements}
+                  toggleIsDetailCardOpened={toggleIsDetailCardOpened}
+                />
+              ) : (
+                <>
+                  <div className="vh-55 d-flex align-items-center justify-content-center subtitleText fs-20">
+                    <p>No results</p>
+                  </div>
+                </>
+              )}
+            </>
           ) : (
             <div className="mainText d-flex align-items-center justify-content-center vh-55">
               <Spinner animation="border" role="status">

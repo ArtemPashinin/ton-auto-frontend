@@ -4,7 +4,7 @@ code {
 }
 
 body {
-  background-color: var(--tg-theme-bg-color);
+  background-color: var(--tg-theme-secondary-bg-color);
   font-family: "Rubik", sans-serif;
 }
 
@@ -57,19 +57,19 @@ p {
 }
 
 .fs-12 {
-  font-size: 12px;
+  font-size: .75rem;
 }
 
 .fs-14 {
-  font-size: 14px;
+  font-size: 1rem;
 }
 
 .fs-17 {
-  font-size: 17px;
+  font-size: 1.0625rem;
 }
 
 .fs-20 {
-  font-size: 20px;
+  font-size: 1.25rem;
 }
 
 .lh-14 {
@@ -120,4 +120,12 @@ p {
 
 .vh-55 {
   height: 55vh;
+}
+
+.vh-75 {
+  height: 75vh;
+}
+
+.sectionBgColor {
+  background-color: var(--tg-theme-section-bg-color);
 }

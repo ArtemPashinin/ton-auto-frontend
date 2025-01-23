@@ -92,7 +92,7 @@ export const CarCard = ({
             {format(new Date(createdAt), "MMM dd, yyyy")}
           </p>
           <i
-            className={`fa-heart ${style.favoriteIcon} ${
+            className={`lg fa-heart ${style.favoriteIcon} ${
               favorited ? `${style.favorited} fa-solid` : "fa-regular"
             }`}
             onClick={(event) => {
@@ -107,7 +107,7 @@ export const CarCard = ({
         <>
           <Col className="p-0  mt-2" xs={12}>
             <Button
-              className="w-100 fade-outline-button"
+              className="w-100 fade-outline-button py-2"
               onClick={(event) => {
                 event.stopPropagation();
                 toggleIsOnEditDescription(id);
@@ -118,7 +118,7 @@ export const CarCard = ({
           </Col>
           <Col className="p-0  mt-2" xs={12}>
             <Button
-              className="w-100 fade-outline-button"
+              className="w-100 fade-outline-button py-2"
               onClick={(event) => {
                 event.stopPropagation();
                 toggleIsOnMediaEdit(id);
@@ -129,7 +129,7 @@ export const CarCard = ({
           </Col>
           <Col className="p-0  mt-2" xs={12}>
             <Button
-              className="w-100 danger-button"
+              className="w-100 danger-button py-2"
               onClick={(event) => {
                 event.stopPropagation();
                 removeAd(id);

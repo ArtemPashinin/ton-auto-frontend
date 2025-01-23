@@ -6,10 +6,7 @@
     "lib": ["ESNext"],
     "module": "ESNext",
     "skipLibCheck": true,
-    "paths": {
-      "swiper/css": ["node_modules/swiper/swiper.min.css"],
-      "swiper/css/pagination": ["node_modules/swiper/modules/pagination/pagination.min.css"]
-    },
+
 
     /* Bundler mode */
     "moduleResolution": "bundler",

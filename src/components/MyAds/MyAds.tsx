@@ -25,33 +25,43 @@ export const MyAds = () => {
     toggleIsOnMediaEdit,
   } = useMyAdsContext();
 
-  if (loading) {
-    return (
-      <div className="tab mainText d-flex align-items-center justify-content-center vh-100">
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
-      </div>
-    );
-  }
-
   return (
     <div className="p-2 tab">
       {/* Показываем "Мои объявления", если ничего не редактируется */}
       {!isDetailCardOpened && !isOnEditDescription && !isOnMediaEdit && (
         <>
           <p className="defaultText text-start mb-4">My Ads</p>
-          <CarCardList
-            removeAd={removeAd}
-            toggleIsOnEditDescription={toggleIsOnEditDescription}
-            advertisementsCount={advertisementsCount}
-            advertisements={advertisements}
-            userId={user.id}
-            fetchNextPageAdvertisements={fetchNextPageAdvertisements}
-            toggleFavorite={toggleFavorite}
-            toggleIsDetailCardOpened={toggleIsDetailCardOpened}
-            toggleIsOnMediaEdit={toggleIsOnMediaEdit}
-          />
+          {loading ? (
+            <div className="mainText d-flex align-items-center justify-content-center vh-75">
+              <Spinner animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            </div>
+          ) : (
+            <>
+              {advertisementsCount > 0 ? (
+                <>
+                  <CarCardList
+                    removeAd={removeAd}
+                    toggleIsOnEditDescription={toggleIsOnEditDescription}
+                    advertisementsCount={advertisementsCount}
+                    advertisements={advertisements}
+                    userId={user.id}
+                    fetchNextPageAdvertisements={fetchNextPageAdvertisements}
+                    toggleFavorite={toggleFavorite}
+                    toggleIsDetailCardOpened={toggleIsDetailCardOpened}
+                    toggleIsOnMediaEdit={toggleIsOnMediaEdit}
+                  />
+                </>
+              ) : (
+                <>
+                  <div className="vh-75 d-flex align-items-center justify-content-center subtitleText fs-20">
+                    <p>No results</p>
+                  </div>
+                </>
+              )}
+            </>
+          )}
         </>
       )}
 

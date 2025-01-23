@@ -15,9 +15,9 @@ export const VehicleTypeButton = ({
   return (
     <Col
       onClick={onClick}
-      className={`${style.vehicleTypeButton} ${
+      className={`${style.vehicleTypeButton} fs-12 ${
         isACtive ? style.enabled : style.disabled
-      } border rounded-pill user-select-none p-0 py-1`}
+      } border rounded-pill user-select-none p-2 py-2`}
     >
       <p>{title}</p>
     </Col>

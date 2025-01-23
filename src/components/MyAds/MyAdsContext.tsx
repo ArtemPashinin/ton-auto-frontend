@@ -98,6 +98,7 @@ export const MyAdsProvider = ({ children }: { children: ReactNode }) => {
             (advertisement) => advertisement.id !== advertisementId
           )
         );
+        setAdvertisementsCount((prev) => prev - 1);
         WebApp.showAlert("Your ad has been successfully removed!");
       }
     });

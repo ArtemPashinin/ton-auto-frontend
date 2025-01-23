@@ -6,7 +6,7 @@ export const Success = () => {
   const { setTabState, setMenuVisibility } = useMenuContext();
 
   return (
-    <Stack className="p-2 gap-2 vh-100 justify-content-center">
+    <Stack className="p-2 gap-2 vh-75 justify-content-center">
       <div className="mb-5">
         <p className="defaultText fs-17 fw-300">
           Your ad is successfully published.

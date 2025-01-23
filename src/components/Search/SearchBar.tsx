@@ -1,6 +1,8 @@
 import { Button, Collapse, Container, Form, Stack } from "react-bootstrap";
 import { useSearchContext } from "./SearchContext";
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSliders } from "@awesome.me/kit-7090d2ba88/icons/classic/light";
 
 export const SearchBar = () => {
   const { searchData, virtualQuery, updateQuery, searchAdvertisements } =
@@ -41,15 +43,15 @@ export const SearchBar = () => {
           ))}
         </Form.Select>
         <Button
-          className="outline-button lh-14"
+          className="outline-button lh-14 py-2"
           onClick={() => setOpen(!open)}
           aria-controls="example-collapse-text"
           aria-expanded={open}
         >
-          <i className="fa-solid fa-sliders"></i>
+          <FontAwesomeIcon icon={faSliders} />
         </Button>
         <Button
-          className="outline-button"
+          className="outline-button py-2"
           onClick={() => {
             searchAdvertisements();
           }}
@@ -176,10 +178,10 @@ export const SearchBar = () => {
 
           <div className="pb-3">
             <Button
+              className="w-100 main-button  py-2"
               onClick={() => {
                 searchAdvertisements();
               }}
-              className="w-100 main-button"
             >
               Search
             </Button>

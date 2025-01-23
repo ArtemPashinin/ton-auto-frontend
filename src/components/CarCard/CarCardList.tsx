@@ -44,7 +44,7 @@ export const CarCardList = ({
         </Container>
         {advertisements.length < advertisementsCount && (
           <Button
-            className="w-100 main-button mb-3"
+            className="w-100 main-button mb-3 py-2"
             onClick={() => fetchNextPageAdvertisements()}
           >
             Load more

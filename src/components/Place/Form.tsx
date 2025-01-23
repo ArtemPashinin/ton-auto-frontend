@@ -318,7 +318,7 @@ export const AdForm = () => {
         </Container>
         <Stack className="p-2 fixed-bottom pb-5">
           <Button
-            className="w-100 main-button"
+            className="w-100 main-button py-2"
             type="submit"
             disabled={!user?.city?.country.currency}
           >

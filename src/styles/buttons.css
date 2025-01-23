@@ -6,6 +6,7 @@
   background-color: var(--tg-theme-bg-color) !important;
   border-color: var(--tg-theme-text-color) !important;
   box-shadow: none !important;
+  font-size: 1.125rem;
 }
 
 .fade-outline-button,
@@ -16,6 +17,7 @@
   background-color: var(--tg-theme-bg-color) !important;
   border-color: var(--tg-theme-hint-color) !important;
   box-shadow: none !important;
+  font-size: 1.125rem;
 }
 
 .main-button,
@@ -26,6 +28,8 @@
   background-color: var(--tg-theme-button-color) !important;
   border-color: var(--tg-theme-button-color) !important;
   box-shadow: none !important;
+  font-size: 1.125rem;
+  border-radius: .5rem;
 }
 
 .main-outline-button,
@@ -34,6 +38,8 @@
   background-color:var(--tg-theme-bg-color) !important;
   color: var(--tg-theme-button-color) !important;
   border-color: var(--tg-theme-button-color) !important;
+  font-size: 1.125rem;
+  border-radius: .5rem;
 }
 
 .yellow-otline-button,
@@ -42,9 +48,13 @@
   background-color:var(--tg-theme-bg-color) !important;
   color: var(--tg-theme-text-color) !important;
   border-color: #F8A917 !important;
+  font-size: 1.125rem;
+  border-radius: .5rem;
 }
 
 .danger-button {
   background-color: var(--tg-theme-destructive-text-color) !important;
   border-color: var(--tg-theme-destructive-text-color) !important;
+  font-size: 1.125rem;
+  border-radius: .5rem;
 }

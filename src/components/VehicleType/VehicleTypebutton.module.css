@@ -1,7 +1,7 @@
 .vehicleTypeButton {
   color: var(--tg-theme-text-color);
-  font-size: 12px;
   background-color: var(--tg-theme-bg-color);
+  line-height: 1;
 }
 
 .disabled {

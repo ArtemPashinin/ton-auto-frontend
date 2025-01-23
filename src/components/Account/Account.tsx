@@ -83,6 +83,7 @@ export const Account = () => {
     <Stack className="p-2" gap={2}>
       <FontAwesomeIcon icon={faUser} size="7x" className="py-5 subtitleText" />
       <Form.Select
+        className="py-2"
         aria-label="Select your country"
         value={selectedCountryId}
         onChange={(event) => {
@@ -99,6 +100,7 @@ export const Account = () => {
       </Form.Select>
 
       <Form.Select
+        className="py-2"
         aria-label="Select cities"
         value={formData?.city_id}
         disabled={!selectedCountryId}
@@ -146,7 +148,7 @@ export const Account = () => {
       </InputGroup>
 
       <Button
-        className="main-button"
+        className="main-button py-2"
         disabled={!isFormValid}
         onClick={() => {
           update();

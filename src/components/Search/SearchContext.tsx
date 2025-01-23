@@ -140,6 +140,7 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
   const setUpAdvertisements = useCallback(async () => {
     setLoading(true);
     const user = await fetchUser();
+    console.log(user);
     const { city } = user;
     const query = {
       ...startUpQuery,

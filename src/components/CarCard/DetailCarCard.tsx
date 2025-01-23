@@ -79,14 +79,14 @@ export const DetailCardCard = ({
         </div>
       </div>
       <div className="d-flex gap-2 mb-2">
-        <Button className="w-100 main-button">Call</Button>
-        <Button className="w-100 main-outline-button fw-400">
+        <Button className="w-100 main-button py-2">Call</Button>
+        <Button className="w-100 main-outline-button fw-400 py-2">
           Copy number
         </Button>
       </div>
       <div>
         <Button
-          className={`w-100 ${
+          className={`w-100 py-2 d-flex align-items-center justify-content-center gap-3 ${
             favorited ? "yellow-otline-button" : "main-outline-button"
           } fw-400`}
           onClick={() => {
@@ -94,6 +94,11 @@ export const DetailCardCard = ({
             mark();
           }}
         >
+          <i
+            className={`fa-heart ${style.favoriteIcon} ${
+              favorited ? `${style.favorited} fa-solid` : "fa-regular"
+            }`}
+          ></i>
           {`${favorited ? "In Favorites" : "Add to Favorites"}`}
         </Button>
       </div>

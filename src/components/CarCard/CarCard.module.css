@@ -2,7 +2,7 @@
   color: var(--tg-theme-text-color);
   line-height: 1rem;
   font-size: 14px;
-  background-color: var(--tg-theme-secondary-bg-color);
+  background-color: var(--tg-theme-section-bg-color);
   font-weight: 400;
   display: flex;
 
@@ -22,7 +22,7 @@
 }
 
 .favoriteIcon {
-  font-size: 20px;
+  font-size: 23px;
 }
 
 .favorited {

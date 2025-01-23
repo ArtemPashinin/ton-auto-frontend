@@ -52,12 +52,11 @@ export const Location = ({ setUserRegistred }: LocationProps) => {
         language_code,
         phone: phoneNumber,
       };
-
       const { data } = await axios.post<boolean>(
-        `${import.meta.env.REACT_APP_API_URL}/user`,
+        `${import.meta.env.VITE_APP_API_URL}/user`,
         user
       );
-
+      console.log(user);
       if (data) setUserRegistred(true);
     } catch (err) {
       console.error("Error during user registration:", err);
@@ -184,6 +183,7 @@ export const Location = ({ setUserRegistred }: LocationProps) => {
       >
         Continue
       </Button>
+      <p></p>
     </Stack>
   );
 };

@@ -20,6 +20,7 @@ interface FavoritesContextState {
   advertisements: Advertisement[];
   fetchNextPageAdvertisements: () => void;
   user: User;
+  loading: boolean;
   toggleIsDetailCardOpened: (advertisementId: string) => void;
   isDetailCardOpened: boolean;
   openedAdvertisement: Advertisement;
@@ -37,7 +38,7 @@ export const FavoritesProvider = ({ children }: { children: ReactNode }) => {
     return { page: 1, favorites: true } as QueryDto;
   }, []);
   const advertisementsRefs = useRef<Map<string, HTMLElement | null>>(new Map());
-
+  const [loading, setLoading] = useState<boolean>(true);
   const [user, setUser] = useState<User>({} as User);
   const [isDetailCardOpened, setIsDetailCardOpened] = useState<boolean>(false);
   const [advertisements, setAdvertisements] = useState<Advertisement[]>([]);
@@ -72,6 +73,7 @@ export const FavoritesProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const setUpAdvertisements = useCallback(async () => {
+    setLoading(true);
     const user = await fetchUser();
     const query = {
       ...startUpQuery,
@@ -82,6 +84,7 @@ export const FavoritesProvider = ({ children }: { children: ReactNode }) => {
     setAdvertisementsCount(count);
     setCurrentQuery(query);
     setUser(user);
+    setLoading(false);
   }, [startUpQuery]);
 
   const fetchNextPageAdvertisements = useCallback(async () => {
@@ -125,7 +128,7 @@ export const FavoritesProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     setAdvertisementsCount(advertisements.length);
-  }, [advertisements.length]);
+  }, [advertisements]);
 
   useEffect(() => {
     return () => {
@@ -137,6 +140,7 @@ export const FavoritesProvider = ({ children }: { children: ReactNode }) => {
     <FavoritesContext.Provider
       value={{
         user,
+        loading,
         advertisementsCount,
         isDetailCardOpened,
         advertisements,

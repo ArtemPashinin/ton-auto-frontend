@@ -14,9 +14,9 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <MenuProvider>
-      <App />
-    </MenuProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <MenuProvider>
+    <App />
+  </MenuProvider>
+  // </React.StrictMode>
 );

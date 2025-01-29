@@ -16,8 +16,15 @@ import { PlaceProvider } from "./components/Place/PlaceContext";
 import { SearchProvider } from "./components/Search/SearchContext";
 import { FavoritesProvider } from "./components/Favorites/FavoritesContext";
 import { MyAdsProvider } from "./components/MyAds/MyAdsContext";
+import TelegramAnalytics from "@telegram-apps/analytics";
 
 function App() {
+  // TelegramAnalytics.init({
+  //   token:
+  //     "eyJhcHBfbmFtZSI6InRvbl9hdXRvX21pbmlfYXBwIiwiYXBwX3VybCI6Imh0dHBzOi8vdC5tZS90b25hdXRvYXBwX2JvdC90b25fYXV0b19hcHAiLCJhcHBfZG9tYWluIjoiaHR0cHM6Ly92dXpjcm1wbHVzLnN0b3JlLyJ9!IG7qVs9OcFNxeZAtSJ6RubSOCpX/Ull9ISNHXxm70Cg=",
+  //   appName: "ton_auto_mini_app",
+  // });
+
   const { isVisible: isMenuVisible, tab } = useMenuContext();
   const [isUserRegistred, setUserRegistred] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
@@ -73,7 +80,7 @@ function App() {
     return <Error />;
   }
 
-  if (!isUserRegistred) {
+  if (!!isUserRegistred) {
     return <Location setUserRegistred={setUserRegistred} />;
   }
 

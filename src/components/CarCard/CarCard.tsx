@@ -5,6 +5,8 @@ import { markFavorite } from "../../utils/mark-favorite";
 import { useEffect, useState } from "react";
 import { Advertisement } from "../../interfaces/advertisement.interface";
 import WebApp from "@twa-dev/sdk";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@awesome.me/kit-7090d2ba88/icons/classic/regular";
 
 interface Props {
   userId: number | undefined;
@@ -129,13 +131,17 @@ export const CarCard = ({
           </Col>
           <Col className="p-0  mt-2" xs={12}>
             <Button
-              className="w-100 danger-button py-2"
+              className="w-100 danger-button py-2 d-flex align-items-center justify-content-center gap-2"
               onClick={(event) => {
                 event.stopPropagation();
                 removeAd(id);
               }}
             >
-              Remove ad
+              <FontAwesomeIcon
+                icon={faTrash}
+                style={{ fontSize: "1.125rem", marginBottom: "1px" }}
+              />
+              <p>Remove ad</p>
             </Button>
           </Col>
         </>

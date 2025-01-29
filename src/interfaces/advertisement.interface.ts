@@ -23,4 +23,5 @@ export interface Advertisement {
   favoritedBy: User[];
   commercial: boolean;
   condition: Condition;
+  fict_phone?: string;
 }

@@ -2,6 +2,13 @@ import { Draggable } from "@hello-pangea/dnd";
 import { Col, Image } from "react-bootstrap";
 import style from "./MediaPreview.module.css";
 import { MediaDto } from "../../interfaces/dto/media.dto";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircle,
+  faCircleDot,
+  faTrash,
+} from "@awesome.me/kit-7090d2ba88/icons/classic/regular";
+import WebApp from "@twa-dev/sdk";
 
 export interface MediaPreviewProps {
   index: number;
@@ -34,22 +41,28 @@ export const MediaPreview = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <div className="justify-content-between d-flex align-items-center ps-1 pe-2">
+          <div className="justify-content-between d-flex align-items-center pe-2 pb-1">
             {imageOrder.main ? (
               <div className="d-flex align-items-center">
-                <i
-                  className={`fa-regular fa-circle defaultText fs-17 me-2 ${style.mainCardIcon}`}
-                ></i>
-                <span className="defaultText fs-14">Main</span>
+                <FontAwesomeIcon
+                  size="lg"
+                  icon={faCircleDot}
+                  color={WebApp.themeParams.button_color}
+                />
+                <span className="ms-1 defaultText fs-14">Main</span>
               </div>
             ) : (
               <div className="d-flex align-items-center">
-                <i className="fa-regular fa-circle defaultText fs-17"></i>
+                <FontAwesomeIcon
+                  size="lg"
+                  icon={faCircle}
+                  color={WebApp.themeParams.hint_color}
+                />
               </div>
             )}
 
             <div onClick={() => handleRemoveImage(index)}>
-              <i className="fa-solid fa-trash defaultText fs-17"></i>
+              <FontAwesomeIcon icon={faTrash} size="lg" />
             </div>
           </div>
           <div className="position-relative text-center">

@@ -13,6 +13,7 @@ export const SearchBar = () => {
     <>
       <Container className="p-0 d-flex gap-1">
         <Form.Select
+          className="py-2"
           value={virtualQuery.make || ""}
           onChange={(e) => {
             updateQuery("make", e.target.value);
@@ -28,6 +29,7 @@ export const SearchBar = () => {
           ))}
         </Form.Select>
         <Form.Select
+          className="py-2"
           value={virtualQuery.model || ""}
           onChange={(e) => {
             updateQuery("model", e.target.value);
@@ -63,6 +65,7 @@ export const SearchBar = () => {
         <Stack gap={2}>
           <div className="d-flex gap-1 pt-3">
             <Form.Select
+              className="py-2"
               value={virtualQuery.yearFrom || ""}
               onChange={(e) => {
                 updateQuery("yearFrom", e.target.value);
@@ -77,6 +80,7 @@ export const SearchBar = () => {
               ))}
             </Form.Select>
             <Form.Select
+              className="py-2"
               value={virtualQuery.yearTo || ""}
               onChange={(e) => {
                 updateQuery("yearTo", e.target.value);
@@ -93,6 +97,7 @@ export const SearchBar = () => {
           </div>
           <div className="d-flex gap-1">
             <Form.Select
+              className="py-2"
               value={virtualQuery.country || ""}
               onChange={(e) => {
                 updateQuery("country", e.target.value);
@@ -108,6 +113,7 @@ export const SearchBar = () => {
               ))}
             </Form.Select>
             <Form.Select
+              className="py-2"
               value={virtualQuery.city || ""}
               onChange={(e) => {
                 updateQuery("city", e.target.value);
@@ -125,6 +131,7 @@ export const SearchBar = () => {
           </div>
           <div>
             <Form.Select
+              className="py-2"
               value={virtualQuery.engine || ""}
               onChange={(e) => {
                 updateQuery("engine", e.target.value);
@@ -144,6 +151,7 @@ export const SearchBar = () => {
           </div>
           <div className="d-flex gap-1">
             <Form.Select
+              className="py-2"
               value={virtualQuery.mileageFrom || ""}
               aria-label="0"
               onChange={(e) => {
@@ -159,6 +167,7 @@ export const SearchBar = () => {
             </Form.Select>
 
             <Form.Select
+              className="py-2"
               value={virtualQuery.mileageTo || ""}
               onChange={(e) => {
                 updateQuery("mileageTo", e.target.value);

@@ -186,8 +186,8 @@ export const MyAdsProvider = ({ children }: { children: ReactNode }) => {
   }, [setUpAdvertisements]);
 
   useEffect(() => {
-    setMenuVisibility(!isOnMediaEdit);
-  }, [isOnMediaEdit, setMenuVisibility]);
+    setMenuVisibility(!(isOnMediaEdit || isOnEditDescription));
+  }, [isOnMediaEdit, isOnEditDescription, setMenuVisibility]);
 
   useEffect(() => {
     return () => {

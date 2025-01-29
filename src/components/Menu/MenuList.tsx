@@ -9,16 +9,14 @@ export const MenuList = () => {
   const { tab: activeTab, setTabState } = useMenuContext();
 
   return (
-    <Container className={`fixed-bottom ${style.searchMenu} pb-4`}>
+    <Container className={`fixed-bottom ${style.searchMenu} pb-4 px-3 pt-2`}>
       <Row>
-        {menuButtonData.map(({ icon, title, tab, color }, index) => (
+        {menuButtonData.map((data, index) => (
           <MenuButton
-            color={color}
+            {...data}
             key={index}
-            icon={icon}
-            title={title}
-            isActive={tab === activeTab}
-            onClick={() => setTabState(tab)}
+            isActive={data.tab === activeTab}
+            onClick={() => setTabState(data.tab)}
           />
         ))}
       </Row>

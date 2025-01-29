@@ -78,7 +78,6 @@ export const PlaceProvider = ({ children }: { children: ReactNode }) => {
 
   const setUpUser = useCallback(async () => {
     const user = await fetchUser();
-    console.log("API User:", user);
     updateField("user_id", user.id);
     setUser(user);
   }, [updateField]);

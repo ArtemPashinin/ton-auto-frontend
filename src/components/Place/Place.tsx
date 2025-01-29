@@ -8,20 +8,26 @@ import { Success } from "./Success";
 
 export const Place = () => {
   const { setMenuVisibility, previousTab, setTabState } = useMenuContext();
-  const { step } = usePlaceContext();
+  const { step, setStep } = usePlaceContext();
 
   const back = useCallback(() => {
-    setMenuVisibility(true);
-    setTabState(previousTab);
-    WebApp.BackButton.hide();
-    WebApp.BackButton.offClick(back);
-  }, [previousTab, setMenuVisibility, setTabState]);
+    if (step === Step.MEDIA) {
+      setStep(Step.FORM);
+    } else {
+      setMenuVisibility(true);
+      setTabState(previousTab);
+      WebApp.BackButton.hide();
+    }
+  }, [previousTab, setMenuVisibility, setStep, setTabState, step]);
 
   useEffect(() => {
-    WebApp.BackButton.show();
     WebApp.BackButton.onClick(back);
+    WebApp.BackButton.show();
     setMenuVisibility(false);
-  }, [back, previousTab, setMenuVisibility, setTabState]);
+    return () => {
+      WebApp.BackButton.offClick(back);
+    };
+  });
 
   const components: Record<Step, JSX.Element> = {
     [Step.FORM]: <AdForm />,

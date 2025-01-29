@@ -4,7 +4,7 @@ export interface QueryDto {
   model?: number | string;
   engine?: number | string;
   color?: number;
-  condition?: number;
+  condition?: number | string;
   country?: number | string;
   city?: number | string;
   userId?: number;
@@ -15,4 +15,5 @@ export interface QueryDto {
   favorites?: boolean;
   commercial?: boolean;
   owned?: boolean;
+  type?: string;
 }

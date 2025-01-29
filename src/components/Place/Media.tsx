@@ -1,12 +1,13 @@
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import styles from "./Media.module.css";
-import { Row, Stack, Form, Image, Button } from "react-bootstrap";
+import { Row, Stack, Form } from "react-bootstrap";
 import { MediaPreview } from "./MediaPreview";
 import { Step, usePlaceContext } from "./PlaceContext";
 import axios from "axios";
-import backgroundImage from "../../assets/images/from-background.png";
 import WebApp from "@twa-dev/sdk";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCirclePlus } from "@awesome.me/kit-7090d2ba88/icons/classic/thin";
 
 export const Media = () => {
   const {
@@ -18,6 +19,8 @@ export const Media = () => {
     setStep,
   } = usePlaceContext();
 
+  const sendedRef = useRef<boolean>(false);
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const filesArray = Array.from(event.target.files);
@@ -27,7 +30,22 @@ export const Media = () => {
       );
 
       if (images.length + imageFiles.length > 10) {
-        WebApp.showAlert("You can upload up to 10 images");
+        WebApp.showAlert("You can upload up to 10 images.");
+        return;
+      }
+
+      const currentTotalSize = images.reduce(
+        (total, image) => total + image.size,
+        0
+      );
+
+      const newTotalSize =
+        currentTotalSize +
+        imageFiles.reduce((total, file) => total + file.size, 0);
+
+      if (newTotalSize > 20 * 1024 * 1024) {
+        // 20 МБ
+        WebApp.showAlert("The total size of images must not exceed 20 MB.");
         return;
       }
 
@@ -128,6 +146,25 @@ export const Media = () => {
   };
 
   useEffect(() => {
+    const place = async () => {
+      if (!sendedRef.current) {
+        sendedRef.current = true;
+        WebApp.MainButton.showProgress();
+        await handleUpload();
+        WebApp.MainButton.hideProgress();
+        WebApp.MainButton.hide();
+      }
+    };
+    WebApp.MainButton.text = "Place";
+    WebApp.MainButton.show();
+    WebApp.MainButton.onClick(place);
+
+    return () => {
+      WebApp.MainButton.offClick(place);
+    };
+  });
+
+  useEffect(() => {
     WebApp.BackButton.onClick(() => {
       setStep(Step.FORM);
     });
@@ -146,15 +183,15 @@ export const Media = () => {
           onChange={handleFileChange}
         />
         <div
-          className="custom-upload-button mb-3"
+          className={`mb-3 ${styles.uploadForm} d-flex align-items-center justify-content-center flex-column gap-3`}
           onClick={() => document.getElementById("fileInput")!.click()}
         >
-          <Image
-            src={backgroundImage}
-            alt="Выберите файл"
-            className="upload-image"
-            fluid
+          <FontAwesomeIcon
+            icon={faCirclePlus}
+            size="4x"
+            color={WebApp.themeParams.hint_color}
           />
+          <p className="defaultText">Add</p>
         </div>
         <p className="text-start subtitleText mb-3 fs-14">
           Drag photo to set an order. To choose the main photo click on anyone.
@@ -185,15 +222,6 @@ export const Media = () => {
           )}
         </Droppable>
       </DragDropContext>
-      <Button
-        disabled={images.length === 0}
-        className="main-button"
-        onClick={() => {
-          handleUpload();
-        }}
-      >
-        Place
-      </Button>
     </Stack>
   );
 };

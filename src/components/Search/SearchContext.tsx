@@ -67,7 +67,7 @@ const SearchContext = createContext<SearchContextState | undefined>(undefined);
 
 export const SearchProvider = ({ children }: { children: ReactNode }) => {
   const startUpQuery = useMemo(() => {
-    return { page: 1 } as QueryDto;
+    return { page: 1, type: "car" } as QueryDto;
   }, []);
   const [vehicleType, setVehicleType] = useState<VehicleType | string>("");
   const [loading, setLoading] = useState<boolean>(true);
@@ -100,7 +100,6 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
   );
   const [isDetailCardOpened, setIsDetailCardOpened] = useState<boolean>(false);
   const [advertisementsCount, setAdvertisementsCount] = useState<number>(0);
-
   const updateVehicleType = useCallback((type: VehicleType) => {
     setVehicleType(type);
   }, []);
@@ -140,12 +139,10 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
   const setUpAdvertisements = useCallback(async () => {
     setLoading(true);
     const user = await fetchUser();
-    console.log(user);
     const { city } = user;
     const query = {
       ...startUpQuery,
       country: city.country.id,
-      city: city.id,
       userId: user.id,
     };
     const { advertisements, count } = await fetchAdvertisements(query);
@@ -153,13 +150,14 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
     setAdvertisements(advertisements);
     setCurrentQuery(query);
     setVirtualQuery(query);
-    setUser(user);
     setVehicleType("");
+    setUser(user);
     setLoading(false);
   }, [startUpQuery]);
 
   const searchAdvertisements = useCallback(async () => {
     setLoading(true);
+    console.log("NEW SEARCH");
     const { advertisements, count } = await fetchAdvertisements(virtualQuery);
     setAdvertisementsCount(count);
     setAdvertisements(advertisements);
@@ -234,11 +232,11 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
     fetchData("makes", "makes");
     fetchData("engineTypes", "engineTypes");
     fetchData("countries", "countries");
-  }, [fetchData, setUpAdvertisements, updateVehicleType]);
+  }, [fetchData]);
 
-  useEffect(() => {
-    setUpAdvertisements();
-  }, [setUpAdvertisements]);
+  // useEffect(() => {
+  //   setUpAdvertisements();
+  // }, []);
 
   useEffect(() => {
     updateModels();
@@ -246,20 +244,24 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
   }, [updateCities, updateModels]);
 
   useEffect(() => {
+    updateQuery("commercial", false);
+    updateQuery("condition", "");
+    updateQuery("type", "car");
+
     if (vehicleType === VehicleType.NEW_CARS) {
-      updateQuery("mileageFrom", 0);
-      updateQuery("mileageTo", 20);
-      updateQuery("commercial", false);
+      updateQuery("condition", 1);
     } else if (vehicleType === VehicleType.USED_CARS) {
-      updateQuery("mileageTo", 1000000);
-      updateQuery("mileageFrom", 10000);
-      updateQuery("commercial", false);
+      updateQuery("condition", 2);
     } else if (vehicleType === VehicleType.COMMERCIAL) {
-      updateQuery("mileageTo", "");
-      updateQuery("mileageFrom", "");
       updateQuery("commercial", true);
+    } else if (vehicleType === VehicleType.MOTORCICLE) {
+      updateQuery("type", "motorcycle");
     }
   }, [vehicleType]);
+
+  useEffect(() => {
+    searchAdvertisements();
+  }, [virtualQuery.type, virtualQuery.commercial, virtualQuery.condition]);
 
   useEffect(() => {
     return () => {

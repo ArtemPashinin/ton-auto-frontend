@@ -3,7 +3,7 @@
 .outline-button:active,
 .outline-button:focus-visible{
   color: var(--tg-theme-text-color) !important;
-  background-color: var(--tg-theme-bg-color) !important;
+  background-color: transparent !important;
   border-color: var(--tg-theme-text-color) !important;
   box-shadow: none !important;
   font-size: 1.125rem;
@@ -14,7 +14,7 @@
 .fade-outline-button:active,
 .fade-outline-button:focus-visible{
   color: var(--tg-theme-text-color) !important;
-  background-color: var(--tg-theme-bg-color) !important;
+  background-color: transparent !important;
   border-color: var(--tg-theme-hint-color) !important;
   box-shadow: none !important;
   font-size: 1.125rem;
@@ -24,7 +24,7 @@
 .main-button:hover,
 .main-button:active,
 .main-button:focus-visible {
-  color: var(--tg-theme-text-color) !important;
+  color: white !important;
   background-color: var(--tg-theme-button-color) !important;
   border-color: var(--tg-theme-button-color) !important;
   box-shadow: none !important;
@@ -35,7 +35,7 @@
 .main-outline-button,
 .main-outline-button:active, 
 .main-outline-button:hover {
-  background-color:var(--tg-theme-bg-color) !important;
+  background-color: transparent !important;
   color: var(--tg-theme-button-color) !important;
   border-color: var(--tg-theme-button-color) !important;
   font-size: 1.125rem;
@@ -45,7 +45,7 @@
 .yellow-otline-button,
 .yellow-otline-button:active,
 .yellow-otline-button:hover {
-  background-color:var(--tg-theme-bg-color) !important;
+  background-color: var(--tg-theme-secondary-bg-color) !important;
   color: var(--tg-theme-text-color) !important;
   border-color: #F8A917 !important;
   font-size: 1.125rem;
@@ -57,4 +57,5 @@
   border-color: var(--tg-theme-destructive-text-color) !important;
   font-size: 1.125rem;
   border-radius: .5rem;
+  color: white;
 }

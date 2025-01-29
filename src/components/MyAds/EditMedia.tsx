@@ -1,15 +1,16 @@
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { useCallback, useEffect, useState } from "react";
 import styles from "./Media.module.css";
-import { Row, Stack, Form, Image } from "react-bootstrap";
+import { Row, Stack, Form } from "react-bootstrap";
 import { MediaPreview } from "./MediaPreview";
-import backgroundImage from "../../assets/images/from-background.png";
 import { Media } from "../../interfaces/vehicle-info.interface";
 import { removeFile } from "../../utils/remove-media";
 import WebApp from "@twa-dev/sdk";
 import { updateMain } from "../../utils/update-main-media";
 import axios from "axios";
 import { updateMediaOrder } from "../../utils/update-media-order";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCirclePlus } from "@awesome.me/kit-7090d2ba88/icons/classic/thin";
 
 interface MediaProps {
   media: Media[];
@@ -20,7 +21,6 @@ export const EditMedia = ({ media, toggleIsOnMediaEdit }: MediaProps) => {
   const [mediaData, setMediaData] = useState<Media[]>(
     [...media].sort((a, b) => a.order - b.order)
   );
-
   useEffect(() => {
     const cancel = () => {
       WebApp.SecondaryButton.hide();
@@ -40,6 +40,11 @@ export const EditMedia = ({ media, toggleIsOnMediaEdit }: MediaProps) => {
   ) => {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
+
+      if (file.size > 5 * 1024 * 1024) {
+        WebApp.showAlert("The size of image must not exceed 5 MB.");
+        return;
+      }
 
       if (!file.type.startsWith("image/")) {
         WebApp.showAlert("Please select a valid image file");
@@ -61,7 +66,6 @@ export const EditMedia = ({ media, toggleIsOnMediaEdit }: MediaProps) => {
 
       try {
         const response = await axios.post<Media>(url, formData);
-        console.log(response.data);
         setMediaData((prev) => [...prev, response.data]);
       } catch (error) {
         console.error("Error uploading image:", error);
@@ -75,28 +79,32 @@ export const EditMedia = ({ media, toggleIsOnMediaEdit }: MediaProps) => {
     async (index: number) => {
       if (mediaData.length <= 1) return;
 
-      const removedMedia = media[index];
+      const removedMedia = mediaData[index];
+
+      // Удаление файла
       await removeFile(removedMedia.advertisement_id, removedMedia.id);
 
-      setMediaData((prevMediaData) => {
-        const updatedMediaData = prevMediaData.filter((_, i) => i !== index);
+      // Формирование нового массива данных
+      let updatedMediaData = mediaData.filter((_, i) => i !== index);
 
-        // Установка нового главного изображения
-        if (removedMedia.main && updatedMediaData.length > 0) {
-          updateMain(
-            updatedMediaData[0].advertisement_id,
-            updatedMediaData[0].id
-          );
-          updatedMediaData[0].main = true;
-        }
+      // Обновление главного изображения, если удаленное было главным
+      if (removedMedia.main && updatedMediaData.length > 0) {
+        await updateMain(
+          updatedMediaData[0].advertisement_id,
+          updatedMediaData[0].id
+        );
+        updatedMediaData[0].main = true;
+      }
 
-        return updatedMediaData.map((item, i) => ({
-          ...item,
-          order: i,
-        }));
-      });
+      // Обновление порядка
+      updatedMediaData = updatedMediaData.map((item, i) => ({
+        ...item,
+        order: i,
+      }));
+
+      setMediaData(updatedMediaData);
     },
-    [media, mediaData.length]
+    [media, mediaData]
   );
 
   const onDragEnd = useCallback(
@@ -116,6 +124,9 @@ export const EditMedia = ({ media, toggleIsOnMediaEdit }: MediaProps) => {
       setMediaData(
         reorderedMediaData.map((item, index) => ({ ...item, order: index }))
       );
+      console.log(
+        reorderedMediaData.map((item, index) => ({ ...item, order: index }))
+      );
     },
     [mediaData]
   );
@@ -123,7 +134,6 @@ export const EditMedia = ({ media, toggleIsOnMediaEdit }: MediaProps) => {
   // Обновление главного изображения
   const updateMainMedia = useCallback(
     async (index: number) => {
-      console.log(mediaData[index]);
       await updateMain(mediaData[index].advertisement_id, mediaData[index].id);
       setMediaData((prevMediaData) =>
         prevMediaData.map((item, i) => ({
@@ -135,9 +145,9 @@ export const EditMedia = ({ media, toggleIsOnMediaEdit }: MediaProps) => {
     [mediaData]
   );
 
-  useEffect(() => {
-    console.log(media);
-  });
+  // useEffect(() => {
+  //   console.log(media);
+  // });
 
   return (
     <Stack className="p-2">
@@ -152,15 +162,15 @@ export const EditMedia = ({ media, toggleIsOnMediaEdit }: MediaProps) => {
           onChange={handleFileChange}
         />
         <div
-          className="custom-upload-button mb-3"
+          className={`mb-3 ${styles.uploadForm} d-flex align-items-center justify-content-center flex-column gap-3`}
           onClick={() => document.getElementById("fileInput")!.click()}
         >
-          <Image
-            src={backgroundImage}
-            alt="Выберите файл"
-            className="upload-image"
-            fluid
+          <FontAwesomeIcon
+            icon={faCirclePlus}
+            size="4x"
+            color={WebApp.themeParams.hint_color}
           />
+          <p className="defaultText">Add</p>
         </div>
         <p className="text-start subtitleText mb-3 fs-14">
           Drag photo to set an order. To choose the main photo click on anyone.

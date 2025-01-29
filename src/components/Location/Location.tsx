@@ -126,6 +126,7 @@ export const Location = ({ setUserRegistred }: LocationProps) => {
       />
 
       <Form.Select
+        className="py-2"
         aria-label="Select your country"
         value={selectedCountryId}
         onChange={handleCountryChange}
@@ -139,6 +140,7 @@ export const Location = ({ setUserRegistred }: LocationProps) => {
       </Form.Select>
 
       <Form.Select
+        className="py-2"
         aria-label="Select cities"
         onChange={handleCityChange}
         value={selectedCity}
@@ -151,33 +153,33 @@ export const Location = ({ setUserRegistred }: LocationProps) => {
           </option>
         ))}
       </Form.Select>
-
-      <InputGroup>
-        <InputGroup.Text id="basic-addon1">{phoneCode}</InputGroup.Text>
-        <Form.Control
-          placeholder="Phone number"
-          aria-label="Phone number"
-          aria-describedby="basic-addon1"
-          value={phoneNumber}
-          onChange={(e) => {
-            const input = e.target.value;
-            if (/^\d*$/.test(input)) {
-              setPhoneNumber(input);
-            }
-          }}
-          maxLength={14}
-        />
-
-        <Button className="main-button" onClick={shareNumber}>
+      <div className="d-flex gap-2">
+        <InputGroup>
+          <InputGroup.Text id="basic-addon1">{phoneCode}</InputGroup.Text>
+          <Form.Control
+            className="py-2"
+            placeholder="Phone number"
+            aria-label="Phone number"
+            aria-describedby="basic-addon1"
+            value={phoneNumber}
+            onChange={(e) => {
+              const input = e.target.value;
+              if (/^\d*$/.test(input)) {
+                setPhoneNumber(input);
+              }
+            }}
+            maxLength={14}
+          />
+        </InputGroup>
+        <Button className="main-outline-button px-4" onClick={shareNumber}>
           Share
         </Button>
-      </InputGroup>
-
+      </div>
       <p className={`text-start ${style.text}`}>
         You can change settings later
       </p>
       <Button
-        className="main-button"
+        className="main-button py-2"
         onClick={userRegister}
         disabled={!(selectedCity && selectedCountryId && phoneNumber)}
       >

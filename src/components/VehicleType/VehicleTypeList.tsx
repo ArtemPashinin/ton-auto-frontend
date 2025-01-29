@@ -14,7 +14,7 @@ export const VehicleTypeList = ({
 }: VehicleTypeListProps) => {
   return (
     <Container className="mb-3">
-      <Row className="gap-1">
+      <Row>
         {vehicleTypeButtonData.map(({ title, type }, index) => (
           <VehicleTypeButton
             onClick={() => {

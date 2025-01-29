@@ -2,14 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Form from "react-bootstrap/esm/Form";
 import Stack from "react-bootstrap/esm/Stack";
 import axios from "axios";
-import {
-  InputGroup,
-  Spinner,
-  Button,
-  Col,
-  Row,
-  Container,
-} from "react-bootstrap";
+import { InputGroup, Spinner, Col, Row, Container } from "react-bootstrap";
 import { Step, usePlaceContext } from "./PlaceContext";
 import {
   Make,
@@ -18,6 +11,7 @@ import {
   Condition,
   Color,
 } from "../../interfaces/vehicle-info.interface";
+import WebApp from "@twa-dev/sdk";
 
 export const AdForm = () => {
   const {
@@ -72,17 +66,24 @@ export const AdForm = () => {
     }
   }, [selectedMakeId]);
 
-  const submitAdvertisement = useCallback(
-    async (event: { preventDefault: () => void }) => {
-      event.preventDefault();
-      setIsSubmitted(true);
+  const submitAdvertisement = useCallback(() => {
+    setIsSubmitted(true);
 
-      if (isAdvertisementDataValid) {
-        setStep(Step.MEDIA);
-      }
-    },
-    [isAdvertisementDataValid, setStep]
-  );
+    if (isAdvertisementDataValid) {
+      setStep(Step.MEDIA);
+    }
+  }, [isAdvertisementDataValid, setStep]);
+
+  useEffect(() => {
+    WebApp.MainButton.text = "Next";
+    WebApp.MainButton.show();
+    WebApp.MainButton.onClick(() => submitAdvertisement());
+
+    return () => {
+      WebApp.MainButton.offClick(() => submitAdvertisement()); // Очистка обработчика
+      WebApp.MainButton.hide();
+    };
+  }, [submitAdvertisement]);
 
   useEffect(() => {
     fetchData("makes", "makes");
@@ -105,16 +106,13 @@ export const AdForm = () => {
 
   return (
     <div className="p-2">
-      <Form
-        onSubmit={(event) => {
-          submitAdvertisement(event);
-        }}
-      >
+      <Form>
         <Container>
           {/* Make and Model */}
           <Row className="mb-2 gap-2">
-            <Form.Group as={Col} className="p-0">
+            <Form.Group as={Col} className="p-0" id="place-form">
               <Form.Select
+                className="py-2"
                 as={Col}
                 isInvalid={!selectedMakeId && isSubmitted}
                 value={selectedMakeId || ""}
@@ -134,6 +132,7 @@ export const AdForm = () => {
             </Form.Group>
             <Form.Group as={Col} className="p-0">
               <Form.Select
+                className="py-2"
                 isInvalid={!advertisementData.model_id && isSubmitted}
                 value={advertisementData.model_id || ""}
                 onChange={(e) => {
@@ -156,6 +155,7 @@ export const AdForm = () => {
           <Row className="mb-2 gap-2">
             <Form.Group as={Col} className="p-0">
               <Form.Select
+                className="py-2"
                 isInvalid={!advertisementData.engine_id && isSubmitted}
                 value={advertisementData.engine_id || ""}
                 onChange={(e) => {
@@ -173,6 +173,7 @@ export const AdForm = () => {
             </Form.Group>
             <Form.Group as={Col} className="p-0">
               <Form.Select
+                className="py-2"
                 isInvalid={!advertisementData.color_id && isSubmitted}
                 value={advertisementData.color_id || ""}
                 onChange={(e) => {
@@ -194,6 +195,7 @@ export const AdForm = () => {
           <Row className="mb-2 gap-2">
             <Form.Group as={Col} className="p-0">
               <Form.Select
+                className="py-2"
                 isInvalid={!advertisementData.year && isSubmitted}
                 value={advertisementData.year || ""}
                 onChange={(e) => {
@@ -211,8 +213,10 @@ export const AdForm = () => {
             </Form.Group>
             <Form.Group as={Col} className="p-0">
               <Form.Control
+                className="py-2"
                 isInvalid={!advertisementData.hp && isSubmitted}
                 type="text"
+                inputMode="numeric"
                 placeholder="Horse powers"
                 aria-label="Horse powers"
                 maxLength={4}
@@ -229,9 +233,11 @@ export const AdForm = () => {
             <Form.Group as={Col} className="p-0">
               <InputGroup>
                 <Form.Control
+                  className="py-2"
                   isInvalid={!advertisementData.price && isSubmitted}
                   placeholder="Price"
                   aria-label="Price"
+                  inputMode="numeric"
                   maxLength={12}
                   value={advertisementData.price || ""}
                   onChange={(e) => {
@@ -255,6 +261,7 @@ export const AdForm = () => {
             </Form.Group>
             <Form.Group as={Col} className="p-0">
               <Form.Select
+                className="py-2"
                 isInvalid={!advertisementData.condition_id && isSubmitted}
                 value={advertisementData.condition_id || ""}
                 onChange={(e) => {
@@ -275,8 +282,10 @@ export const AdForm = () => {
           <Row className="mb-2 gap-2">
             <Form.Group as={Col} className="p-0">
               <Form.Control
+                className="py-2"
                 isInvalid={!advertisementData.mileage && isSubmitted}
                 type="text"
+                inputMode="numeric"
                 placeholder="Mileage"
                 aria-label="Mileage"
                 maxLength={7}
@@ -288,7 +297,7 @@ export const AdForm = () => {
             </Form.Group>
           </Row>
 
-          <Row className="mb-2 gap-2">
+          <Row className="my-4">
             <Form.Group as={Col} className="p-0">
               <Form.Check
                 type="checkbox"
@@ -304,9 +313,11 @@ export const AdForm = () => {
           <Row className="mb-2 gap-2">
             <Form.Group as={Col} className="p-0">
               <Form.Control
+                className="py-2"
                 isInvalid={!advertisementData.description && isSubmitted}
                 as="textarea"
                 rows={4}
+                value={advertisementData.description}
                 placeholder="Description"
                 onChange={(e) => {
                   updateField("description", e.target.value);
@@ -316,15 +327,7 @@ export const AdForm = () => {
             </Form.Group>
           </Row>
         </Container>
-        <Stack className="p-2 fixed-bottom pb-5">
-          <Button
-            className="w-100 main-button py-2"
-            type="submit"
-            disabled={!user?.city?.country.currency}
-          >
-            Next
-          </Button>
-        </Stack>
+        <Stack className="p-2 fixed-bottom pb-5"></Stack>
       </Form>
     </div>
   );

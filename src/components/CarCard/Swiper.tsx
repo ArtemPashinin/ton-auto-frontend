@@ -24,7 +24,7 @@ export const MediaSwiper = ({ media }: MediaSwiperProps) => {
       className="rounded-4"
     >
       {mediaData.map(({ id, image_url }) => (
-        <SwiperSlide>
+        <SwiperSlide key={id}>
           <img
             className={`${style.swiperImg} rounded-4`}
             src={image_url}

@@ -4,7 +4,7 @@ import { MediaSwiper } from "./Swiper";
 import style from "./CarCard.module.css";
 import { Button } from "react-bootstrap";
 import { markFavorite } from "../../utils/mark-favorite";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import WebApp from "@twa-dev/sdk";
 
 interface Props {
@@ -29,15 +29,46 @@ export const DetailCardCard = ({
   createdAt,
   favoritedBy,
   userId,
+  fict_phone,
   toggleFavorite,
 }: DetailCardCardProps) => {
   const [favorited, setFavorited] = useState<boolean>(false);
+  const [isCopied, setIsCopied] = useState<boolean>(false);
+  const [phoneNumber] = useState<string>(
+    `${user.city.country.phone_code}${user.phone}`
+  );
+  const [fictPhone] = useState<string | undefined>(fict_phone);
 
   const mark = async () => {
     await markFavorite(userId, id);
     toggleFavorite(id);
     setFavorited(!favorited);
   };
+
+  const copyToClipBoard = useCallback(() => {
+    if (!isCopied) {
+      if (navigator.clipboard) {
+        let number = phoneNumber;
+        if (fictPhone) number = fictPhone;
+        navigator.clipboard
+          .writeText(number)
+          .then(() => {
+            setIsCopied(true);
+          })
+          .catch((err) => {
+            console.error("Ошибка при копировании: ", err);
+          });
+      } else {
+        WebApp.showAlert("Copying is not available, please try again later");
+      }
+    }
+  }, [fictPhone, isCopied, phoneNumber]);
+
+  const call = useCallback(() => {
+    let number = phoneNumber;
+    if (fictPhone) number = fictPhone;
+    window.open(`tel:${number}`);
+  }, [fictPhone, phoneNumber]);
 
   useEffect(() => {
     if (favoritedBy.length > 0) {
@@ -61,9 +92,9 @@ export const DetailCardCard = ({
         <MediaSwiper media={media} />
       </div>
       <div className="d-flex mb-4">
-        <div className="text-start lh-14 fw-400 fs-14 me-3">
-          <p>🗓 {year}</p>
-          <p>🛞 {mileage} km</p>
+        <div className="text-start lh-16 fw-400 fs-14 pe-3 pt-1 text-nowrap">
+          <p>📆 {year}</p>
+          <p>🔘 {mileage} km</p>
           <p>⛽️ {engine.type}</p>
           <p>🐎 {hp}</p>
           <p>🌈 {color.color}</p>
@@ -72,16 +103,28 @@ export const DetailCardCard = ({
           </p>
         </div>
         <div className="text-start">
-          <p className="fw-300 fs-17">{description}</p>
+          <p className="fw-300 fs-17 lh-17 text-break">{description}</p>
           <p className={`${style.dateText} fw-400 fs-12`}>
             {format(new Date(createdAt), "MMM dd, yyyy")}
           </p>
         </div>
       </div>
       <div className="d-flex gap-2 mb-2">
-        <Button className="w-100 main-button py-2">Call</Button>
-        <Button className="w-100 main-outline-button fw-400 py-2">
-          Copy number
+        <Button
+          className="w-100 main-button py-2"
+          onClick={() => {
+            call();
+          }}
+        >
+          Call
+        </Button>
+        <Button
+          className="w-100 main-outline-button fw-400 py-2"
+          onClick={() => {
+            copyToClipBoard();
+          }}
+        >
+          {isCopied ? "Copied" : "Copy number"}
         </Button>
       </div>
       <div>

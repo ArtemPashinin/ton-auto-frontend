@@ -14,10 +14,12 @@ export const VehicleTypeButton = ({
 }: VehicleTypeButtonProps) => {
   return (
     <Col
-      onClick={onClick}
-      className={`${style.vehicleTypeButton} fs-12 ${
+      onClick={() => {
+        onClick();
+      }}
+      className={`${style.vehicleTypeButton} p-0 fs-087 ${
         isACtive ? style.enabled : style.disabled
-      } border rounded-pill user-select-none p-2 py-2`}
+      } border rounded-pill user-select-none py-1`}
     >
       <p>{title}</p>
     </Col>

@@ -1,3 +1,5 @@
 .uploadForm {
-  background-image: "../../assets/images/from-background.jpg";
+  height: 151px;
+  background-color:  var(--tg-theme-section-bg-color);
+  border-radius: .5rem;
 }

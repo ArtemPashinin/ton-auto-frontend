@@ -199,7 +199,9 @@ export const EditForm = ({
         {/* Make and Model */}
         <Form.Group as={Col} className="p-0">
           <Form.Select
-            className={correctFields.make ? "" : "incorrect-form-select"}
+            className={`${
+              correctFields.make ? "" : "incorrect-form-select"
+            } py-2`}
             value={selectedMakeId}
             onChange={(event) => {
               const selectedMake = event.target.value;
@@ -223,7 +225,9 @@ export const EditForm = ({
 
         <Form.Group as={Col} className="p-0">
           <Form.Select
-            className={correctFields.model ? "" : "incorrect-form-select"}
+            className={`${
+              correctFields.model ? "" : "incorrect-form-select"
+            } py-2`}
             disabled={!selectedMakeId}
             value={updatedFields.model_id}
             onChange={(event) => {
@@ -248,6 +252,7 @@ export const EditForm = ({
       <Row className="mb-2 gap-2">
         <Form.Group as={Col} className="p-0">
           <Form.Select
+            className="py-2"
             value={updatedFields.engine_id}
             onChange={(e) => handleInputChange("engine_id", e.target.value)}
           >
@@ -261,6 +266,7 @@ export const EditForm = ({
 
         <Form.Group as={Col} className="p-0">
           <Form.Select
+            className="py-2"
             value={updatedFields.color_id}
             onChange={(e) => handleInputChange("color_id", e.target.value)}
           >
@@ -276,6 +282,7 @@ export const EditForm = ({
       <Row className="mb-2 gap-2">
         <Form.Group as={Col} className="p-0">
           <Form.Select
+            className="py-2"
             value={updatedFields.year}
             onChange={(e) => handleInputChange("year", e.target.value)}
           >
@@ -289,7 +296,9 @@ export const EditForm = ({
 
         <Form.Group as={Col} className="p-0">
           <Form.Control
-            className={correctFields.hp ? "" : "incorrect-form-select"}
+            className={`${
+              correctFields.hp ? "" : "incorrect-form-select"
+            } py-2`}
             value={updatedFields.hp}
             type="text"
             placeholder="Horse powers"
@@ -304,7 +313,9 @@ export const EditForm = ({
         <Form.Group as={Col} className="p-0">
           <InputGroup>
             <Form.Control
-              className={correctFields.price ? "" : "incorrect-form-select"}
+              className={`${
+                correctFields.price ? "" : "incorrect-form-select"
+              } py-2`}
               value={updatedFields.price}
               placeholder="Price"
               onChange={(e) =>
@@ -321,6 +332,7 @@ export const EditForm = ({
 
         <Form.Group as={Col} className="p-0">
           <Form.Select
+            className="py-2"
             value={updatedFields.condition_id}
             onChange={(e) => handleInputChange("condition_id", e.target.value)}
           >
@@ -336,7 +348,9 @@ export const EditForm = ({
       <Row className="mb-2 gap-2">
         <Form.Group as={Col} className="p-0">
           <Form.Control
-            className={correctFields.mileage ? "" : "incorrect-form-select"}
+            className={`${
+              correctFields.mileage ? "" : "incorrect-form-select"
+            } py-2`}
             value={updatedFields.mileage}
             type="text"
             placeholder="Mileage"
@@ -346,7 +360,7 @@ export const EditForm = ({
           />
         </Form.Group>
       </Row>
-      <Row className="mb-2">
+      <Row className="my-4">
         <Form.Group as={Col} className="p-0">
           <Form.Check
             type="checkbox"
@@ -362,7 +376,9 @@ export const EditForm = ({
       <Row className="mb-2 gap-2">
         <Form.Group as={Col} className="p-0">
           <Form.Control
-            className={correctFields.description ? "" : "incorrect-form-select"}
+            className={`${
+              correctFields.description ? "" : "incorrect-form-select"
+            } py-2`}
             value={updatedFields.description}
             placeholder="Description"
             onChange={(e) => handleInputChange("description", e.target.value)}

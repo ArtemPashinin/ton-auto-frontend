@@ -44,6 +44,10 @@ p {
   color: var(--tg-theme-subtitle-text-color);
 }
 
+.hintcolor {
+  color: var(--tg-theme-hint-color);
+}
+
 .mainText {
   color: var(--tg-theme-button-color)
 }
@@ -64,6 +68,11 @@ p {
   font-size: 1rem;
 }
 
+.fs-087 {
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
 .fs-17 {
   font-size: 1.0625rem;
 }
@@ -74,6 +83,14 @@ p {
 
 .lh-14 {
   line-height: 14px;
+}
+
+.lh-16 {
+  line-height: 16px;
+}
+
+.lh-17 {
+  line-height: 17px;
 }
 
 .swiper {

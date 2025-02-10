@@ -1,0 +1,145 @@
+import { Col, Row, Image } from "react-bootstrap";
+import { format } from "date-fns";
+import style from "./CarCard.module.css";
+// import { markFavorite } from "../../utils/mark-favorite";
+import { useEffect, useState } from "react";
+import { Advertisement } from "../../interfaces/advertisement.interface";
+import WebApp from "@twa-dev/sdk";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faTrash } from "@awesome.me/kit-7090d2ba88/icons/classic/regular";
+import { useDispatch, useSelector } from "react-redux";
+import { userSelector } from "../../redux/slices/user-slice/user-slice";
+import { AppDispatch } from "../../redux/store";
+import { markFavorite } from "../../redux/slices/favorites-slice/thunks/mark-favorite";
+import { useNavigate } from "react-router-dom";
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface Props {
+  // userId: number | undefined;
+  // toggleFavorite: (advertisementId: string) => void;
+  // toggleIsDetailCardOpened?: (advertisementId: string) => void;
+  // removeAd?: (advertisementId: string) => void;
+}
+
+type CarCardProps = Advertisement & Props;
+
+export const CarCard = ({
+  id,
+  model,
+  year,
+  mileage,
+  engine,
+  hp,
+  color,
+  price,
+  createdAt,
+  media,
+  favoritedBy,
+  user,
+}: // removeAd,
+CarCardProps) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const currentUser = useSelector(userSelector);
+
+  const [favorited, setFavorited] = useState<boolean>(false);
+  const [mainMedia] = useState<string | undefined>(
+    media.find(({ main }) => main)?.image_url ??
+      "https://imgholder.ru/600x300/8493a8/adb9ca&text=No+image"
+  );
+
+  useEffect(() => {
+    setFavorited(favoritedBy.length > 0);
+  }, [favoritedBy, user]);
+
+  return (
+    <Row
+      className={`${style.carCard} rounded-4 p-2 mb-2`}
+      onClick={() => navigate(`../advvertisement/${id}`)}
+    >
+      <Col className="h-100 p-0 me-2">
+        <Image src={mainMedia} className={`${style.cardImage} rounded-3`} />
+      </Col>
+      <Col
+        className={`text-start d-flex justify-content-between flex-column p-0`}
+        xs={4}
+      >
+        <div>
+          <p>
+            {model.make.make} {model.model}
+          </p>
+        </div>
+        <div>
+          <p>📆 {year}</p>
+          <p>🔘 {mileage} km</p>
+          <p>⛽️ {engine.type}</p>
+          <p>🐎 {hp}</p>
+          <p>🌈 {color.color}</p>
+          <p>📍 {user?.city.country.title}</p>
+          <p>
+            💰 {price} {user?.city.country.currency}
+          </p>
+        </div>
+        <div className="d-flex justify-content-between align-items-end">
+          <p className={`${style.dateText}`}>
+            {format(new Date(createdAt), "MMM dd, yyyy")}
+          </p>
+          <i
+            className={`lg fa-heart ${style.favoriteIcon} ${
+              favorited ? `${style.favorited} fa-solid` : "fa-regular"
+            }`}
+            onClick={(event) => {
+              event.stopPropagation();
+              dispatch(
+                markFavorite({ user: currentUser!, advertisementId: id })
+              );
+              WebApp.HapticFeedback.impactOccurred("medium");
+            }}
+          ></i>
+        </div>
+      </Col>
+
+      {/* {removeAd && toggleIsOnEditDescription && toggleIsOnMediaEdit && (
+        <>
+          <Col className="p-0  mt-2" xs={12}>
+            <Button
+              className="w-100 fade-outline-button py-2"
+              onClick={(event) => {
+                event.stopPropagation();
+                toggleIsOnEditDescription(id);
+              }}
+            >
+              Edit
+            </Button>
+          </Col>
+          <Col className="p-0  mt-2" xs={12}>
+            <Button
+              className="w-100 fade-outline-button py-2"
+              onClick={(event) => {
+                event.stopPropagation();
+                toggleIsOnMediaEdit(id);
+              }}
+            >
+              Manage photos
+            </Button>
+          </Col>
+          <Col className="p-0  mt-2" xs={12}>
+            <Button
+              className="w-100 danger-button py-2 d-flex align-items-center justify-content-center gap-2"
+              onClick={(event) => {
+                event.stopPropagation();
+                removeAd(id);
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faTrash}
+                style={{ fontSize: "1.125rem", marginBottom: "1px" }}
+              />
+              <p>Remove ad</p>
+            </Button>
+          </Col>
+        </>
+      )} */}
+    </Row>
+  );
+};

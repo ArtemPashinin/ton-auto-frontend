@@ -1,0 +1,152 @@
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+body {
+  background-color: var(--tg-theme-secondary-bg-color);
+  font-family: "Rubik", sans-serif;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+html,
+body {
+  overscroll-behavior-y: contain; /* Предотвращает перетягивание на iOS */
+  height: -webkit-fill-available;
+  min-height: 100%;
+}
+
+html {
+  overflow: hidden;
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Скрыть скроллбар в Webkit (например, Safari, Chrome) */
+}
+
+p {
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+.tab {
+  padding-bottom: 6rem !important;
+}
+
+.defaultText {
+  color: var(--tg-theme-text-color);
+}
+
+.subtitleText {
+  color: var(--tg-theme-subtitle-text-color);
+}
+
+.hintcolor {
+  color: var(--tg-theme-hint-color);
+}
+
+.mainText {
+  color: var(--tg-theme-button-color)
+}
+
+.fw-300 {
+  font-weight: 300;
+}
+
+.fw-400 {
+  font-weight: 400;
+}
+
+.fs-12 {
+  font-size: .75rem;
+}
+
+.fs-14 {
+  font-size: 1rem;
+}
+
+.fs-087 {
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+.fs-17 {
+  font-size: 1.0625rem;
+}
+
+.fs-20 {
+  font-size: 1.25rem;
+}
+
+.lh-14 {
+  line-height: 14px;
+}
+
+.lh-16 {
+  line-height: 16px;
+}
+
+.lh-17 {
+  line-height: 17px;
+}
+
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.swiper-container {
+  height: 15rem;
+}
+
+.swiper-pagination-bullet-active{
+  background-color: #F8A917 !important;
+  width: 6px !important;
+  height: 6px !important;
+  margin-left: 2px !important;
+  margin-right: 2px !important;
+}
+
+.swiper-pagination-bullet { 
+  width: 6px !important;
+  height: 6px !important;
+  margin-left: 2px !important;
+  margin-right: 2px !important;
+}
+
+.large-icon {
+  font-size: 5rem;
+  color: var(--tg-theme-hint-color);
+}
+
+.vh-55 {
+  height: 55vh;
+}
+
+.vh-75 {
+  height: 75vh;
+}
+
+.sectionBgColor {
+  background-color: var(--tg-theme-section-bg-color);
+}

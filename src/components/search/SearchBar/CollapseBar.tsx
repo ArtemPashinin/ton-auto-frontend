@@ -1,7 +1,7 @@
 import { Button, Collapse, Form, Stack } from "react-bootstrap";
 import { useEffect, useMemo, useState } from "react";
 import { QueryDto } from "../../../interfaces/dto/query.dto";
-import { generateTearsList } from "../../../utils/generate-years-list";
+import { generateYearsList } from "../../../utils/generate-years-list";
 import { City } from "../../../interfaces/user-info.interface";
 import { fetchCities } from "../../../utils/fetch-cities";
 import { useSelector } from "react-redux";
@@ -29,7 +29,7 @@ const CollapseBar = ({
 }: CollapseBarProps) => {
   const countries = useSelector(countriesSelector);
   const engineTypes = useSelector(engineTypesSelector);
-  const years = useMemo(generateTearsList, []);
+  const years = useMemo(generateYearsList, []);
   const mileage = useMemo(generateMileageList, []);
 
   const [cities, setCities] = useState<City[]>([]);
@@ -44,38 +44,6 @@ const CollapseBar = ({
     <Collapse in={open}>
       <Stack gap={2}>
         <div className="d-flex gap-1 pt-3">
-          <Form.Select
-            className="py-2"
-            value={filters.yearFrom || ""}
-            onChange={(e) => {
-              handleChangeFilter("yearFrom", e.target.value);
-            }}
-            aria-label="Year from"
-          >
-            <option value="">Year from</option>
-            {years.map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </Form.Select>
-          <Form.Select
-            className="py-2"
-            value={filters.yearTo || ""}
-            onChange={(e) => {
-              handleChangeFilter("yearTo", e.target.value);
-            }}
-            aria-label="Year to"
-          >
-            <option value="">Year to</option>
-            {years.map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </Form.Select>
-        </div>
-        <div className="d-flex gap-1">
           <Form.Select
             className="py-2"
             value={filters.country || ""}
@@ -109,6 +77,39 @@ const CollapseBar = ({
             ))}
           </Form.Select>
         </div>
+        <div className="d-flex gap-1">
+          <Form.Select
+            className="py-2"
+            value={filters.yearFrom || ""}
+            onChange={(e) => {
+              handleChangeFilter("yearFrom", e.target.value);
+            }}
+            aria-label="Year from"
+          >
+            <option value="">Year from</option>
+            {years.map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </Form.Select>
+          <Form.Select
+            className="py-2"
+            value={filters.yearTo || ""}
+            onChange={(e) => {
+              handleChangeFilter("yearTo", e.target.value);
+            }}
+            aria-label="Year to"
+          >
+            <option value="">Year to</option>
+            {years.map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </Form.Select>
+        </div>
+
         <div>
           <Form.Select
             className="py-2"

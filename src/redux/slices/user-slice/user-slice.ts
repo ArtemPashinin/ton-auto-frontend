@@ -4,6 +4,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchUser } from "./thunks/fetch-user";
 import { RootState } from "../../store";
 import { updateUser } from "./thunks/update-user";
+import { createUser } from "./thunks/create-user";
 
 interface UserState {
   user: User | null;
@@ -38,8 +39,18 @@ const userSlice = createSlice({
         state.user = action.payload;
       }
     );
+    builder.addCase(
+      createUser.fulfilled,
+      (state, action: PayloadAction<User>) => {
+        state.loading = false;
+        state.user = action.payload;
+      }
+    );
     builder.addCase(updateUser.pending, (state) => {
       state.loading = true;
+    });
+    builder.addCase(createUser.pending, (state) =>{
+      state.loading = true
     });
   },
 });

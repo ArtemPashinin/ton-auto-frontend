@@ -10,6 +10,7 @@ interface CarCardListProps {
   userId?: number;
   loading: boolean;
   advertisementsCount: number;
+  isMyAds: boolean;
 }
 
 const CarCardList = ({
@@ -17,6 +18,7 @@ const CarCardList = ({
   fetchNextPageAdvertisements,
   advertisementsCount,
   loading,
+  isMyAds = false,
 }: CarCardListProps) => {
   if (advertisements.length === 0 && loading) return <PageSpinner />;
 
@@ -24,7 +26,7 @@ const CarCardList = ({
     <div className={style.carCardList}>
       <Container>
         {advertisements.map((advertisement) => (
-          <CarCard key={advertisement.id} {...advertisement} />
+          <CarCard key={advertisement.id} {...advertisement} isMyAd={isMyAds} />
         ))}
       </Container>
       {advertisements.length < advertisementsCount && (

@@ -1,11 +1,15 @@
 import PageWrapper from "../../components/PageWrapper/PageWrapper";
+import { usePlace } from "../../hooks/usePlace";
+import PlaceForm from "../../components/PlaceForm/PlaceForm";
 
-export const Place = () => {
+export const PlacePage = () => {
+  usePlace();
+
   return (
     <PageWrapper hideTabBar={true} backButton={true}>
-      Place
+      <PlaceForm />
     </PageWrapper>
   );
 };
 
-export default Place;
+export default PlacePage;

@@ -6,5 +6,7 @@ export enum SlicesNames {
   FILTERS = "filters",
   PAGE = "page",
   FAVORITES = "favorites",
-  MY_ADS = "myAds"
+  MY_ADS = "myAds",
+  PLACE = "place",
+  DESCRIPTION = "description"
 }

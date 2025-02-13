@@ -7,4 +7,5 @@ export const TelegramSDK = () => {
   WebApp.expand();
   WebApp.setHeaderColor(WebApp.themeParams.secondary_bg_color);
   WebApp.setBackgroundColor(WebApp.themeParams.secondary_bg_color);
+  WebApp.setBottomBarColor(WebApp.themeParams.secondary_bg_color);
 };

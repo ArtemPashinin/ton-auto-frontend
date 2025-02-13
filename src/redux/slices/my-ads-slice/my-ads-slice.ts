@@ -4,6 +4,7 @@ import { Advertisement } from "../../../interfaces/advertisement.interface";
 import { fetchMyAds } from "./thunks/fetch-my-ads";
 import { SearchResultDto } from "../../../interfaces/dto/search-result.dto";
 import { RootState } from "../../store";
+import { removeAdretisement } from "./thunks/remove-advertisement";
 
 interface MyAdsState {
   advertisements: Advertisement[];
@@ -21,7 +22,7 @@ const myAdsSlice = createSlice({
   name: SlicesNames.MY_ADS,
   initialState,
   reducers: {
-    clearFavorites() {
+    clearMyAds() {
       return initialState;
     },
   },
@@ -37,18 +38,25 @@ const myAdsSlice = createSlice({
         state.loading = false;
       }
     );
+    builder.addCase(
+      removeAdretisement.fulfilled,
+      (state, action: PayloadAction<string>) => {
+        state.advertisements = state.advertisements.filter(
+          (advertsement) => advertsement.id !== action.payload
+        );
+        state.count = state.count - 1;
+      }
+    );
     builder.addCase(fetchMyAds.pending, (state) => {
       state.loading = true;
     });
   },
 });
 
-export const { clearFavorites } = myAdsSlice.actions;
+export const { clearMyAds } = myAdsSlice.actions;
 
-export const myAdsLoadingSelector = (state: RootState) =>
-  state.favorites.loading;
-export const myAdsCountSelector = (state: RootState) => state.favorites.count;
-export const myAdsSelector = (state: RootState) =>
-  state.favorites.advertisements;
+export const myAdsLoadingSelector = (state: RootState) => state.myAds.loading;
+export const myAdsCountSelector = (state: RootState) => state.myAds.count;
+export const myAdsSelector = (state: RootState) => state.myAds.advertisements;
 
 export default myAdsSlice.reducer;

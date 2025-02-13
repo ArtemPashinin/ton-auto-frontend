@@ -30,8 +30,7 @@ const Favorites = () => {
         advertisements={favorites}
         advertisementsCount={favoritesCount}
         loading={favoritesLoading}
-        fetchNextPageAdvertisements={fetchNextPageFavorites}
-      />
+        fetchNextPageAdvertisements={fetchNextPageFavorites} isMyAds={false}      />
     </div>
   );
 };

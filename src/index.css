@@ -81,6 +81,7 @@ a {
   font-size: 1.0625rem;
 }
 
+
 .fs-20 {
   font-size: 1.25rem;
 }
@@ -95,6 +96,10 @@ a {
 
 .lh-17 {
   line-height: 17px;
+}
+
+.lh-18 {
+  line-height: 18px;
 }
 
 .swiper {

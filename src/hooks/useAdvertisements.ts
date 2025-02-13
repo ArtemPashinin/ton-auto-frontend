@@ -25,8 +25,7 @@ export const useAdvertisements = () => {
       dispatch(clearAdvertisements());
       dispatch(fetchAdvertisements(filters));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, filters]);
+  }, [dispatch, filters, user]);
 
   useEffect(() => {
     if (user && searchPage > 1) dispatch(fetchAdvertisements(filters));
@@ -41,6 +40,6 @@ export const useAdvertisements = () => {
       if (user)
         dispatch(setFilter({ key: "country", value: user.city.country.id }));
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };

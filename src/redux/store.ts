@@ -7,6 +7,8 @@ import searchFiltersSlice from "./slices/search-filters-slice/search-filters-sli
 import pageSlice from "./slices/page-slice/page-slice";
 import favoritesSlice from "./slices/favorites-slice/favorites-slice";
 import myAdsSlice from "./slices/my-ads-slice/my-ads-slice";
+import placeSlice from "./slices/place-sclice/place-slice";
+import descriptionSlice from "./slices/description-slice/description-slice";
 
 const store = configureStore({
   reducer: {
@@ -18,6 +20,8 @@ const store = configureStore({
     page: pageSlice,
     favorites: favoritesSlice,
     myAds: myAdsSlice,
+    place: placeSlice,
+    description: descriptionSlice,
   },
 });
 

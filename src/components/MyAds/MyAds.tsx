@@ -8,7 +8,7 @@ import { useCallback } from "react";
 import { setNextPage } from "../../redux/slices/page-slice/page-slice";
 import { AppDispatch } from "../../redux/store";
 import CarCardList from "../CarCard/CarCardList";
-import { useFavorites } from "../../hooks/useFavorites";
+import { useMyAds } from "../../hooks/useMyAds";
 
 const MyAds = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -16,7 +16,7 @@ const MyAds = () => {
   const myAdsCount = useSelector(myAdsCountSelector);
   const myAdsLoading = useSelector(myAdsLoadingSelector);
 
-  useFavorites();
+  useMyAds();
 
   const fetchNextPageMyAds = useCallback(() => {
     dispatch(setNextPage({ pageType: "myAdsPage" }));
@@ -24,8 +24,9 @@ const MyAds = () => {
 
   return (
     <div>
-      <p className="defaultText text-start mb-4">Favorites</p>
+      <p className="defaultText text-start mb-4">MyAds</p>
       <CarCardList
+        isMyAds
         advertisements={myAds}
         advertisementsCount={myAdsCount}
         loading={myAdsLoading}

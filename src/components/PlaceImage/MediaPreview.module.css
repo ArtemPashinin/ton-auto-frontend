@@ -1,0 +1,24 @@
+.previewImage {
+  height: 8rem;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 11.48px;
+}
+
+.previewCard {
+  background-color: var(--tg-theme-section-bg-color);
+  border: 2px solid var(--tg-theme-section-bg-color);
+  border-radius: 15.43px;
+  width: 100%;
+  cursor: "pointer";      
+  position: "relative",
+}
+
+.mainCardIcon {
+  color: var(--tg-theme-button-color);
+}
+
+.mainCard {
+  border: 2px solid var(--tg-theme-button-color);
+}
+

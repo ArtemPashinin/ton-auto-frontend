@@ -4,7 +4,10 @@ import { AppDispatch } from "../redux/store";
 import { clearFavorites } from "../redux/slices/favorites-slice/favorites-slice";
 import { fetchFavorites } from "../redux/slices/favorites-slice/thunks/fetch-favorites";
 import { userSelector } from "../redux/slices/user-slice/user-slice";
-import { favoritesPageSelector } from "../redux/slices/page-slice/page-slice";
+import {
+  clearPage,
+  favoritesPageSelector,
+} from "../redux/slices/page-slice/page-slice";
 
 export const useFavorites = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -23,4 +26,11 @@ export const useFavorites = () => {
     if (user && favoritesPage > 1) dispatch(fetchFavorites(user.id!));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [favoritesPage]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearPage({ pageType: "favoritesPage" }));
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 };

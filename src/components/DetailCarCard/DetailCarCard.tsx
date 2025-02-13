@@ -24,8 +24,7 @@ export const DetailCardCard = ({
   favoritedBy,
   fict_phone,
 }: DetailCardCardProps) => {
-  const phoneNumber = `${user.city.country.phone_code}${user.phone}`;
-  const displayPhone = fict_phone || phoneNumber;
+  const displayPhone = fict_phone || user!.phone!;
 
   return (
     <div className="p-2 defaultText">
@@ -43,7 +42,7 @@ export const DetailCardCard = ({
       </div>
 
       <div className="d-flex mb-4">
-        <div className="text-start lh-16 fw-400 fs-14 pe-3 pt-1 text-nowrap">
+        <div className="text-start lh-18 fw-400 fs-14 pe-3 pt-1 text-nowrap">
           <p>📆 {year}</p>
           <p>🔘 {mileage} km</p>
           <p>⛽️ {engine.type}</p>

@@ -4,6 +4,7 @@ import { SlicesNames } from "../../../enums/slices";
 import { RootState } from "../../store";
 import { fetchUser } from "../user-slice/thunks/fetch-user";
 import { User } from "../../../interfaces/user-info.interface";
+import { updateUser } from "../user-slice/thunks/update-user";
 
 const initialState: QueryDto = {
   make: undefined,
@@ -49,6 +50,12 @@ const querySlice = createSlice({
         if (action.payload && action.payload?.city?.country?.id) {
           state.country = action.payload.city.country.id;
         }
+      }
+    );
+    builder.addCase(
+      updateUser.fulfilled,
+      (state, action: PayloadAction<User>) => {
+        state.country = action.payload.city.country.id;
       }
     );
   },

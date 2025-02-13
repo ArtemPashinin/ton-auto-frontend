@@ -8,7 +8,7 @@ import { User } from "../../../../interfaces/user-info.interface";
 // TODO add error statement
 
 export const updateUser = createAsyncThunk(
-  `${SlicesNames.USER}`,
+  `${SlicesNames.USER}/updateUser`,
   async (body: Partial<UserDto>): Promise<User> => {
     const url = `${import.meta.env.VITE_APP_API_URL}/user`;
     const webAppUser = WebApp.initDataUnsafe.user as User;

@@ -34,8 +34,7 @@ const Search = () => {
         loading={loading}
         advertisements={advertisements}
         advertisementsCount={advertisementsCount}
-        fetchNextPageAdvertisements={fetchNextPageAdvertisements}
-      />
+        fetchNextPageAdvertisements={fetchNextPageAdvertisements} isMyAds={false}      />
     </div>
   );
 };

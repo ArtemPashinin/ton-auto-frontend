@@ -9,7 +9,7 @@ export const fetchMyAds = createAsyncThunk(
   `${SlicesNames.MY_ADS}/fetchMyAds`,
   async (userId: number, { getState }): Promise<SearchResultDto> => {
     const state = getState() as RootState;
-    const page = state.page.favoritesPage;
+    const page = state.page.myAdsPage;
     const url = `${import.meta.env.VITE_APP_API_URL}/advertisements`;
 
     const { data } = await axios.get<SearchResultDto>(url, {

@@ -1,24 +1,20 @@
 import { Col, Row, Image } from "react-bootstrap";
 import { format } from "date-fns";
 import style from "./CarCard.module.css";
-// import { markFavorite } from "../../utils/mark-favorite";
 import { useEffect, useState } from "react";
 import { Advertisement } from "../../interfaces/advertisement.interface";
 import WebApp from "@twa-dev/sdk";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faTrash } from "@awesome.me/kit-7090d2ba88/icons/classic/regular";
 import { useDispatch, useSelector } from "react-redux";
 import { userSelector } from "../../redux/slices/user-slice/user-slice";
 import { AppDispatch } from "../../redux/store";
 import { markFavorite } from "../../redux/slices/favorites-slice/thunks/mark-favorite";
 import { useNavigate } from "react-router-dom";
+import EditDescriptionButton from "./buttons/EditDescriptionButton";
+import EditMediaButton from "./buttons/EditMediaButton";
+import RemoveAdButton from "./buttons/RemoveAdButton";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface Props {
-  // userId: number | undefined;
-  // toggleFavorite: (advertisementId: string) => void;
-  // toggleIsDetailCardOpened?: (advertisementId: string) => void;
-  // removeAd?: (advertisementId: string) => void;
+  isMyAd: boolean;
 }
 
 type CarCardProps = Advertisement & Props;
@@ -36,8 +32,8 @@ export const CarCard = ({
   media,
   favoritedBy,
   user,
-}: // removeAd,
-CarCardProps) => {
+  isMyAd,
+}: CarCardProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const currentUser = useSelector(userSelector);
@@ -99,47 +95,13 @@ CarCardProps) => {
         </div>
       </Col>
 
-      {/* {removeAd && toggleIsOnEditDescription && toggleIsOnMediaEdit && (
+      {isMyAd && (
         <>
-          <Col className="p-0  mt-2" xs={12}>
-            <Button
-              className="w-100 fade-outline-button py-2"
-              onClick={(event) => {
-                event.stopPropagation();
-                toggleIsOnEditDescription(id);
-              }}
-            >
-              Edit
-            </Button>
-          </Col>
-          <Col className="p-0  mt-2" xs={12}>
-            <Button
-              className="w-100 fade-outline-button py-2"
-              onClick={(event) => {
-                event.stopPropagation();
-                toggleIsOnMediaEdit(id);
-              }}
-            >
-              Manage photos
-            </Button>
-          </Col>
-          <Col className="p-0  mt-2" xs={12}>
-            <Button
-              className="w-100 danger-button py-2 d-flex align-items-center justify-content-center gap-2"
-              onClick={(event) => {
-                event.stopPropagation();
-                removeAd(id);
-              }}
-            >
-              <FontAwesomeIcon
-                icon={faTrash}
-                style={{ fontSize: "1.125rem", marginBottom: "1px" }}
-              />
-              <p>Remove ad</p>
-            </Button>
-          </Col>
+          <EditDescriptionButton id={id} />
+          <EditMediaButton />
+          <RemoveAdButton asdvertisementAd={id} />
         </>
-      )} */}
+      )}
     </Row>
   );
 };

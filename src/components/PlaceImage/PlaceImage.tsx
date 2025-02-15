@@ -5,6 +5,7 @@ import DraggableImage from "./DraggableImage";
 import WebApp from "@twa-dev/sdk";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  clearPlaceError,
   placeSelector,
   publishError,
   publishLoadingSelector,
@@ -127,8 +128,13 @@ const ImageUploader: React.FC = () => {
       formData.append("files", image.file);
     });
     formData.append("meta", JSON.stringify(metaData));
-    dispatch(placeAd(formData));
+    await dispatch(placeAd(formData));
     if (!error) navigate("../place/success");
+    else {
+      WebApp.showAlert("Something wrog.\nTry again later", () => {
+        dispatch(clearPlaceError());
+      });
+    }
   }, [
     dispatch,
     error,
@@ -167,6 +173,7 @@ const ImageUploader: React.FC = () => {
       }
     }
   };
+
   const handleDeleteImage = (id: string, column: "left" | "right") => {
     if (column === "left") {
       setLeftImages((prevImages) =>

@@ -16,7 +16,11 @@ import { fetchCities } from "../../utils/fetch-cities";
 import { clearPage } from "../../redux/slices/page-slice/page-slice";
 import { userSelector } from "../../redux/slices/user-slice/user-slice";
 
-const InfoBar = () => {
+interface InfoBarProps {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const InfoBar = ({ setOpen }: InfoBarProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const count = useSelector(advertisementCountSelector);
   const loading = useSelector(advertisementLoadingSelector);
@@ -47,10 +51,16 @@ const InfoBar = () => {
     <Container className="my-3">
       <Row className="text-center">
         <Col className="text-start p-0 subtitleText fs-14">
-          <p>
+          <a
+            href="#"
+            className="link-underline-primary link-underline-opacity-0 mainText"
+            onClick={() => {
+              setOpen((prev) => !prev);
+            }}
+          >
             {countryTitle}
             {cityTitle ? `, ${cityTitle}` : ""}
-          </p>
+          </a>
         </Col>
         <Col className="p-0">
           <div className="subtitleText fs-14 d-flex align-items-center justify-content-center">

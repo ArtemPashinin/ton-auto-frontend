@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { VehicleTypeList } from "../VehicleTypeBar/VehicleTypeList";
 import InfoBar from "./InfoBar";
 import { AppDispatch } from "../../redux/store";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import SearchBar from "./SearchBar/SearchBar";
 import CarCardList from "../CarCard/CarCardList";
 import {
@@ -19,6 +19,8 @@ const Search = () => {
   const advertisements = useSelector(advertisementsSelector);
   const loading = useSelector(advertisementLoadingSelector);
 
+  const [collabseOpen, setCollapseOpen] = useState<boolean>(false);
+
   useAdvertisements();
 
   const fetchNextPageAdvertisements = useCallback(() => {
@@ -28,13 +30,15 @@ const Search = () => {
   return (
     <div>
       <VehicleTypeList />
-      <SearchBar />
-      <InfoBar />
+      <SearchBar open={collabseOpen} setOpen={setCollapseOpen} />
+      <InfoBar setOpen={setCollapseOpen} />
       <CarCardList
         loading={loading}
         advertisements={advertisements}
         advertisementsCount={advertisementsCount}
-        fetchNextPageAdvertisements={fetchNextPageAdvertisements} isMyAds={false}      />
+        fetchNextPageAdvertisements={fetchNextPageAdvertisements}
+        isMyAds={false}
+      />
     </div>
   );
 };

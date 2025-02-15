@@ -5,6 +5,13 @@ import { fetchMyAds } from "./thunks/fetch-my-ads";
 import { SearchResultDto } from "../../../interfaces/dto/search-result.dto";
 import { RootState } from "../../store";
 import { removeAdretisement } from "./thunks/remove-advertisement";
+import { FavoriteDto, markFavorite } from "../favorites-slice/thunks/mark-favorite";
+
+interface CustomPayloadAction extends PayloadAction<FavoriteDto | null> {
+  meta: {
+    arg: FavoriteDto;
+  };
+}
 
 interface MyAdsState {
   advertisements: Advertisement[];
@@ -50,6 +57,21 @@ const myAdsSlice = createSlice({
     builder.addCase(fetchMyAds.pending, (state) => {
       state.loading = true;
     });
+    builder.addCase(
+      markFavorite.fulfilled,
+      (state, action: CustomPayloadAction) => {
+        const { advertisementId, user } = action.meta.arg;
+        state.advertisements = state.advertisements.map((ad) =>
+          ad.id === advertisementId
+            ? {
+                ...ad,
+                favoritedBy:
+                  ad.favoritedBy && ad.favoritedBy.length > 0 ? [] : [user],
+              }
+            : ad
+        );
+      }
+    );
   },
 });
 

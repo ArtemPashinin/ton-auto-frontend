@@ -17,12 +17,16 @@ import { fetchAdvertisements } from "../../../redux/slices/advertisement-slice/t
 import { clearAdvertisements } from "../../../redux/slices/advertisement-slice/advertisement-slice";
 import throttle from "lodash.throttle";
 
-const SearchBar = () => {
+interface SearchBarProps {
+  open: boolean
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const SearchBar = ({open, setOpen}: SearchBarProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const filters = useSelector(searchFiltersSelector);
   const makes = useSelector(makeSelector);
 
-  const [open, setOpen] = useState<boolean>(false);
   const [models, setModels] = useState<Model[]>([]);
 
   const throttledOpen = throttle(() => {

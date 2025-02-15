@@ -13,6 +13,7 @@ import RequireAuth from "./components/RequireAuth/RequireAuth";
 import PlaceImagesPage from "./pages/PlaceImages/PlaceImagesPage";
 import SuccessPage from "./pages/Success/SuccessPage";
 import EditDescriptionPage from "./pages/EditDescription/EditDescriptionPage";
+import MediaPage from "./pages/Media/MediaPage";
 
 function App() {
   useAppData();
@@ -81,6 +82,14 @@ function App() {
           element={
             <RequireAuth>
               <Advertisement />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="media/:url"
+          element={
+            <RequireAuth>
+              <MediaPage />
             </RequireAuth>
           }
         />

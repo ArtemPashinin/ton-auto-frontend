@@ -15,8 +15,8 @@
 }
 
 .cardImage {
-  width: 100%;
-  height: 11rem;
+  width: 100% !important;
+  height: 11rem !important;
   object-fit: cover; 
   object-position: center;
 }
@@ -27,4 +27,19 @@
 
 .favorited {
   color: #F8A917;
+}
+
+.cardMedia {
+  width: 100% !important;
+  height: 16rem !important;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 4px; /* Если нужно, добавьте радиус */
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px; /* Если нужно, добавьте радиус */
 }

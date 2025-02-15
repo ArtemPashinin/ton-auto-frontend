@@ -7,7 +7,7 @@ import { placeAd } from "./thunks/place-ad";
 interface InitialState {
   placeData: AdvertisementDto;
   loading: boolean;
-  error: boolean
+  error: boolean;
 }
 
 const initialState: InitialState = {
@@ -25,7 +25,7 @@ const initialState: InitialState = {
     commercial: false,
   },
   loading: false,
-  error: false
+  error: false,
 };
 
 const placeSlice = createSlice({
@@ -45,6 +45,9 @@ const placeSlice = createSlice({
     clearPlace() {
       return initialState;
     },
+    clearPlaceError(state) {
+      state.error = false;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(placeAd.pending, (state) => {
@@ -53,13 +56,16 @@ const placeSlice = createSlice({
     builder.addCase(placeAd.fulfilled, (state) => {
       state.loading = false;
     });
+    builder.addCase(placeAd.rejected, (state) => {
+      state.error = true;
+    });
   },
 });
 
-export const { setField, clearPlace } = placeSlice.actions;
+export const { setField, clearPlace, clearPlaceError } = placeSlice.actions;
 
 export const placeSelector = (state: RootState) => state.place.placeData;
 export const publishLoadingSelector = (state: RootState) => state.place.loading;
-export const publishError = (state: RootState) => state.place.error
+export const publishError = (state: RootState) => state.place.error;
 
 export default placeSlice.reducer;

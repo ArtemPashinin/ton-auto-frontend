@@ -14,7 +14,7 @@ const UploadForm = ({ handleFileChange }: UploadFormProps) => {
       <Form.Control
         type="file"
         multiple
-        accept="image/*"
+        accept="image/*, video/*"
         className={`${style.uploadForm} d-none`}
         id="fileInput"
         onChange={handleFileChange}

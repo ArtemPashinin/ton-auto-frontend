@@ -34,8 +34,8 @@ const ImageUploader: React.FC = () => {
     WebApp.MainButton.setText("Publish");
     WebApp.MainButton.show();
     return () => {
-      WebApp.MainButton.hide();
       WebApp.MainButton.hideProgress();
+      WebApp.MainButton.hide();
     };
   }, []);
 
@@ -87,7 +87,11 @@ const ImageUploader: React.FC = () => {
               }
             });
 
-            if (!mainImageId && newImages.length > 0) {
+            if (
+              !mainImageId &&
+              newImages.length > 0 &&
+              !newImages[0].file.type.startsWith("video/")
+            ) {
               setMainImageId(newImages[0].id);
             }
           }
@@ -101,6 +105,18 @@ const ImageUploader: React.FC = () => {
     if (leftImages.length + rightImages.length < 1) {
       WebApp.showAlert("Нет изображений");
       return;
+    }
+    if (leftImages.length + rightImages.length < 2) {
+      const element =
+        leftImages.length > 0
+          ? leftImages[0]
+          : rightImages.length > 0
+          ? rightImages[0]
+          : null;
+      if (element?.file.type.startsWith("video/")) {
+        WebApp.showAlert("You must upload at least one image.");
+        return;
+      }
     }
     const formData = new FormData();
     const orderedImages: Image[] = [];
@@ -129,8 +145,11 @@ const ImageUploader: React.FC = () => {
     });
     formData.append("meta", JSON.stringify(metaData));
     await dispatch(placeAd(formData));
-    if (!error) navigate("../place/success");
-    else {
+    WebApp.MainButton.hideProgress();
+    if (!error) {
+      navigate("../place/success");
+    } else {
+      console.log(Array.from(formData));
       WebApp.showAlert("Something wrog.\nTry again later", () => {
         dispatch(clearPlaceError());
       });

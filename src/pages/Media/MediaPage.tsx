@@ -50,7 +50,7 @@ const MediaPage = () => {
         style={{ height: "100vh" }}
       >
         {extension && extensionList.includes(extension) ? (
-          <video src={url} controls style={mediaStyles} />
+          <video autoPlay src={url} controls style={mediaStyles} />
         ) : (
           <img src={url} alt="Media" style={mediaStyles} />
         )}

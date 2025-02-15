@@ -57,6 +57,7 @@ const placeSlice = createSlice({
       state.loading = false;
     });
     builder.addCase(placeAd.rejected, (state) => {
+      state.loading = false;
       state.error = true;
     });
   },

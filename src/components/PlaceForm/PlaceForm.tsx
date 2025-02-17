@@ -27,6 +27,7 @@ import { userSelector } from "../../redux/slices/user-slice/user-slice";
 import { AdvertisementDto } from "../../interfaces/dto/advertisement.dto";
 import WebApp from "@twa-dev/sdk";
 import { Link, useNavigate } from "react-router-dom";
+import { clearEditDesc } from "../../redux/slices/description-slice/description-slice";
 
 const PlaceForm = () => {
   const navigate = useNavigate();
@@ -84,9 +85,10 @@ const PlaceForm = () => {
     WebApp.MainButton.onClick(submitAdvertisement);
 
     return () => {
-      WebApp.MainButton.offClick(submitAdvertisement); // Очистка обработчика
+      WebApp.MainButton.offClick(submitAdvertisement);
+      dispatch(clearEditDesc());
     };
-  }, [submitAdvertisement]);
+  }, [dispatch, submitAdvertisement]);
 
   useEffect(() => {
     (async () => {

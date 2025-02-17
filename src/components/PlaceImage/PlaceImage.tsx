@@ -206,7 +206,7 @@ const ImageUploader: React.FC = () => {
 
     if (id === mainImageId) {
       const allImages = [...leftImages, ...rightImages].filter(
-        (image) => image.id !== id
+        (image) => image.id !== id && !image.file.type.startsWith("video/")
       );
       if (allImages.length > 0) {
         setMainImageId(allImages[0].id);

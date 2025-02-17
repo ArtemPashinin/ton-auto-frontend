@@ -14,97 +14,125 @@ import PlaceImagesPage from "./pages/PlaceImages/PlaceImagesPage";
 import SuccessPage from "./pages/Success/SuccessPage";
 import EditDescriptionPage from "./pages/EditDescription/EditDescriptionPage";
 import MediaPage from "./pages/Media/MediaPage";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Button } from "react-bootstrap";
+import WebApp from "@twa-dev/sdk";
 
 function App() {
   useAppData();
+  const [link, setLink] = useState<any>("");
+
+  useEffect(() => {
+    const a = async () => {
+      const l = await axios.get(`${import.meta.env.VITE_APP_API_URL}/bot`);
+      setLink(l.data);
+      console.log(l);
+    };
+    a();
+  }, []);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <RequireAuth>
-              <Search />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="favorites"
-          element={
-            <RequireAuth>
-              <Favorites />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="place"
-          element={
-            <RequireAuth>
-              <Place />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="myads"
-          element={
-            <RequireAuth>
-              <MyAds />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="account"
-          element={
-            <RequireAuth>
-              <Account />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="place/images"
-          element={
-            <RequireAuth>
-              <PlaceImagesPage />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="place/success"
-          element={
-            <RequireAuth>
-              <SuccessPage />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="advvertisement/:id"
-          element={
-            <RequireAuth>
-              <Advertisement />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="media/:url"
-          element={
-            <RequireAuth>
-              <MediaPage />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="myAds/:id/editDescription"
-          element={
-            <RequireAuth>
-              <EditDescriptionPage />
-            </RequireAuth>
-          }
-        />
-        <Route path="404" element={<NotFoundPage />} />
-        <Route path="registration" element={<RegistrationPage />} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      <Button
+        onClick={() => {
+          WebApp.openInvoice(link, (status) => {
+            if (status === "paid") {
+              console.log("paid");
+            }
+          });
+        }}
+      >
+        pay
+      </Button>
+      asdasasdsdasd
+      {/* <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <RequireAuth>
+                <Search />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="favorites"
+            element={
+              <RequireAuth>
+                <Favorites />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="place"
+            element={
+              <RequireAuth>
+                <Place />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="myads"
+            element={
+              <RequireAuth>
+                <MyAds />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="account"
+            element={
+              <RequireAuth>
+                <Account />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="place/images"
+            element={
+              <RequireAuth>
+                <PlaceImagesPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="place/success"
+            element={
+              <RequireAuth>
+                <SuccessPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="advvertisement/:id"
+            element={
+              <RequireAuth>
+                <Advertisement />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="media/:url"
+            element={
+              <RequireAuth>
+                <MediaPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="myAds/:id/editDescription"
+            element={
+              <RequireAuth>
+                <EditDescriptionPage />
+              </RequireAuth>
+            }
+          />
+          <Route path="404" element={<NotFoundPage />} />
+          <Route path="registration" element={<RegistrationPage />} />
+        </Routes>
+      </BrowserRouter> */}
+    </>
   );
 }
 

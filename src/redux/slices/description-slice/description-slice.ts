@@ -7,6 +7,7 @@ import { RootState } from "../../store";
 
 interface InitialState {
   description: AdvertisementDto;
+  advertisiment: Advertisement;
   loading: boolean;
   error: boolean;
 }
@@ -28,12 +29,73 @@ const initialState: InitialState = {
   },
   loading: false,
   error: false,
+  advertisiment: {
+    id: "",
+    user: {
+      user_id: 0,
+      city: {
+        id: 0,
+        title: "",
+        country: {
+          id: 0,
+          title: "",
+          currency: "",
+          phone_code: "",
+        },
+      },
+    },
+    model: {
+      id: 0,
+      make_id: 0,
+      model: "",
+      make: {
+        id: 0,
+        make: "",
+      },
+    },
+    year: 0,
+    hp: 0,
+    mileage: 0,
+    engine: {
+      id: 0,
+      type: "",
+    },
+    color: {
+      id: 0,
+      color: "",
+    },
+    price: 0,
+    description: "",
+    createdAt: "",
+    media: [],
+    favoritedBy: [],
+    commercial: false,
+    condition: {
+      id: "",
+      title: "",
+    },
+    fict_phone: "",
+  },
 };
 
 const descriptionSlice = createSlice({
   name: SlicesNames.DESCRIPTION,
   initialState,
-  reducers: {},
+  reducers: {
+    setNewDecriptionField(
+      state,
+      action: PayloadAction<{
+        key: keyof AdvertisementDto;
+        value: AdvertisementDto[keyof AdvertisementDto];
+      }>
+    ) {
+      const { key, value } = action.payload;
+      state.description[key] = value;
+    },
+    clearEditDesc() {
+      return initialState;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(
       fetchDescription.fulfilled,
@@ -52,11 +114,18 @@ const descriptionSlice = createSlice({
           description: advertisement.description,
           commercial: advertisement.commercial,
         };
+        state.advertisiment = advertisement;
       }
     );
   },
 });
 
-export const descriptionSelector = (state:RootState) => state.description.description
+export const { setNewDecriptionField, clearEditDesc } =
+  descriptionSlice.actions;
+
+export const descriptionSelector = (state: RootState) =>
+  state.description.description;
+export const editenAdvertisementSelector = (state: RootState) =>
+  state.description.advertisiment;
 
 export default descriptionSlice.reducer;

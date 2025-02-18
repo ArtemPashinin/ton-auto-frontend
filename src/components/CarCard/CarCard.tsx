@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import EditDescriptionButton from "./buttons/EditDescriptionButton";
 import EditMediaButton from "./buttons/EditMediaButton";
 import RemoveAdButton from "./buttons/RemoveAdButton";
+import Purchase from "./components/Purchase";
 
 interface Props {
   isMyAd: boolean;
@@ -32,6 +33,7 @@ export const CarCard = ({
   media,
   favoritedBy,
   user,
+  paid,
   isMyAd,
 }: CarCardProps) => {
   const navigate = useNavigate();
@@ -53,6 +55,7 @@ export const CarCard = ({
       className={`${style.carCard} rounded-4 p-2 mb-2`}
       onClick={() => navigate(`../advvertisement/${id}`)}
     >
+      {isMyAd && !paid && <Purchase advertisementId={id} />}
       <Col className="h-100 p-0 me-2">
         <Image src={mainMedia} className={`${style.cardImage} rounded-3`} />
       </Col>

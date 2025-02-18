@@ -9,7 +9,7 @@ const EditDescriptionButton = ({ id }: EditDescriptionButtonProps) => {
   const navigate = useNavigate();
 
   return (
-    <Col className="p-0  mt-2" xs={12}>
+    <Col className="p-0 mt-2" xs={12}>
       <Button
         className="w-100 fade-outline-button py-2"
         onClick={(event) => {

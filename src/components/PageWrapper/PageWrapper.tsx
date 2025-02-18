@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import TabBar from "../TabBar/TabBar";
 import WebApp from "@twa-dev/sdk";
 import { useNavigate } from "react-router-dom";
@@ -16,21 +16,18 @@ const PageWrapper = ({
 }: PageWrapperProps) => {
   const navigate = useNavigate();
 
-  const handleGoBack = useCallback(() => {
-    navigate(-1);
-  }, [navigate]);
-
   useEffect(() => {
     if (backButton && WebApp) {
+      const goBack = () => navigate(-1); // Определяем функцию локально
       WebApp.BackButton.show();
-      WebApp.BackButton.onClick(handleGoBack);
+      WebApp.BackButton.onClick(goBack);
 
       return () => {
         WebApp.BackButton.hide();
-        WebApp.BackButton.offClick(handleGoBack);
+        WebApp.BackButton.offClick(goBack);
       };
     }
-  }, [backButton, handleGoBack]);
+  }, [backButton, navigate]);
 
   return (
     <div className="p-2">

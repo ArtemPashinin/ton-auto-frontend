@@ -86,7 +86,7 @@ const EditDescription = () => {
     if (isAdvertisementDataValid()) {
       try {
         await updateAdvertisement(newDescription, advertisement.id);
-        navigate("/myAds");
+        navigate(-1);
       } catch {
         WebApp.showAlert("Something wrong\nTry again later");
       }
@@ -98,7 +98,7 @@ const EditDescription = () => {
     WebApp.MainButton.onClick(submitAdvertisement);
 
     return () => {
-      WebApp.MainButton.offClick(submitAdvertisement); 
+      WebApp.MainButton.offClick(submitAdvertisement);
     };
   }, [submitAdvertisement]);
 

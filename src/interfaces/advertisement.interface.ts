@@ -24,4 +24,5 @@ export interface Advertisement {
   commercial: boolean;
   condition: Condition;
   fict_phone?: string;
+  paid: boolean;
 }

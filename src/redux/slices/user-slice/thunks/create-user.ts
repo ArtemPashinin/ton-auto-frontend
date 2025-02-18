@@ -10,7 +10,6 @@ export const createUser = createAsyncThunk(
   `${SlicesNames.USER}/createUser`,
   async (body: UserDto): Promise<User> => {
     const url = `${import.meta.env.VITE_APP_API_URL}/user`;
-    console.log(body);
     const { data } = await axios.post<User>(url, body);
     return data;
   }

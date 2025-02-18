@@ -1,7 +1,6 @@
 import { faMapLocationDot } from "@awesome.me/kit-7090d2ba88/icons/classic/thin";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Form, InputGroup, Spinner, Stack } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
 import { countriesSelector } from "../../redux/slices/data-slice/data-slice";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { UserDto } from "../../interfaces/dto/user.dto";
@@ -12,12 +11,19 @@ import CitySelect from "../account/CitySelect";
 import WebApp from "@twa-dev/sdk";
 import { handleContactRequested } from "../../utils/handleContactRequested";
 import style from "./Registration.module.css";
-import { userLoadingSelector } from "../../redux/slices/user-slice/user-slice";
+import {
+  userLoadingSelector,
+  userSelector,
+} from "../../redux/slices/user-slice/user-slice";
 import { AppDispatch } from "../../redux/store";
 import { createUser } from "../../redux/slices/user-slice/thunks/create-user";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 const Registretion = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const user = useSelector(userSelector);
   const loaing = useSelector(userLoadingSelector);
   const countries = useSelector(countriesSelector);
   const [cities, setCities] = useState<City[]>([]);
@@ -50,6 +56,13 @@ const Registretion = () => {
       })
     );
   }, [dispatch, formData?.city_id, formData?.phone, isFormValid]);
+
+  useEffect(() => {
+    if (user) {
+      console.log(user);
+      navigate("/"); // Перенаправляем на главную страницу
+    }
+  }, [navigate, user]);
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

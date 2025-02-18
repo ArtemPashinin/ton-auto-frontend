@@ -15,6 +15,7 @@ import SuccessPage from "./pages/Success/SuccessPage";
 import EditDescriptionPage from "./pages/EditDescription/EditDescriptionPage";
 import MediaPage from "./pages/Media/MediaPage";
 import PurchasePage from "./pages/Purchase/PurchasePage";
+import SuccessPaymentPage from "./pages/SuccessPayment/SuccessPayment";
 
 function App() {
   useAppData();
@@ -108,6 +109,14 @@ function App() {
             element={
               <RequireAuth>
                 <PurchasePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="purachse/success"
+            element={
+              <RequireAuth>
+                <SuccessPaymentPage />
               </RequireAuth>
             }
           />

@@ -48,7 +48,7 @@ export const appRoutesData: AppRouteData[] = [
     },
     "0"
   ),
-  createRoute("/myads", "My ads", {
+  createRoute("/myAds", "My ads", {
     icon: faHeart,
     size: "xl",
     color: WebApp.themeParams.text_color,

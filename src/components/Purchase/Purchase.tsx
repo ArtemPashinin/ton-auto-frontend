@@ -33,7 +33,8 @@ const Purchase = () => {
       if (ad) {
         const invoiceLink = await makePaymentLink(ad.id);
         WebApp.openInvoice(invoiceLink, (status) => {
-          if (status === "paid") WebApp.showAlert("Confirm!");
+          if (status === "paid")
+            navigate("/purachse/success", { replace: true });
         });
       }
     };

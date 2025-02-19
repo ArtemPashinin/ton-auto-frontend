@@ -26,6 +26,7 @@ const initialState: InitialState = {
     description: undefined,
     condition_id: undefined,
     commercial: false,
+    fict_phone: undefined,
   },
   loading: false,
   error: false,
@@ -43,6 +44,7 @@ const initialState: InitialState = {
           phone_code: "",
         },
       },
+      admin: false,
     },
     model: {
       id: 0,
@@ -75,6 +77,7 @@ const initialState: InitialState = {
       title: "",
     },
     fict_phone: "",
+    paid: false,
   },
 };
 
@@ -113,6 +116,7 @@ const descriptionSlice = createSlice({
           mileage: advertisement.mileage,
           description: advertisement.description,
           commercial: advertisement.commercial,
+          fict_phone: advertisement.fict_phone,
         };
         state.advertisiment = advertisement;
       }

@@ -1,26 +1,27 @@
 import { Button, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-interface EditDescriptionButtonProps {
+interface EditButtonProps {
   id: string;
+  title: string;
+  path: string;
 }
 
-const EditDescriptionButton = ({ id }: EditDescriptionButtonProps) => {
+const EditButton = ({ id, title, path }: EditButtonProps) => {
   const navigate = useNavigate();
-
   return (
-    <Col className="p-0 mt-2" xs={12}>
+    <Col className="p-0  mt-2" xs={12}>
       <Button
         className="w-100 fade-outline-button py-2"
         onClick={(event) => {
           event.stopPropagation();
-          navigate(`${id}/editDescription`);
+          navigate(`${id}/${path}`);
         }}
       >
-        Edit
+        {title}
       </Button>
     </Col>
   );
 };
 
-export default EditDescriptionButton;
+export default EditButton;

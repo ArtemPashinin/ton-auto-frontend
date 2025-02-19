@@ -11,5 +11,6 @@ export interface AdvertisementDto {
   description?: string;
   condition_id?: string | number;
   commercial: boolean;
+  fict_phone?: string
   [key: string]: unknown;
 }

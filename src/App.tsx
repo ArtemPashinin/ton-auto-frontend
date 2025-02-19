@@ -16,6 +16,7 @@ import EditDescriptionPage from "./pages/EditDescription/EditDescriptionPage";
 import MediaPage from "./pages/Media/MediaPage";
 import PurchasePage from "./pages/Purchase/PurchasePage";
 import SuccessPaymentPage from "./pages/SuccessPayment/SuccessPayment";
+import EditMediaPage from "./pages/EditMedia/EditMedia";
 
 function App() {
   useAppData();
@@ -101,6 +102,14 @@ function App() {
             element={
               <RequireAuth>
                 <EditDescriptionPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="myAds/:id/editMedia"
+            element={
+              <RequireAuth>
+                <EditMediaPage />
               </RequireAuth>
             }
           />

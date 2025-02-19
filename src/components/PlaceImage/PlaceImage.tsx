@@ -1,18 +1,20 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
-import UploadForm from "./UploadForm";
-import DraggableImage from "./DraggableImage";
+
 import WebApp from "@twa-dev/sdk";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  clearPlace,
   clearPlaceError,
   placeSelector,
-  publishError,
   publishLoadingSelector,
 } from "../../redux/slices/place-sclice/place-slice";
 import { AppDispatch } from "../../redux/store";
-import { placeAd } from "../../redux/slices/place-sclice/thunks/place-ad";
+
 import { useNavigate } from "react-router-dom";
+import UploadForm from "./UploadForm";
+import DraggableImage from "./DraggableImage";
+import { placeAd } from "../../redux/slices/place-sclice/thunks/place-ad";
 
 interface Image {
   id: string;
@@ -23,7 +25,7 @@ interface Image {
 const ImageUploader: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const error = useSelector(publishError);
+
   const publishLoading = useSelector(publishLoadingSelector);
   const placeData = useSelector(placeSelector);
   const [leftImages, setLeftImages] = useState<Image[]>([]);
@@ -144,25 +146,20 @@ const ImageUploader: React.FC = () => {
       formData.append("files", image.file);
     });
     formData.append("meta", JSON.stringify(metaData));
-    await dispatch(placeAd(formData));
-    WebApp.MainButton.hideProgress();
-    if (!error) {
-      navigate("../place/success");
-    } else {
-      console.log(Array.from(formData));
+    try {
+      const response = await dispatch(placeAd(formData)).unwrap();
+      if (response) {
+        dispatch(clearPlace());
+        navigate("../place/success");
+      }
+    } catch {
       WebApp.showAlert("Something wrog.\nTry again later", () => {
         dispatch(clearPlaceError());
+        navigate("/", { replace: true });
       });
     }
-  }, [
-    dispatch,
-    error,
-    leftImages,
-    mainImageId,
-    navigate,
-    placeData,
-    rightImages,
-  ]);
+    WebApp.MainButton.hideProgress();
+  }, [dispatch, leftImages, mainImageId, navigate, placeData, rightImages]);
 
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;

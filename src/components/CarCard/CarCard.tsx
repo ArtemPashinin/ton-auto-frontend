@@ -9,10 +9,9 @@ import { userSelector } from "../../redux/slices/user-slice/user-slice";
 import { AppDispatch } from "../../redux/store";
 import { markFavorite } from "../../redux/slices/favorites-slice/thunks/mark-favorite";
 import { useNavigate } from "react-router-dom";
-import EditDescriptionButton from "./buttons/EditDescriptionButton";
-import EditMediaButton from "./buttons/EditMediaButton";
 import RemoveAdButton from "./buttons/RemoveAdButton";
 import Purchase from "./components/Purchase";
+import EditButton from "./buttons/EditButton";
 
 interface Props {
   isMyAd: boolean;
@@ -100,8 +99,8 @@ export const CarCard = ({
 
       {isMyAd && (
         <>
-          <EditDescriptionButton id={id} />
-          <EditMediaButton />
+          <EditButton id={id} title={"Edit"} path={"editDescription"} />
+          <EditButton id={id} title={"Manage photos"} path={"editMedia"} />
           <RemoveAdButton asdvertisementAd={id} />
         </>
       )}

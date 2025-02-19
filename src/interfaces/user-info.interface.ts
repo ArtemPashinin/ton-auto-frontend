@@ -20,4 +20,5 @@ export interface User {
   phone?: string;
   language_code?: string;
   city: City;
+  admin: boolean
 }

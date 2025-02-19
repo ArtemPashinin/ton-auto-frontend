@@ -53,7 +53,7 @@ const Purchase = () => {
         is_visible: false,
       });
     };
-  }, [ad]);
+  }, [ad, navigate]);
 
   useEffect(() => {
     if (!ad) navigate("/", { replace: true });

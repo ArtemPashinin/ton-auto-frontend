@@ -59,7 +59,6 @@ const Registretion = () => {
 
   useEffect(() => {
     if (user) {
-      console.log(user);
       navigate("/"); // Перенаправляем на главную страницу
     }
   }, [navigate, user]);

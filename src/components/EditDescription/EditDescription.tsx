@@ -65,11 +65,18 @@ const EditDescription = () => {
       "condition_id",
       "description",
     ];
-    return requiredFields.every(
-      (field) =>
-        newDescription[field] !== undefined && newDescription[field] !== ""
-    );
-  }, [newDescription]);
+
+    if (user?.admin) {
+      requiredFields.push("fict_phone");
+    }
+
+    const valid = requiredFields.every((field) => {
+      const value = newDescription?.[field];
+      return value !== undefined && value !== "" && !Number.isNaN(value);
+    });
+
+    return valid;
+  }, [newDescription, user?.admin]);
 
   useEffect(() => {
     WebApp.MainButton.setText("Save");
@@ -380,6 +387,31 @@ const EditDescription = () => {
             </InputGroup>
           </Form.Group>
         </Row>
+
+        {user?.admin && (
+          <Row className="mb-2 gap-2">
+            <Form.Group as={Col} className="p-0">
+              <Form.Control
+                className="py-2"
+                isInvalid={!newDescription.fict_phone && isSubmitted}
+                type="text"
+                inputMode="numeric"
+                placeholder="Phone"
+                aria-label="Phone"
+                maxLength={15}
+                value={newDescription.fict_phone || ""}
+                onChange={(e) => {
+                  dispatch(
+                    setNewDecriptionField({
+                      key: "fict_phone",
+                      value: parseInt(e.target.value),
+                    })
+                  );
+                }}
+              />
+            </Form.Group>
+          </Row>
+        )}
 
         <Row className="my-4">
           <Form.Group as={Col} className="p-0">

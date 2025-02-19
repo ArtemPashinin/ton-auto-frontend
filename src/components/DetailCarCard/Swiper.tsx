@@ -21,7 +21,6 @@ export const MediaSwiper = ({ media }: MediaSwiperProps) => {
 
   const handleMediaClick = (url: string) => {
     navigate(`../media/${encodeURIComponent(url)}`);
-    console.log(url); // Лог для отладки
   };
 
   return (

@@ -58,10 +58,18 @@ const PlaceForm = () => {
       "condition_id",
       "description",
     ];
-    return requiredFields.every(
-      (field) => placeData[field] !== undefined && placeData[field] !== ""
-    );
-  }, [placeData]);
+
+    if (user?.admin) {
+      requiredFields.push("fict_phone");
+    }
+
+    const valid = requiredFields.every((field) => {
+      const value = placeData?.[field];
+      return value !== undefined && value !== "" && !Number.isNaN(value);
+    });
+
+    return valid;
+  }, [placeData, user?.admin]);
 
   useEffect(() => {
     WebApp.MainButton.text = "Next";
@@ -337,6 +345,31 @@ const PlaceForm = () => {
             </InputGroup>
           </Form.Group>
         </Row>
+
+        {user?.admin && (
+          <Row className="mb-2 gap-2">
+            <Form.Group as={Col} className="p-0">
+              <Form.Control
+                className="py-2"
+                isInvalid={!placeData.fict_phone && isSubmitted}
+                type="text"
+                inputMode="numeric"
+                placeholder="Phone"
+                aria-label="Phone"
+                maxLength={15}
+                value={placeData.fict_phone || ""}
+                onChange={(e) => {
+                  dispatch(
+                    setField({
+                      key: "fict_phone",
+                      value: parseInt(e.target.value),
+                    })
+                  );
+                }}
+              />
+            </Form.Group>
+          </Row>
+        )}
 
         <Row className="my-4">
           <Form.Group as={Col} className="p-0">

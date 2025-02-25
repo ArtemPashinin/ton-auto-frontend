@@ -14,17 +14,18 @@ body {
 
 html,
 body {
-  overscroll-behavior-y: contain; /* Предотвращает перетягивание на iOS */
+  overscroll-behavior-y: contain;
   height: -webkit-fill-available;
   min-height: 100%;
+
 }
 
-html {
+.no-scroll {
   overflow: hidden;
 }
 
 body::-webkit-scrollbar {
-  display: none; /* Скрыть скроллбар в Webkit (например, Safari, Chrome) */
+  display: none; 
 }
 
 p {

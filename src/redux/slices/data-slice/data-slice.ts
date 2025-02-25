@@ -13,6 +13,7 @@ import { fetchMakes } from "./thunks/fetch-makes";
 import { fetchEngineTypes } from "./thunks/fetch-engine-types";
 import { fetchColors } from "./thunks/fetch-colors";
 import { fetchConditions } from "./thunks/fetch-conditions";
+import { fetchExistsMakes } from "./thunks/fetch-exists-makes";
 
 interface DataState {
   countries: Country[];
@@ -20,6 +21,7 @@ interface DataState {
   engineTypes: EngineType[];
   colors: Color[];
   conditions: Condition[];
+  existsMakes: Make[];
 }
 
 const initialState: DataState = {
@@ -28,6 +30,7 @@ const initialState: DataState = {
   engineTypes: [],
   colors: [],
   conditions: [],
+  existsMakes: [],
 };
 
 const dataSlice = createSlice({
@@ -65,6 +68,9 @@ const dataSlice = createSlice({
         state.conditions = action.payload;
       }
     );
+    builder.addCase(fetchExistsMakes.fulfilled, (state, action: PayloadAction<Make[]>) =>{
+      state.existsMakes = action.payload
+    })
   },
 });
 
@@ -73,5 +79,6 @@ export const makeSelector = (state: RootState) => state.data.makes;
 export const engineTypesSelector = (state: RootState) => state.data.engineTypes;
 export const colorsSelector = (state: RootState) => state.data.colors;
 export const conditionsSelector = (state: RootState) => state.data.conditions;
+export const existsMakesSelector = (state: RootState) => state.data.existsMakes
 
 export default dataSlice.reducer;

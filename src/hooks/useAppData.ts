@@ -7,6 +7,7 @@ import { AppDispatch } from "../redux/store";
 import { fetchEngineTypes } from "../redux/slices/data-slice/thunks/fetch-engine-types";
 import { fetchColors } from "../redux/slices/data-slice/thunks/fetch-colors";
 import { fetchConditions } from "../redux/slices/data-slice/thunks/fetch-conditions";
+import { fetchExistsMakes } from "../redux/slices/data-slice/thunks/fetch-exists-makes";
 
 export const useAppData = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -18,5 +19,6 @@ export const useAppData = () => {
     dispatch(fetchEngineTypes());
     dispatch(fetchColors());
     dispatch(fetchConditions());
+    dispatch(fetchExistsMakes());
   }, [dispatch]);
 };

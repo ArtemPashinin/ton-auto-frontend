@@ -7,25 +7,25 @@ import {
   searchFiltersSelector,
   setFilter,
 } from "../../../redux/slices/search-filters-slice/search-filters-slice";
-import { makeSelector } from "../../../redux/slices/data-slice/data-slice";
+import { existsMakesSelector } from "../../../redux/slices/data-slice/data-slice";
 import { QueryDto } from "../../../interfaces/dto/query.dto";
 import { useCallback, useEffect, useState } from "react";
-import { fetchModels } from "../../../utils/fetch-models";
 import { Model } from "../../../interfaces/vehicle-info.interface";
 import CollapseBar from "./CollapseBar";
 import { fetchAdvertisements } from "../../../redux/slices/advertisement-slice/thunks/fetch-advertisement";
 import { clearAdvertisements } from "../../../redux/slices/advertisement-slice/advertisement-slice";
 import throttle from "lodash.throttle";
+import { fetchExistsModels } from "../../../utils/fetch-exists-models";
 
 interface SearchBarProps {
-  open: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SearchBar = ({open, setOpen}: SearchBarProps) => {
+const SearchBar = ({ open, setOpen }: SearchBarProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const filters = useSelector(searchFiltersSelector);
-  const makes = useSelector(makeSelector);
+  const makes = useSelector(existsMakesSelector);
 
   const [models, setModels] = useState<Model[]>([]);
 
@@ -47,7 +47,7 @@ const SearchBar = ({open, setOpen}: SearchBarProps) => {
 
   useEffect(() => {
     (async () => {
-      setModels(await fetchModels(filters.make));
+      setModels(await fetchExistsModels(filters.make));
     })();
   }, [filters.make]);
 

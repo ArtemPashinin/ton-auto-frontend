@@ -9,8 +9,18 @@ export interface VehicleTypeButtonData {
 }
 
 export const vehicleTypeButtonData: VehicleTypeButtonData[] = [
-  { title: "New cars", type: VehicleType.CAR, commercial: false, condition: VehicleConditions.NEW },
-  { title: "Used cars", type: VehicleType.CAR, commercial: false, condition: VehicleConditions.USED },
-  { title: "Commercial", commercial: true  },
-  { title: "Motocycles", type: VehicleType.MOTORCYCLE, commercial: false },
+  {
+    title: "New cars",
+    type: VehicleType.CAR,
+    commercial: false,
+    condition: VehicleConditions.NEW,
+  },
+  {
+    title: "Used cars",
+    type: VehicleType.CAR,
+    commercial: false,
+    condition: VehicleConditions.USED,
+  },
+  { title: "Commercial", commercial: true },
+  { title: "Motorcycles", type: VehicleType.MOTORCYCLE, commercial: false },
 ];

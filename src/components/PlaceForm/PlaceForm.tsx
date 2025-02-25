@@ -28,6 +28,7 @@ import { AdvertisementDto } from "../../interfaces/dto/advertisement.dto";
 import WebApp from "@twa-dev/sdk";
 import { Link, useNavigate } from "react-router-dom";
 import { clearEditDesc } from "../../redux/slices/description-slice/description-slice";
+import { useOverflowHidden } from "../../hooks/useOverflow";
 
 const PlaceForm = () => {
   const navigate = useNavigate();
@@ -41,6 +42,8 @@ const PlaceForm = () => {
   const conditions = useSelector(conditionsSelector);
 
   const years = useMemo(generateYearsList, []);
+
+  useOverflowHidden(false);
 
   const [models, setModels] = useState<Model[]>([]);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
@@ -105,7 +108,7 @@ const PlaceForm = () => {
   }, [selectedMakeId]);
 
   return (
-    <Form>
+    <Form className="pb-5">
       <Container>
         <Row className="mb-2 gap-2">
           <Form.Group as={Col} className="p-0" id="place-form">
@@ -392,7 +395,7 @@ const PlaceForm = () => {
               className="py-2"
               isInvalid={!placeData.description && isSubmitted}
               as="textarea"
-              rows={4}
+              rows={10}
               value={placeData.description}
               placeholder="Description"
               onChange={(e) => {

@@ -61,7 +61,7 @@ const advertisementSlice = createSlice({
             ? {
                 ...ad,
                 favoritedBy:
-                  ad.favoritedBy && ad.favoritedBy.length > 0 ? [] : [user],
+                  ad.favoritedBy && ad.favoritedBy.some(usr => usr.id === user.id) ? [] : [user],
               }
             : ad
         );

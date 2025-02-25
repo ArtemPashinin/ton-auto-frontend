@@ -16,6 +16,7 @@ interface EndPointMap {
   conditions: Condition[];
   cities: City[];
   countries: Country[];
+  existsMakes: Make[];
 }
 
 export type VehicleEndpoint = keyof EndPointMap;
@@ -28,6 +29,7 @@ const endpointPaths: Record<VehicleEndpoint, string> = {
   conditions: "/vehicle",
   cities: "/user",
   countries: "/user",
+  existsMakes: "/vehicle",
 };
 
 export const fetchVehicleData = async <T extends VehicleEndpoint>(

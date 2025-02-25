@@ -46,8 +46,8 @@ export const CarCard = ({
   );
 
   useEffect(() => {
-    setFavorited(favoritedBy.length > 0);
-  }, [favoritedBy, user]);
+    setFavorited(favoritedBy.some((user) => user.id === currentUser?.id));
+  }, [currentUser, currentUser?.id, favoritedBy, user]);
 
   return (
     <Row

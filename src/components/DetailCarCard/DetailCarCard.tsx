@@ -49,7 +49,8 @@ export const DetailCardCard = ({
           <p>🐎 {hp}</p>
           <p>🌈 {color.color}</p>
           <p>
-            📍 {user.city.country.title}, {user.city.title}
+            📍 {user.city.country.title},<br />
+            {user.city.title}
           </p>
         </div>
         <div className="text-start">

@@ -19,7 +19,7 @@ export const FavoriteButton = ({
 }: FavoriteButtonProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector(userSelector);
-  const [favorited, setFavorited] = useState(favoritedBy.length > 0);
+  const [favorited, setFavorited] = useState(favoritedBy.some(usr => usr.id === user?.id));
 
   const toggleFavorite = () => {
     dispatch(markFavorite({ user: user!, advertisementId }));

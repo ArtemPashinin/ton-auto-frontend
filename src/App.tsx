@@ -17,9 +17,13 @@ import MediaPage from "./pages/Media/MediaPage";
 import PurchasePage from "./pages/Purchase/PurchasePage";
 import SuccessPaymentPage from "./pages/SuccessPayment/SuccessPayment";
 import EditMediaPage from "./pages/EditMedia/EditMedia";
+import { useOverflowHidden } from "./hooks/useOverflow";
+import { useZoomControl } from "./hooks/useZoomcontrol";
 
 function App() {
   useAppData();
+  useOverflowHidden(true)
+  useZoomControl()
 
   return (
     <>

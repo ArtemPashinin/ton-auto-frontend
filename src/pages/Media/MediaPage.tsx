@@ -1,11 +1,13 @@
 import { useMemo, CSSProperties } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import PageWrapper from "../../components/PageWrapper/PageWrapper";
+import { useZoomControl } from "../../hooks/useZoomcontrol";
 
 const MediaPage = () => {
   const { url } = useParams<{ url: string }>();
 
-  // Массив расширений, которые считаются видеоформатами
+  useZoomControl(true);
+
   const extensionList = useMemo(
     () => [
       "mov",
@@ -32,13 +34,13 @@ const MediaPage = () => {
   // Стили для видео и изображений
   const mediaStyles: CSSProperties = {
     maxWidth: "100vw",
-    maxHeight: "100vh",
-    objectFit: "contain", // Теперь TypeScript знает, что это допустимое значение
+    maxHeight: "90vh",
+    objectFit: "contain",
     display: "block",
     margin: "auto",
   };
 
-  // Если URL отсутствует, перенаправляем на главную страницу
+  
   if (!url) {
     return <Navigate to="/" replace />;
   }
@@ -47,7 +49,7 @@ const MediaPage = () => {
     <PageWrapper backButton hideTabBar>
       <div
         className="d-flex align-items-center justify-content-center"
-        style={{ height: "100vh" }}
+        style={{ height: "95vh" }}
       >
         {extension && extensionList.includes(extension) ? (
           <video autoPlay src={url} controls style={mediaStyles} />

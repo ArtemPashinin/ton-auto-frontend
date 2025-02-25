@@ -53,7 +53,7 @@ const ImageUploader: React.FC = () => {
 
       // Проверка на количество изображений
       if (newFiles.length + totalImages > 10) {
-        WebApp.showAlert("Максимум можно загрузить 10 изображений.");
+        WebApp.showAlert("A maximum of 10 images can be uploaded.");
         return;
       }
 
@@ -65,7 +65,7 @@ const ImageUploader: React.FC = () => {
       const newSize = currentSize + totalSize;
 
       if (newSize > 40 * 1024 * 1024) {
-        WebApp.showAlert("Общий размер изображений не должен превышать 40 МБ.");
+        WebApp.showAlert("The total size of images should not exceed 40 MB.");
         return;
       }
 
@@ -105,21 +105,26 @@ const ImageUploader: React.FC = () => {
 
   const handleUpload = useCallback(async () => {
     if (leftImages.length + rightImages.length < 1) {
-      WebApp.showAlert("Нет изображений");
+      WebApp.showAlert("No images");
       return;
     }
-    if (leftImages.length + rightImages.length < 2) {
-      const element =
-        leftImages.length > 0
-          ? leftImages[0]
-          : rightImages.length > 0
-          ? rightImages[0]
-          : null;
-      if (element?.file.type.startsWith("video/")) {
-        WebApp.showAlert("You must upload at least one image.");
-        return;
-      }
+    const mediaList = [...leftImages, ...rightImages];
+    if (!mediaList.some((media) => media.file.type.startsWith("image/"))) {
+      WebApp.showAlert("You must upload at least one image.");
+      return;
     }
+    // if (leftImages.length + rightImages.length < 2) {
+    //   const element =
+    //     leftImages.length > 0
+    //       ? leftImages[0]
+    //       : rightImages.length > 0
+    //       ? rightImages[0]
+    //       : null;
+    //   if (element?.file.type.startsWith("video/")) {
+    //     WebApp.showAlert("You must upload at least one image.");
+    //     return;
+    //   }
+    // }
     const formData = new FormData();
     const orderedImages: Image[] = [];
 

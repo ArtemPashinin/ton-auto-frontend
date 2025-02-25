@@ -328,13 +328,11 @@ const PlaceForm = () => {
             <InputGroup>
               <Form.Control
                 className="py-2"
-                placeholder="Contry"
-                aria-label="Contry"
+                placeholder="City"
+                aria-label="City"
                 disabled
                 value={
-                  countries.find(
-                    (country) => country.id === user?.city.country.id
-                  )?.title
+                  user?.city.title
                 }
               />
               <InputGroup.Text>

@@ -1,10 +1,12 @@
-import { format } from "date-fns";
-import { Advertisement } from "../../interfaces/advertisement.interface";
-import { MediaSwiper } from "./Swiper";
-import style from "./CarCard.module.css";
-import { CallButton } from "./CallButton";
-import { CopyButton } from "./CopyButton";
-import { FavoriteButton } from "./FavoriteButton";
+import { format } from 'date-fns';
+
+import { CallButton } from './CallButton';
+import { CopyButton } from './CopyButton';
+import { FavoriteButton } from './FavoriteButton';
+import { MediaSwiper } from './Swiper';
+import { Advertisement } from '../../interfaces/advertisement.interface';
+
+import style from './CarCard.module.css';
 
 type DetailCardCardProps = Advertisement;
 
@@ -42,22 +44,38 @@ export const DetailCardCard = ({
       </div>
 
       <div className="d-flex mb-4">
-        <div className="text-start lh-18 fw-400 fs-14 pe-3 pt-1 text-nowrap">
-          <p>📆 {year}</p>
-          <p>🔘 {mileage} km</p>
-          <p>⛽️ {engine.type}</p>
-          <p>🐎 {hp}</p>
-          <p>🌈 {color.color}</p>
+        <div className="text-start fw-normal fs-14 pe-3 text-nowrap">
           <p>
-            📍 {user.city.country.title},<br />
-            {user.city.title}
+            <span className="d-inline-block" style={{ minWidth: '2rem' }}>📆</span>
+            {year}
+          </p>
+          <p>
+            <span className="d-inline-block" style={{ minWidth: '2rem' }}>🔘</span>
+            {mileage} km
+          </p>
+          <p>
+            <span className="d-inline-block" style={{ minWidth: '2rem' }}>⛽️</span>
+            {engine.type}
+          </p>
+          <p>
+            <span className="d-inline-block" style={{ minWidth: '2rem' }}>🐎</span>
+            {hp}
+          </p>
+          <p>
+            <span className="d-inline-block" style={{ minWidth: '2rem' }}>🌈</span>
+            {color.color}
+          </p>
+          <p className="d-flex align-items-center">
+            <span className="d-inline-block" style={{ minWidth: '2rem' }}>📍</span>
+            <span className="d-inline-block lh-1">
+              {user.city.country.title},<br />
+              {user.city.title}
+            </span>
           </p>
         </div>
         <div className="text-start">
-          <p className="fw-300 fs-17 lh-17 text-break">{description}</p>
-          <p className={`${style.dateText} fw-400 fs-12`}>
-            {format(new Date(createdAt), "MMM dd, yyyy")}
-          </p>
+          <p className="fw-light text-break">{description}</p>
+          <p className={`${style.dateText} fw-normal fs-12`}>{format(new Date(createdAt), 'MMM dd, yyyy')}</p>
         </div>
       </div>
 

@@ -1,11 +1,13 @@
-import { Button } from "react-bootstrap";
 import { useState } from "react";
+import { Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../../redux/store";
-import { markFavorite } from "../../redux/slices/favorites-slice/thunks/mark-favorite";
-import { userSelector } from "../../redux/slices/user-slice/user-slice";
+
 import WebApp from "@twa-dev/sdk";
 import { User } from "../../interfaces/user-info.interface";
+import { markFavorite } from "../../redux/slices/favorites-slice/thunks/mark-favorite";
+import { userSelector } from "../../redux/slices/user-slice/user-slice";
+import { AppDispatch } from "../../redux/store";
+
 import style from "./CarCard.module.css";
 
 interface FavoriteButtonProps {
@@ -19,7 +21,8 @@ export const FavoriteButton = ({
 }: FavoriteButtonProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector(userSelector);
-  const [favorited, setFavorited] = useState(favoritedBy.some(usr => usr.id === user?.id));
+  const isFavourite = favoritedBy ? favoritedBy.some(usr => usr.id === user?.id) : false;
+  const [favorited, setFavorited] = useState(isFavourite);
 
   const toggleFavorite = () => {
     dispatch(markFavorite({ user: user!, advertisementId }));

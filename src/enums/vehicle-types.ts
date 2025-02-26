@@ -1,5 +1,5 @@
-import { VehicleConditions } from "./vehicle-conditions";
-import { VehicleType } from "./VehicleType.enum";
+import { VehicleConditions } from './vehicle-conditions';
+import { VehicleType } from './VehicleType.enum';
 
 export interface VehicleTypeButtonData {
   title: string;
@@ -10,17 +10,28 @@ export interface VehicleTypeButtonData {
 
 export const vehicleTypeButtonData: VehicleTypeButtonData[] = [
   {
-    title: "New cars",
+    title: 'All cars',
+    commercial: false,
+  },
+  {
+    title: 'New',
     type: VehicleType.CAR,
     commercial: false,
     condition: VehicleConditions.NEW,
   },
   {
-    title: "Used cars",
+    title: 'Used',
     type: VehicleType.CAR,
     commercial: false,
     condition: VehicleConditions.USED,
   },
-  { title: "Commercial", commercial: true },
-  { title: "Motorcycles", type: VehicleType.MOTORCYCLE, commercial: false },
+  {
+    title: 'Commercial',
+    commercial: true
+  },
+  { 
+    title: 'Moto', 
+    type: VehicleType.MOTORCYCLE, 
+    commercial: false
+  },
 ];

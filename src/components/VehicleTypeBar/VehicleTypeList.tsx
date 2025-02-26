@@ -1,15 +1,12 @@
-import { Container, Row } from "react-bootstrap";
-import { VehicleTypeButton } from "../buttons/VehicleTypeButton/VehicleTypeButton";
-import { vehicleTypeButtonData } from "../../enums/vehicle-types";
+import { vehicleTypeButtonData } from '../../enums/vehicle-types';
+import { VehicleTypeButton } from '../buttons/VehicleTypeButton/VehicleTypeButton';
 
 export const VehicleTypeList = () => {
   return (
-    <Container className="mb-3">
-      <Row>
-        {vehicleTypeButtonData.map((data, index) => (
-          <VehicleTypeButton {...data} key={index} />
-        ))}
-      </Row>
-    </Container>
+    <div className="mb-3 d-flex justify-content-between gap-2">
+      {vehicleTypeButtonData.map((data, index) => (
+        <VehicleTypeButton {...data} key={index} />
+      ))}
+    </div>
   );
 };

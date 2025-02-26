@@ -1,4 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { fetchColors } from "./thunks/fetch-colors";
+import { fetchConditions } from "./thunks/fetch-conditions";
+import { fetchCountries } from "./thunks/fetch-countries";
+import { fetchEngineTypes } from "./thunks/fetch-engine-types";
+import { fetchExistsMakes } from "./thunks/fetch-exists-makes";
+import { fetchMakes } from "./thunks/fetch-makes";
+import { SlicesNames } from "../../../enums/slices";
 import { Country } from "../../../interfaces/user-info.interface";
 import {
   Color,
@@ -6,16 +13,10 @@ import {
   EngineType,
   Make,
 } from "../../../interfaces/vehicle-info.interface";
-import { SlicesNames } from "../../../enums/slices";
-import { fetchCountries } from "./thunks/fetch-countries";
-import { RootState } from "../../store";
-import { fetchMakes } from "./thunks/fetch-makes";
-import { fetchEngineTypes } from "./thunks/fetch-engine-types";
-import { fetchColors } from "./thunks/fetch-colors";
-import { fetchConditions } from "./thunks/fetch-conditions";
-import { fetchExistsMakes } from "./thunks/fetch-exists-makes";
 
-interface DataState {
+import { RootState } from "../../store";
+
+export interface DataState {
   countries: Country[];
   makes: Make[];
   engineTypes: EngineType[];
@@ -80,5 +81,6 @@ export const engineTypesSelector = (state: RootState) => state.data.engineTypes;
 export const colorsSelector = (state: RootState) => state.data.colors;
 export const conditionsSelector = (state: RootState) => state.data.conditions;
 export const existsMakesSelector = (state: RootState) => state.data.existsMakes
+export const getAllData = (state: RootState) => state.data
 
 export default dataSlice.reducer;

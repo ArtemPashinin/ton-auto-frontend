@@ -1,85 +1,71 @@
-import {
-  Col,
-  Container,
-  Form,
-  InputGroup,
-  Row,
-  Spinner,
-} from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  descriptionSelector,
-  editenAdvertisementSelector,
-  setNewDecriptionField,
-} from "../../redux/slices/description-slice/description-slice";
-import { AppDispatch } from "../../redux/store";
-import {
-  colorsSelector,
-  conditionsSelector,
-  countriesSelector,
-  engineTypesSelector,
-  makeSelector,
-} from "../../redux/slices/data-slice/data-slice";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { Model } from "../../interfaces/vehicle-info.interface";
-import { fetchModels } from "../../utils/fetch-models";
-import { generateYearsList } from "../../utils/generate-years-list";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { userSelector } from "../../redux/slices/user-slice/user-slice";
-import { fetchDescription } from "../../redux/slices/description-slice/thunks/fetch-advertisement";
-import { AdvertisementDto } from "../../interfaces/dto/advertisement.dto";
-import WebApp from "@twa-dev/sdk";
-import { updateAdvertisement } from "../../utils/update-advertsement";
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Col, Container, Form, InputGroup, Row, Spinner } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 
-const EditDescription = () => {
-  const { id } = useParams<{ id: string }>();
+import WebApp from '@twa-dev/sdk';
+import { Advertisement } from '../../interfaces/advertisement.interface';
+import { AdvertisementDto } from '../../interfaces/dto/advertisement.dto';
+import { Model } from '../../interfaces/vehicle-info.interface';
+import { DataState } from '../../redux/slices/data-slice/data-slice';
+import { descriptionSelector, setNewDecriptionField } from '../../redux/slices/description-slice/description-slice';
+import { userSelector } from '../../redux/slices/user-slice/user-slice';
+import { AppDispatch } from '../../redux/store';
 
+import { fetchModels } from '../../utils/fetch-models';
+import { generateYearsList } from '../../utils/generate-years-list';
+import { updateAdvertisement } from '../../utils/update-advertsement';
+
+interface EditDescriptionProps {
+  data: DataState;
+  advertisement: Advertisement;
+}
+
+const EditDescription = ({ data, advertisement }: EditDescriptionProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const makes = useSelector(makeSelector);
+
   const newDescription = useSelector(descriptionSelector);
-  const advertisement = useSelector(editenAdvertisementSelector);
+
+  const modelMakeId = advertisement.model.make.id;
+
   const user = useSelector(userSelector);
-  const countries = useSelector(countriesSelector);
-  const engineTypes = useSelector(engineTypesSelector);
-  const colors = useSelector(colorsSelector);
-  const conditions = useSelector(conditionsSelector);
+
+  const { countries, makes, engineTypes, colors, conditions } = data;
 
   const years = useMemo(generateYearsList, []);
 
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const [selectedMakeId, setSelectedMakeId] = useState<string | number>(
-    advertisement.model.make.id
-  );
+  const [selectedMakeId, setSelectedMakeId] = useState<string | number>(modelMakeId);
   const [models, setModels] = useState<Model[]>([]);
 
   const isAdvertisementDataValid = useCallback(() => {
     const requiredFields: (keyof AdvertisementDto)[] = [
-      "model_id",
-      "engine_id",
-      "color_id",
-      "year",
-      "hp",
-      "price",
-      "mileage",
-      "condition_id",
-      "description",
+      'model_id',
+      'engine_id',
+      'color_id',
+      'year',
+      'hp',
+      'price',
+      'mileage',
+      'condition_id',
+      'description',
     ];
 
     if (user?.admin) {
-      requiredFields.push("fict_phone");
+      requiredFields.push('fict_phone');
     }
 
     const valid = requiredFields.every((field) => {
       const value = newDescription?.[field];
-      return value !== undefined && value !== "" && !Number.isNaN(value);
+      return value !== undefined && value !== '' && !Number.isNaN(value);
     });
 
     return valid;
   }, [newDescription, user?.admin]);
 
   useEffect(() => {
-    WebApp.MainButton.setText("Save");
+    WebApp.MainButton.setText('Save');
     WebApp.MainButton.show();
 
     return () => {
@@ -95,7 +81,7 @@ const EditDescription = () => {
         await updateAdvertisement(newDescription, advertisement.id);
         navigate(-1);
       } catch {
-        WebApp.showAlert("Something wrong\nTry again later");
+        WebApp.showAlert('Something wrong\nTry again later');
       }
     }
   }, [advertisement.id, isAdvertisementDataValid, navigate, newDescription]);
@@ -116,8 +102,8 @@ const EditDescription = () => {
   }, [selectedMakeId]);
 
   useEffect(() => {
-    if (id) dispatch(fetchDescription(id));
-  }, [dispatch, id]);
+    setSelectedMakeId(modelMakeId);
+  }, [modelMakeId]);
 
   return (
     <Form>
@@ -127,13 +113,12 @@ const EditDescription = () => {
             <Form.Select
               className="py-2"
               as={Col}
+              aria-asdasd={selectedMakeId}
               isInvalid={!selectedMakeId && isSubmitted}
-              value={selectedMakeId || ""}
+              value={selectedMakeId}
               onChange={(e) => {
                 setSelectedMakeId(e.target.value);
-                dispatch(
-                  setNewDecriptionField({ key: "model_id", value: undefined })
-                );
+                dispatch(setNewDecriptionField({ key: 'model_id', value: undefined }));
               }}
               aria-label="Select make"
             >
@@ -149,11 +134,11 @@ const EditDescription = () => {
             <Form.Select
               className="py-2"
               isInvalid={!newDescription.model_id && isSubmitted}
-              value={newDescription.model_id || ""}
+              value={newDescription.model_id || ''}
               onChange={(e) => {
                 dispatch(
                   setNewDecriptionField({
-                    key: "model_id",
+                    key: 'model_id',
                     value: e.target.value,
                   })
                 );
@@ -175,11 +160,11 @@ const EditDescription = () => {
             <Form.Select
               className="py-2"
               isInvalid={!newDescription.engine_id && isSubmitted}
-              value={newDescription.engine_id || ""}
+              value={newDescription.engine_id || ''}
               onChange={(e) => {
                 dispatch(
                   setNewDecriptionField({
-                    key: "engine_id",
+                    key: 'engine_id',
                     value: e.target.value,
                   })
                 );
@@ -198,11 +183,11 @@ const EditDescription = () => {
             <Form.Select
               className="py-2"
               isInvalid={!newDescription.color_id && isSubmitted}
-              value={newDescription.color_id || ""}
+              value={newDescription.color_id || ''}
               onChange={(e) => {
                 dispatch(
                   setNewDecriptionField({
-                    key: "color_id",
+                    key: 'color_id',
                     value: e.target.value,
                   })
                 );
@@ -224,11 +209,9 @@ const EditDescription = () => {
             <Form.Select
               className="py-2"
               isInvalid={!newDescription.year && isSubmitted}
-              value={newDescription.year || ""}
+              value={newDescription.year || ''}
               onChange={(e) => {
-                dispatch(
-                  setNewDecriptionField({ key: "year", value: e.target.value })
-                );
+                dispatch(setNewDecriptionField({ key: 'year', value: e.target.value }));
               }}
               aria-label="Select year"
             >
@@ -249,11 +232,9 @@ const EditDescription = () => {
               placeholder="Horse powers"
               aria-label="Horse powers"
               maxLength={4}
-              value={newDescription.hp || ""}
+              value={newDescription.hp || ''}
               onChange={(e) => {
-                dispatch(
-                  setNewDecriptionField({ key: "hp", value: e.target.value })
-                );
+                dispatch(setNewDecriptionField({ key: 'hp', value: e.target.value }));
               }}
             />
           </Form.Group>
@@ -269,13 +250,13 @@ const EditDescription = () => {
                 aria-label="Price"
                 inputMode="numeric"
                 maxLength={12}
-                value={newDescription.price || ""}
+                value={newDescription.price || ''}
                 onChange={(e) => {
                   const input = e.target.value;
                   if (/^\d*$/.test(input)) {
                     dispatch(
                       setNewDecriptionField({
-                        key: "price",
+                        key: 'price',
                         value: parseInt(e.target.value) || undefined,
                       })
                     );
@@ -295,11 +276,11 @@ const EditDescription = () => {
             <Form.Select
               className="py-2"
               isInvalid={!newDescription.condition_id && isSubmitted}
-              value={newDescription.condition_id || ""}
+              value={newDescription.condition_id || ''}
               onChange={(e) => {
                 dispatch(
                   setNewDecriptionField({
-                    key: "condition_id",
+                    key: 'condition_id',
                     value: e.target.value,
                   })
                 );
@@ -326,11 +307,11 @@ const EditDescription = () => {
               placeholder="Mileage"
               aria-label="Mileage"
               maxLength={7}
-              value={newDescription.mileage || ""}
+              value={newDescription.mileage || ''}
               onChange={(e) => {
                 dispatch(
                   setNewDecriptionField({
-                    key: "mileage",
+                    key: 'mileage',
                     value: parseInt(e.target.value),
                   })
                 );
@@ -347,17 +328,10 @@ const EditDescription = () => {
                 placeholder="Contry"
                 aria-label="Contry"
                 disabled
-                value={
-                  countries.find(
-                    (country) => country.id === user?.city.country.id
-                  )?.title
-                }
+                value={countries.find((country) => country.id === user?.city.country.id)?.title}
               />
               <InputGroup.Text>
-                <Link
-                  to="../account"
-                  className="fs-12 link-underline-primary link-underline-opacity-0 mainText"
-                >
+                <Link to="../account" className="fs-12 link-underline-primary link-underline-opacity-0 mainText">
                   Change
                 </Link>
               </InputGroup.Text>
@@ -370,17 +344,10 @@ const EditDescription = () => {
                 placeholder="Contry"
                 aria-label="Contry"
                 disabled
-                value={
-                  countries.find(
-                    (country) => country.id === user?.city.country.id
-                  )?.title
-                }
+                value={countries.find((country) => country.id === user?.city.country.id)?.title}
               />
               <InputGroup.Text>
-                <Link
-                  to="../account"
-                  className="fs-12 link-underline-primary link-underline-opacity-0 mainText"
-                >
+                <Link to="../account" className="fs-12 link-underline-primary link-underline-opacity-0 mainText">
                   Change
                 </Link>
               </InputGroup.Text>
@@ -399,11 +366,11 @@ const EditDescription = () => {
                 placeholder="Phone"
                 aria-label="Phone"
                 maxLength={15}
-                value={newDescription.fict_phone || ""}
+                value={newDescription.fict_phone || ''}
                 onChange={(e) => {
                   dispatch(
                     setNewDecriptionField({
-                      key: "fict_phone",
+                      key: 'fict_phone',
                       value: parseInt(e.target.value),
                     })
                   );
@@ -423,7 +390,7 @@ const EditDescription = () => {
               onChange={(e) => {
                 dispatch(
                   setNewDecriptionField({
-                    key: "commercial",
+                    key: 'commercial',
                     value: e.target.checked,
                   })
                 );
@@ -443,7 +410,7 @@ const EditDescription = () => {
               onChange={(e) => {
                 dispatch(
                   setNewDecriptionField({
-                    key: "description",
+                    key: 'description',
                     value: e.target.value,
                   })
                 );

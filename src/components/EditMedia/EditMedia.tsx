@@ -173,6 +173,7 @@ const EditMedia = () => {
     return () => {
       WebApp.MainButton.hide();
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSetMainImage = async (id: string) => {

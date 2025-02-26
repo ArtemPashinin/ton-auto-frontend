@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Advertisement } from "../../interfaces/advertisement.interface";
-import PageSpinner from "../placeholders/PageSpinner";
-import { fetchAdvertisement } from "../../utils/fetch-advertisement";
-import UploadForm from "./UploadForm";
+
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
+import WebApp from "@twa-dev/sdk";
 import DraggableImage from "./DraggableImage";
+import UploadForm from "./UploadForm";
+import { Advertisement } from "../../interfaces/advertisement.interface";
 import { Media } from "../../interfaces/vehicle-info.interface";
+import PageSpinner from "../placeholders/PageSpinner";
+
+import { fetchAdvertisement } from "../../utils/fetch-advertisement";
 import { removeFile } from "../../utils/remove-media";
 import { updateMain } from "../../utils/update-main-media";
-import WebApp from "@twa-dev/sdk";
 import { updateMediaOrder } from "../../utils/update-media-order";
 import { uploadOneMedia } from "../../utils/upload-one-media";
 
@@ -162,6 +164,16 @@ const EditMedia = () => {
       }
     })();
   }, [id, navigate]);
+
+  useEffect(() => {
+    WebApp.MainButton.setText('Save');
+    WebApp.MainButton.show();
+    WebApp.MainButton.onClick(() => navigate(-1))
+
+    return () => {
+      WebApp.MainButton.hide();
+    };
+  }, []);
 
   const handleSetMainImage = async (id: string) => {
     const media = [...leftImages, ...rightImages].find(

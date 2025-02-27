@@ -32,7 +32,7 @@ export const DetailCardCard = ({
   const displayPhone = fict_phone || user!.phone!;
 
   return (
-    <div className="d-flex flex-column gap-3 p-2 defaultText">
+    <div className="d-flex flex-column gap-3 p-2 pb-5 defaultText">
       <div className="d-flex justify-content-between fs-20 flex-wrap">
         <p className="text-start">
           {model.make.make} {model.model} 

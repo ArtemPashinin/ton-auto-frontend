@@ -51,6 +51,7 @@ const EditDescription = ({ data, advertisement }: EditDescriptionProps) => {
     modelMakeId
   );
   const [models, setModels] = useState<Model[]>([]);
+  const [lockForm, setLockForm] = useState<boolean>(false);
 
   const isAdvertisementDataValid = useCallback(() => {
     const requiredFields: (keyof AdvertisementDto)[] = [
@@ -118,8 +119,12 @@ const EditDescription = ({ data, advertisement }: EditDescriptionProps) => {
     setSelectedMakeId(modelMakeId);
   }, [modelMakeId]);
 
+  useEffect(() => {
+    setTimeout(() => setLockForm(false), 500);
+  }, [lockForm]);
+
   return (
-    <Form>
+    <Form className={`pb-5 ${lockForm ? 'pe-none' : ''}`}>
       <Container>
         <Row className="mb-2 gap-2">
           <Form.Group as={Col} className="p-0" id="place-form">
@@ -130,6 +135,7 @@ const EditDescription = ({ data, advertisement }: EditDescriptionProps) => {
               isInvalid={!selectedMakeId && isSubmitted}
               value={selectedMakeId}
               onChange={(e) => {
+                setLockForm(true);
                 setSelectedMakeId(e.target.value);
                 dispatch(
                   setNewDecriptionField({ key: "model_id", value: undefined })
@@ -151,6 +157,7 @@ const EditDescription = ({ data, advertisement }: EditDescriptionProps) => {
               isInvalid={!newDescription.model_id && isSubmitted}
               value={newDescription.model_id || ""}
               onChange={(e) => {
+                setLockForm(true);
                 dispatch(
                   setNewDecriptionField({
                     key: "model_id",
@@ -177,6 +184,7 @@ const EditDescription = ({ data, advertisement }: EditDescriptionProps) => {
               isInvalid={!newDescription.engine_id && isSubmitted}
               value={newDescription.engine_id || ""}
               onChange={(e) => {
+                setLockForm(true);
                 dispatch(
                   setNewDecriptionField({
                     key: "engine_id",
@@ -200,6 +208,7 @@ const EditDescription = ({ data, advertisement }: EditDescriptionProps) => {
               isInvalid={!newDescription.color_id && isSubmitted}
               value={newDescription.color_id || ""}
               onChange={(e) => {
+                setLockForm(true);
                 dispatch(
                   setNewDecriptionField({
                     key: "color_id",
@@ -226,6 +235,7 @@ const EditDescription = ({ data, advertisement }: EditDescriptionProps) => {
               isInvalid={!newDescription.year && isSubmitted}
               value={newDescription.year || ""}
               onChange={(e) => {
+                setLockForm(true);
                 dispatch(
                   setNewDecriptionField({ key: "year", value: e.target.value })
                 );
@@ -297,6 +307,7 @@ const EditDescription = ({ data, advertisement }: EditDescriptionProps) => {
               isInvalid={!newDescription.condition_id && isSubmitted}
               value={newDescription.condition_id || ""}
               onChange={(e) => {
+                setLockForm(true);
                 dispatch(
                   setNewDecriptionField({
                     key: "condition_id",

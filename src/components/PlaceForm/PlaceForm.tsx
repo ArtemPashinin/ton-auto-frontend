@@ -29,6 +29,7 @@ import WebApp from "@twa-dev/sdk";
 import { Link, useNavigate } from "react-router-dom";
 import { clearEditDesc } from "../../redux/slices/description-slice/description-slice";
 import { useOverflowHidden } from "../../hooks/useOverflow";
+import { fetchMakeByModel } from "../../utils/fetch-make-by-model";
 
 const PlaceForm = () => {
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ const PlaceForm = () => {
 
   const [models, setModels] = useState<Model[]>([]);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const [selectedMakeId, setSelectedMakeId] = useState<string>("");
+  const [selectedMakeId, setSelectedMakeId] = useState<string | number>("");
 
   const isAdvertisementDataValid = useCallback(() => {
     const requiredFields: (keyof AdvertisementDto)[] = [
@@ -107,6 +108,16 @@ const PlaceForm = () => {
     })();
   }, [selectedMakeId]);
 
+  useEffect(() => {
+    const findMake = async () => {
+      if (placeData.model_id && selectedMakeId === "") {
+        const make = await fetchMakeByModel(placeData.model_id);
+        setSelectedMakeId(make.id);
+      }
+    };
+    findMake();
+  }, [placeData.model_id, selectedMakeId]);
+
   return (
     <Form className="pb-5">
       <Container>
@@ -135,7 +146,7 @@ const PlaceForm = () => {
             <Form.Select
               className="py-2"
               isInvalid={!placeData.model_id && isSubmitted}
-              value={placeData.model_id || ""}
+              value={placeData.model_id}
               onChange={(e) => {
                 dispatch(setField({ key: "model_id", value: e.target.value }));
               }}
@@ -331,9 +342,7 @@ const PlaceForm = () => {
                 placeholder="City"
                 aria-label="City"
                 disabled
-                value={
-                  user?.city.title
-                }
+                value={user?.city.title}
               />
               <InputGroup.Text>
                 <Link

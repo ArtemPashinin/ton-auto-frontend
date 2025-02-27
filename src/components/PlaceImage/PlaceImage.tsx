@@ -4,10 +4,13 @@ import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import WebApp from "@twa-dev/sdk";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  addImage,
   clearPlace,
   clearPlaceError,
   placeSelector,
   publishLoadingSelector,
+  setImages,
+  setMainImage,
 } from "../../redux/slices/place-sclice/place-slice";
 import { AppDispatch } from "../../redux/store";
 
@@ -16,21 +19,27 @@ import UploadForm from "./UploadForm";
 import DraggableImage from "./DraggableImage";
 import { placeAd } from "../../redux/slices/place-sclice/thunks/place-ad";
 
-interface Image {
+export interface Image {
   id: string;
   url: string;
   file: File;
 }
 
-const ImageUploader: React.FC = () => {
+interface ImageUploaderProps {
+  left: Image[];
+  right: Image[];
+  mainId: string | null;
+}
+
+const ImageUploader = ({ mainId, left, right }: ImageUploaderProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
   const publishLoading = useSelector(publishLoadingSelector);
   const placeData = useSelector(placeSelector);
-  const [leftImages, setLeftImages] = useState<Image[]>([]);
-  const [rightImages, setRightImages] = useState<Image[]>([]);
-  const [mainImageId, setMainImageId] = useState<string | null>(null);
+  const [leftImages, setLeftImages] = useState<Image[]>(left);
+  const [rightImages, setRightImages] = useState<Image[]>(right);
+  const [mainImageId, setMainImageId] = useState<string | null>(mainId);
 
   useEffect(() => {
     WebApp.MainButton.setText("Publish");
@@ -84,8 +93,10 @@ const ImageUploader: React.FC = () => {
             newImages.forEach((image, index) => {
               if (index % 2 === 0) {
                 setLeftImages((prevImages) => [...prevImages, image]);
+                dispatch(addImage({ side: "left", image: image }));
               } else {
                 setRightImages((prevImages) => [...prevImages, image]);
+                dispatch(addImage({ side: "right", image: image }));
               }
             });
 
@@ -95,6 +106,7 @@ const ImageUploader: React.FC = () => {
               !newImages[0].file.type.startsWith("video/")
             ) {
               setMainImageId(newImages[0].id);
+              dispatch(setMainImage(newImages[0].id));
             }
           }
         };
@@ -113,18 +125,6 @@ const ImageUploader: React.FC = () => {
       WebApp.showAlert("You must upload at least one image.");
       return;
     }
-    // if (leftImages.length + rightImages.length < 2) {
-    //   const element =
-    //     leftImages.length > 0
-    //       ? leftImages[0]
-    //       : rightImages.length > 0
-    //       ? rightImages[0]
-    //       : null;
-    //   if (element?.file.type.startsWith("video/")) {
-    //     WebApp.showAlert("You must upload at least one image.");
-    //     return;
-    //   }
-    // }
     const formData = new FormData();
     const orderedImages: Image[] = [];
 
@@ -174,36 +174,54 @@ const ImageUploader: React.FC = () => {
     const sourceList = source.droppableId === "left" ? leftImages : rightImages;
     const destList =
       destination.droppableId === "left" ? leftImages : rightImages;
-    const [removed] = sourceList.splice(source.index, 1);
+    const updatedSourceList = [
+      ...sourceList.slice(0, source.index),
+      ...sourceList.slice(source.index + 1),
+    ];
+    const removed = sourceList[source.index];
 
     if (source.droppableId === destination.droppableId) {
-      sourceList.splice(destination.index, 0, removed);
+      const updatedList = [
+        ...updatedSourceList.slice(0, destination.index),
+        removed,
+        ...updatedSourceList.slice(destination.index),
+      ];
       if (source.droppableId === "left") {
-        setLeftImages([...sourceList]);
+        setLeftImages(updatedList);
+        dispatch(setImages({ side: "left", images: updatedList }));
       } else {
-        setRightImages([...sourceList]);
+        setRightImages(updatedList);
+        dispatch(setImages({ side: "right", images: updatedList }));
       }
     } else {
-      destList.splice(destination.index, 0, removed);
+      const updatedDestList = [
+        ...destList.slice(0, destination.index),
+        removed,
+        ...destList.slice(destination.index),
+      ];
       if (source.droppableId === "left") {
-        setLeftImages([...sourceList]);
-        setRightImages([...destList]);
+        setLeftImages(updatedSourceList);
+        setRightImages(updatedDestList);
+        dispatch(setImages({ side: "left", images: updatedSourceList }));
+        dispatch(setImages({ side: "right", images: updatedDestList }));
       } else {
-        setRightImages([...sourceList]);
-        setLeftImages([...destList]);
+        setRightImages(updatedSourceList);
+        setLeftImages(updatedDestList);
+        dispatch(setImages({ side: "right", images: updatedSourceList }));
+        dispatch(setImages({ side: "left", images: updatedDestList }));
       }
     }
   };
 
   const handleDeleteImage = (id: string, column: "left" | "right") => {
     if (column === "left") {
-      setLeftImages((prevImages) =>
-        prevImages.filter((image) => image.id !== id)
-      );
+      const prevImages = leftImages.filter((image) => image.id !== id);
+      setLeftImages(prevImages);
+      dispatch(setImages({ side: "left", images: prevImages }));
     } else {
-      setRightImages((prevImages) =>
-        prevImages.filter((image) => image.id !== id)
-      );
+      const prevImages = rightImages.filter((image) => image.id !== id);
+      setRightImages(prevImages);
+      dispatch(setImages({ side: "right", images: prevImages }));
     }
 
     if (id === mainImageId) {
@@ -212,14 +230,17 @@ const ImageUploader: React.FC = () => {
       );
       if (allImages.length > 0) {
         setMainImageId(allImages[0].id);
+        dispatch(setMainImage(allImages[0].id));
       } else {
         setMainImageId(null);
+        dispatch(setMainImage(null));
       }
     }
   };
 
   const handleSetMainImage = (id: string) => {
     setMainImageId(id);
+    dispatch(setMainImage(id));
   };
 
   useEffect(() => {

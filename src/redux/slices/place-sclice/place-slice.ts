@@ -3,11 +3,17 @@ import { AdvertisementDto } from "../../../interfaces/dto/advertisement.dto";
 import { SlicesNames } from "../../../enums/slices";
 import { RootState } from "../../store";
 import { placeAd } from "./thunks/place-ad";
+import { Image } from "../../../components/PlaceImage/PlaceImage";
 
 interface InitialState {
   placeData: AdvertisementDto;
   loading: boolean;
   error: boolean;
+  images: {
+    leftImages: Image[];
+    rightImages: Image[];
+    mainImageId: string | null;
+  };
 }
 
 const initialState: InitialState = {
@@ -23,6 +29,11 @@ const initialState: InitialState = {
     description: undefined,
     condition_id: undefined,
     commercial: false,
+  },
+  images: {
+    leftImages: [],
+    rightImages: [],
+    mainImageId: null,
   },
   loading: false,
   error: false,
@@ -41,6 +52,20 @@ const placeSlice = createSlice({
     ) {
       const { key, value } = action.payload;
       state.placeData[key] = value;
+    },
+    addImage(
+      state,
+      action: PayloadAction<{ side: "left" | "right"; image: Image }>
+    ) {
+      const { side, image } = action.payload;
+      state.images[side === "left" ? "leftImages" : "rightImages"].push(image);
+    },
+    setImages(state, action: PayloadAction<{ side: "left" | "right"; images: Image[] }>){
+      const { side, images } = action.payload;
+      state.images[side === "left" ? "leftImages" : "rightImages"] = images;
+    },
+    setMainImage(state, action: PayloadAction<string | null>) {
+      state.images.mainImageId = action.payload;
     },
     clearPlace() {
       return initialState;
@@ -63,9 +88,11 @@ const placeSlice = createSlice({
   },
 });
 
-export const { setField, clearPlace, clearPlaceError } = placeSlice.actions;
+export const { setField, clearPlace, clearPlaceError, addImage, setMainImage, setImages } =
+  placeSlice.actions;
 
 export const placeSelector = (state: RootState) => state.place.placeData;
+export const placeImagesSelector = (state: RootState) => state.place.images;
 export const publishLoadingSelector = (state: RootState) => state.place.loading;
 export const publishError = (state: RootState) => state.place.error;
 

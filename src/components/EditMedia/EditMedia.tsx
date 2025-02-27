@@ -14,6 +14,7 @@ import { removeFile } from "../../utils/remove-media";
 import { updateMain } from "../../utils/update-main-media";
 import { updateMediaOrder } from "../../utils/update-media-order";
 import { uploadOneMedia } from "../../utils/upload-one-media";
+import { extensionList } from "../../utils/constants";
 
 const EditMedia = () => {
   const navigate = useNavigate();
@@ -63,33 +64,61 @@ const EditMedia = () => {
   };
 
   const handleDeleteImage = async (id: string, column: "left" | "right") => {
-    if (leftImages.length + rightImages.length > 1) {
-      const media = [...leftImages, ...rightImages].find(
-        (img) => img.image_url === id
+    // Объединяем все изображения
+    const allMedia = [...leftImages, ...rightImages];
+
+    // Находим удаляемое изображение
+    const deletingImage = allMedia.find((media) => media.image_url === id);
+
+    // Проверяем, является ли удаляемое изображение видео
+    const isDeletingImageVideo = deletingImage
+      ? extensionList.includes(
+          deletingImage.image_url.split(".").pop()!.toLowerCase()
+        )
+      : false;
+
+    // Считаем количество оставшихся изображений (не видео)
+    const remainingImagesCount = allMedia.filter(
+      (media) =>
+        !extensionList.includes(media.image_url.split(".").pop()!.toLowerCase())
+    ).length;
+
+    // Проверяем условия для удаления
+    const canDeleteImage =
+      remainingImagesCount < 2 && // Остается хотя бы одно изображение
+      !isDeletingImageVideo; // Удаляемое медиа не является видео
+
+    if (canDeleteImage) {
+      WebApp.showAlert("The ad must contain at least one image.");
+      return;
+    }
+
+    // Удаляем файл с сервера
+    const mediaToDelete = allMedia.find((img) => img.image_url === id);
+    if (mediaToDelete) {
+      await removeFile(advertisement?.id, mediaToDelete.id);
+    }
+
+    // Обновляем состояние изображений
+    if (column === "left") {
+      setLeftImages((prevImages) =>
+        prevImages.filter((image) => image.image_url !== id)
       );
-      await removeFile(advertisement?.id, media?.id);
+    } else {
+      setRightImages((prevImages) =>
+        prevImages.filter((image) => image.image_url !== id)
+      );
+    }
 
-      if (column === "left") {
-        setLeftImages((prevImages) =>
-          prevImages.filter((image) => image.image_url !== id)
-        );
-      } else {
-        setRightImages((prevImages) =>
-          prevImages.filter((image) => image.image_url !== id)
-        );
-      }
-
-      if (id === mainImageId) {
-        const allImages = [...leftImages, ...rightImages].filter(
-          (image) =>
-            image.image_url !== id && !image.image_url.startsWith("video/")
-        );
-        if (allImages.length > 0) {
-          setMainImageId(allImages[0].image_url);
-        } else {
-          setMainImageId(null);
-        }
-      }
+    // Если удаляемое изображение было главным, обновляем главное изображение
+    if (id === mainImageId) {
+      const remainingImages = allMedia.filter(
+        (image) =>
+          image.image_url !== id && !image.image_url.startsWith("video/")
+      );
+      setMainImageId(
+        remainingImages.length > 0 ? remainingImages[0].image_url : null
+      );
     }
   };
 
@@ -166,15 +195,20 @@ const EditMedia = () => {
   }, [id, navigate]);
 
   useEffect(() => {
-    WebApp.MainButton.setText('Save');
+    const back = () => {
+      navigate(-1);
+    };
+
+    WebApp.MainButton.setText("Save");
     WebApp.MainButton.show();
-    WebApp.MainButton.onClick(() => navigate(-1))
+
+    WebApp.MainButton.onClick(back);
 
     return () => {
+      WebApp.MainButton.offClick(back);
       WebApp.MainButton.hide();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [navigate]);
 
   const handleSetMainImage = async (id: string) => {
     const media = [...leftImages, ...rightImages].find(

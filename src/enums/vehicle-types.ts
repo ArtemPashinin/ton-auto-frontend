@@ -10,7 +10,7 @@ export interface VehicleTypeButtonData {
 
 export const vehicleTypeButtonData: VehicleTypeButtonData[] = [
   {
-    title: 'All cars',
+    title: 'All',
     commercial: false,
   },
   {

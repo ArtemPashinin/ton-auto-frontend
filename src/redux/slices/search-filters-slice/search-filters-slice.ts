@@ -20,7 +20,7 @@ const initialState: QueryDto = {
   mileageFrom: undefined,
   mileageTo: undefined,
   favorites: undefined,
-  commercial: undefined,
+  commercial: false,
   owned: undefined,
   type: undefined,
 };

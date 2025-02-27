@@ -1,5 +1,3 @@
-import WebApp from "@twa-dev/sdk";
-import { IconData } from "../interfaces/icon-data.interface";
 import {
   faHeart,
   faMagnifyingGlass,
@@ -7,6 +5,8 @@ import {
   faUser,
 } from "@awesome.me/kit-7090d2ba88/icons/classic/light";
 import { faCirclePlus } from "@awesome.me/kit-7090d2ba88/icons/classic/solid";
+import WebApp from "@twa-dev/sdk";
+import { IconData } from "../interfaces/icon-data.interface";
 
 const createRoute = (
   path: string,
@@ -34,7 +34,7 @@ export const appRoutesData: AppRouteData[] = [
     color: WebApp.themeParams.text_color,
   }),
   createRoute("/favorites", "Favorites", {
-    icon: faStar,
+    icon: faHeart,
     size: "xl",
     color: WebApp.themeParams.text_color,
   }),
@@ -49,7 +49,7 @@ export const appRoutesData: AppRouteData[] = [
     "0"
   ),
   createRoute("/myAds", "My ads", {
-    icon: faHeart,
+    icon: faStar,
     size: "xl",
     color: WebApp.themeParams.text_color,
   }),

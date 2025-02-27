@@ -1,17 +1,21 @@
-import { Col, Row, Image } from "react-bootstrap";
-import { format } from "date-fns";
-import style from "./CarCard.module.css";
 import { useEffect, useState } from "react";
-import { Advertisement } from "../../interfaces/advertisement.interface";
-import WebApp from "@twa-dev/sdk";
+import { format } from "date-fns";
+import { Col, Row, Image } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import Purchase from "./components/Purchase";
+import WebApp from "@twa-dev/sdk";
+import EditButton from "./buttons/EditButton";
+import RemoveAdButton from "./buttons/RemoveAdButton";
+import { Advertisement } from "../../interfaces/advertisement.interface";
+import { markFavorite } from "../../redux/slices/favorites-slice/thunks/mark-favorite";
 import { userSelector } from "../../redux/slices/user-slice/user-slice";
 import { AppDispatch } from "../../redux/store";
-import { markFavorite } from "../../redux/slices/favorites-slice/thunks/mark-favorite";
-import { useNavigate } from "react-router-dom";
-import RemoveAdButton from "./buttons/RemoveAdButton";
-import Purchase from "./components/Purchase";
-import EditButton from "./buttons/EditButton";
+
+import { getNumberWithSpaces } from '../../utils/price';
+
+import style from "./CarCard.module.css";
 
 interface Props {
   isMyAd: boolean;
@@ -67,15 +71,36 @@ export const CarCard = ({
             {model.make.make} {model.model}
           </p>
         </div>
-        <div>
-          <p>📆 {year}</p>
-          <p>🔘 {mileage} km</p>
-          <p>⛽️ {engine.type}</p>
-          <p>🐎 {hp}</p>
-          <p>🌈 {color.color}</p>
-          <p>📍 {user?.city.country.title}</p>
+        <div style={{ lineHeight: 1.4}}>
           <p>
-            💰 {price} {user?.city.country.currency}
+            <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>📆</span>
+            {year}
+          </p>
+          <p>
+            <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>🔘</span>
+            {mileage} km
+          </p>
+          <p>
+            <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>⛽️</span>
+            {engine.type}
+          </p>
+          <p>
+            <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>🐎</span>
+            {hp}
+          </p>
+          <p>
+            <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>🌈</span>
+            {color.color}
+          </p>
+          <p>
+            <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>📍</span>
+            {user?.city.country.title}
+          </p>
+          <p className="d-flex align-items-center">
+            <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>💰</span>
+            <span className="d-inline-block lh-1">
+              {getNumberWithSpaces(price)} {user?.city.country.currency}
+            </span>
           </p>
         </div>
         <div className="d-flex justify-content-between align-items-end">

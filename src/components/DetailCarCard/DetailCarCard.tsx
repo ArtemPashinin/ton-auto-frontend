@@ -1,5 +1,4 @@
 import { format } from 'date-fns';
-import { Col, Row } from 'react-bootstrap';
 
 import { CallButton } from './CallButton';
 import { CopyButton } from './CopyButton';
@@ -46,36 +45,26 @@ export const DetailCardCard = ({
         <MediaSwiper media={media} />
       </div>
 
-      <Row className="text-start fw-normal fs-14 text-nowrap align-items-center gx-1">
-        <Col xs="3">
-          <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>📆</span>
-          {year}
-        </Col>
-        <Col xs="4">
-          <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>🔘</span>
-          {getNumberWithSpaces(mileage)} km
-        </Col>
-        <Col xs="5">
-          <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>🌈</span>
-          {color.color}
-        </Col>
-        
-        <Col xs="3">
-          <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>🐎</span>
-          {hp}
-        </Col>
-        <Col xs="4">
-          <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>⛽️</span>
-          {engine.type}
-        </Col>
-        <Col xs="5" className="d-flex align-items-center">
-          <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>📍</span>
-          <span className="d-inline-block lh-1">
-            {user.city.country.title},<br />
-            {user.city.title}
-          </span>
-        </Col>
-      </Row>
+      <div className="text-start fw-normal fs-14 text-nowrap d-flex flex-wrap">
+        <p className='w-50 pe-2'>
+          <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>📆</span>{year}
+        </p>
+        <p className='w-50 pe-2'>
+          <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>🐎</span>{hp}
+        </p>
+        <p className='w-50 pe-2'>
+          <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>🔘</span>{getNumberWithSpaces(mileage)} km
+        </p>
+        <p className='w-50 pe-2'>
+          <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>🌈</span>{color.color}
+        </p>
+        <p className='w-50 pe-2'>
+          <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>⛽️</span>{engine.type}
+        </p>
+        <p>
+          <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>📍</span>{user.city.country.title}, {user.city.title}
+        </p>
+      </div>
       <div className="text-start">
         <p className="fw-light text-break mb-2">{description}</p>
         <p className={`${style.dateText} fw-normal fs-12`}>{format(new Date(createdAt), 'MMM dd, yyyy')}</p>

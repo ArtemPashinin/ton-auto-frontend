@@ -38,7 +38,7 @@ export const DetailCardCard = ({
           {model.make.make} {model.model} 
         </p>
         <p>
-          💰{getNumberWithSpaces(price)} {user.city.country.currency}
+          🤝 {getNumberWithSpaces(price)} {user.city.country.currency}
         </p>
       </div>
 

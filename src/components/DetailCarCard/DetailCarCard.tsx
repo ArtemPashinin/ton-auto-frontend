@@ -32,8 +32,8 @@ export const DetailCardCard = ({
   const displayPhone = fict_phone || user!.phone!;
 
   return (
-    <div className="p-2 defaultText">
-      <div className="d-flex justify-content-between fs-20 mb-3">
+    <div className="d-flex flex-column gap-3 p-2 defaultText">
+      <div className="d-flex justify-content-between fs-20 flex-wrap">
         <p className="text-start">
           {model.make.make} {model.model} 
         </p>
@@ -42,52 +42,52 @@ export const DetailCardCard = ({
         </p>
       </div>
 
-      <div className="d-flex swiper-container mb-3">
+      <div className="d-flex swiper-container">
         <MediaSwiper media={media} />
       </div>
 
-      <div className="d-flex mb-4 flex-wrap">
-        <Row className="text-start fw-normal fs-14 pe-3 text-nowrap align-items-center mb-2">
-          <Col xs="3">
-            <span className="d-inline-block" style={{ minWidth: '2rem' }}>📆</span>
-            {year}
-          </Col>
-          <Col xs="5">
-            <span className="d-inline-block" style={{ minWidth: '2rem' }}>🔘</span>
-            {mileage} km
-          </Col>
-          <Col xs="4">
-            <span className="d-inline-block" style={{ minWidth: '2rem' }}>⛽️</span>
-            {engine.type}
-          </Col>
-          <Col xs="3">
-            <span className="d-inline-block" style={{ minWidth: '2rem' }}>🐎</span>
-            {hp}
-          </Col>
-          <Col xs="5">
-            <span className="d-inline-block" style={{ minWidth: '2rem' }}>🌈</span>
-            {color.color}
-          </Col>
-          <Col xs="4" className="d-flex align-items-center">
-            <span className="d-inline-block" style={{ minWidth: '2rem' }}>📍</span>
-            <span className="d-inline-block lh-1">
-              {user.city.country.title},<br />
-              {user.city.title}
-            </span>
-          </Col>
-        </Row>
-        <div className="text-start">
-          <p className="fw-light text-break mb-2">{description}</p>
-          <p className={`${style.dateText} fw-normal fs-12`}>{format(new Date(createdAt), 'MMM dd, yyyy')}</p>
+      <Row className="text-start fw-normal fs-14 text-nowrap align-items-center gx-1">
+        <Col xs="3">
+          <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>📆</span>
+          {year}
+        </Col>
+        <Col xs="4">
+          <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>🔘</span>
+          {getNumberWithSpaces(mileage)} km
+        </Col>
+        <Col xs="5">
+          <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>🌈</span>
+          {color.color}
+        </Col>
+        
+        <Col xs="3">
+          <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>🐎</span>
+          {hp}
+        </Col>
+        <Col xs="4">
+          <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>⛽️</span>
+          {engine.type}
+        </Col>
+        <Col xs="5" className="d-flex align-items-center">
+          <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>📍</span>
+          <span className="d-inline-block lh-1">
+            {user.city.country.title},<br />
+            {user.city.title}
+          </span>
+        </Col>
+      </Row>
+      <div className="text-start">
+        <p className="fw-light text-break mb-2">{description}</p>
+        <p className={`${style.dateText} fw-normal fs-12`}>{format(new Date(createdAt), 'MMM dd, yyyy')}</p>
+      </div>
+
+      <div className="d-flex gap-2 flex-wrap">
+        <div className="d-flex gap-2 w-100">
+          <CallButton phoneNumber={displayPhone} />
+          <CopyButton phoneNumber={displayPhone} />
         </div>
+        <FavoriteButton advertisementId={id} favoritedBy={favoritedBy} />
       </div>
-
-      <div className="d-flex gap-2 mb-2">
-        <CallButton phoneNumber={displayPhone} />
-        <CopyButton phoneNumber={displayPhone} />
-      </div>
-
-      <FavoriteButton advertisementId={id} favoritedBy={favoritedBy} />
     </div>
   );
 };

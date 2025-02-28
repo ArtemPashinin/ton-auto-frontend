@@ -1,21 +1,39 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Col, Container, Form, InputGroup, Row, Spinner } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  Col,
+  Container,
+  Form,
+  InputGroup,
+  Row,
+  Spinner,
+} from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
-import WebApp from '@twa-dev/sdk';
-import { AdvertisementDto } from '../../interfaces/dto/advertisement.dto';
-import { Model } from '../../interfaces/vehicle-info.interface';
-import { colorsSelector, conditionsSelector, countriesSelector, engineTypesSelector, makeSelector } from '../../redux/slices/data-slice/data-slice';
-import { clearEditDesc } from '../../redux/slices/description-slice/description-slice';
-import { placeSelector, setField } from '../../redux/slices/place-sclice/place-slice';
-import { userSelector } from '../../redux/slices/user-slice/user-slice';
-import { AppDispatch } from '../../redux/store';
+import WebApp from "@twa-dev/sdk";
+import { AdvertisementDto } from "../../interfaces/dto/advertisement.dto";
+import { Model } from "../../interfaces/vehicle-info.interface";
+import {
+  colorsSelector,
+  conditionsSelector,
+  countriesSelector,
+  engineTypesSelector,
+  makeSelector,
+} from "../../redux/slices/data-slice/data-slice";
+import { clearEditDesc } from "../../redux/slices/description-slice/description-slice";
+import {
+  placeSelector,
+  setField,
+} from "../../redux/slices/place-sclice/place-slice";
+import { userSelector } from "../../redux/slices/user-slice/user-slice";
+import { AppDispatch } from "../../redux/store";
 
-import { fetchMakeByModel } from '../../utils/fetch-make-by-model';
-import { fetchModels } from '../../utils/fetch-models';
-import { generateYearsList } from '../../utils/generate-years-list';
-import { useOverflowHidden } from '../../hooks/useOverflow';
+import { fetchMakeByModel } from "../../utils/fetch-make-by-model";
+import { fetchModels } from "../../utils/fetch-models";
+import { generateYearsList } from "../../utils/generate-years-list";
+import { useOverflowHidden } from "../../hooks/useOverflow";
+import { City } from "../../interfaces/user-info.interface";
+import { fetchCities } from "../../utils/fetch-cities";
 
 const PlaceForm = () => {
   const navigate = useNavigate();
@@ -34,36 +52,37 @@ const PlaceForm = () => {
 
   const [models, setModels] = useState<Model[]>([]);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const [selectedMakeId, setSelectedMakeId] = useState<string | number>('');
+  const [selectedMakeId, setSelectedMakeId] = useState<string | number>("");
   const [lockForm, setLockForm] = useState<boolean>(false);
+  const [cities, setCities] = useState<City[]>([]);
 
   const isAdvertisementDataValid = useCallback(() => {
     const requiredFields: (keyof AdvertisementDto)[] = [
-      'model_id',
-      'engine_id',
-      'color_id',
-      'year',
-      'hp',
-      'price',
-      'mileage',
-      'condition_id',
-      'description',
+      "model_id",
+      "engine_id",
+      "color_id",
+      "year",
+      "hp",
+      "price",
+      "mileage",
+      "condition_id",
+      "description",
     ];
 
     if (user?.admin) {
-      requiredFields.push('fict_phone');
+      requiredFields.push("fict_phone", "fict_country_id", "fict_city_id");
     }
 
     const valid = requiredFields.every((field) => {
       const value = placeData?.[field];
-      return value !== undefined && value !== '' && !Number.isNaN(value);
+      return value !== undefined && value !== "" && !Number.isNaN(value);
     });
 
     return valid;
   }, [placeData, user?.admin]);
 
   useEffect(() => {
-    WebApp.MainButton.text = 'Next';
+    WebApp.MainButton.text = "Next";
     WebApp.MainButton.show();
 
     return () => {
@@ -75,7 +94,7 @@ const PlaceForm = () => {
     setIsSubmitted(true);
 
     if (isAdvertisementDataValid()) {
-      navigate('images');
+      navigate("images");
     }
   }, [isAdvertisementDataValid, navigate]);
 
@@ -101,7 +120,7 @@ const PlaceForm = () => {
 
   useEffect(() => {
     const findMake = async () => {
-      if (placeData.model_id && selectedMakeId === '') {
+      if (placeData.model_id && selectedMakeId === "") {
         const make = await fetchMakeByModel(placeData.model_id);
         setSelectedMakeId(make.id);
       }
@@ -109,8 +128,15 @@ const PlaceForm = () => {
     findMake();
   }, [placeData.model_id, selectedMakeId]);
 
+  useEffect(() => {
+    if (user?.admin)
+      (async () => {
+        setCities(await fetchCities(placeData.fict_country_id));
+      })();
+  }, [placeData.fict_country_id, user?.admin]);
+
   return (
-    <Form className={`pb-5 ${lockForm ? 'pe-none' : ''}`}>
+    <Form className={`pb-5 ${lockForm ? "pe-none" : ""}`}>
       <Container>
         <Row className="mb-2 gap-2">
           <Form.Group as={Col} className="p-0" id="place-form">
@@ -118,11 +144,11 @@ const PlaceForm = () => {
               className="py-2"
               as={Col}
               isInvalid={!selectedMakeId && isSubmitted}
-              value={selectedMakeId || ''}
+              value={selectedMakeId || ""}
               onChange={(e) => {
                 setLockForm(true);
                 setSelectedMakeId(e.target.value);
-                dispatch(setField({ key: 'model_id', value: undefined }));
+                dispatch(setField({ key: "model_id", value: undefined }));
               }}
               aria-label="Select make"
             >
@@ -141,7 +167,7 @@ const PlaceForm = () => {
               value={placeData.model_id}
               onChange={(e) => {
                 setLockForm(true);
-                dispatch(setField({ key: 'model_id', value: e.target.value }));
+                dispatch(setField({ key: "model_id", value: e.target.value }));
               }}
               disabled={!selectedMakeId}
               aria-label="Select model"
@@ -160,10 +186,10 @@ const PlaceForm = () => {
             <Form.Select
               className="py-2"
               isInvalid={!placeData.engine_id && isSubmitted}
-              value={placeData.engine_id || ''}
+              value={placeData.engine_id || ""}
               onChange={(e) => {
                 setLockForm(true);
-                dispatch(setField({ key: 'engine_id', value: e.target.value }));
+                dispatch(setField({ key: "engine_id", value: e.target.value }));
               }}
               aria-label="Select engine type"
             >
@@ -179,10 +205,10 @@ const PlaceForm = () => {
             <Form.Select
               className="py-2"
               isInvalid={!placeData.color_id && isSubmitted}
-              value={placeData.color_id || ''}
+              value={placeData.color_id || ""}
               onChange={(e) => {
                 setLockForm(true);
-                dispatch(setField({ key: 'color_id', value: e.target.value }));
+                dispatch(setField({ key: "color_id", value: e.target.value }));
               }}
               aria-label="Select color"
             >
@@ -201,10 +227,10 @@ const PlaceForm = () => {
             <Form.Select
               className="py-2"
               isInvalid={!placeData.year && isSubmitted}
-              value={placeData.year || ''}
+              value={placeData.year || ""}
               onChange={(e) => {
                 setLockForm(true);
-                dispatch(setField({ key: 'year', value: e.target.value }));
+                dispatch(setField({ key: "year", value: e.target.value }));
               }}
               aria-label="Select year"
             >
@@ -225,9 +251,9 @@ const PlaceForm = () => {
               placeholder="Horse powers"
               aria-label="Horse powers"
               maxLength={4}
-              value={placeData.hp || ''}
+              value={placeData.hp || ""}
               onChange={(e) => {
-                dispatch(setField({ key: 'hp', value: e.target.value }));
+                dispatch(setField({ key: "hp", value: e.target.value }));
               }}
             />
           </Form.Group>
@@ -243,13 +269,13 @@ const PlaceForm = () => {
                 aria-label="Price"
                 inputMode="numeric"
                 maxLength={12}
-                value={placeData.price || ''}
+                value={placeData.price || ""}
                 onChange={(e) => {
                   const input = e.target.value;
                   if (/^\d*$/.test(input)) {
                     dispatch(
                       setField({
-                        key: 'price',
+                        key: "price",
                         value: parseInt(e.target.value) || undefined,
                       })
                     );
@@ -269,10 +295,12 @@ const PlaceForm = () => {
             <Form.Select
               className="py-2"
               isInvalid={!placeData.condition_id && isSubmitted}
-              value={placeData.condition_id || ''}
+              value={placeData.condition_id || ""}
               onChange={(e) => {
                 setLockForm(true);
-                dispatch(setField({ key: 'condition_id', value: e.target.value }));
+                dispatch(
+                  setField({ key: "condition_id", value: e.target.value })
+                );
               }}
               aria-label="Condition"
             >
@@ -296,42 +324,120 @@ const PlaceForm = () => {
               placeholder="Mileage"
               aria-label="Mileage"
               maxLength={7}
-              value={placeData.mileage || ''}
+              value={placeData.mileage || ""}
               onChange={(e) => {
-                dispatch(setField({ key: 'mileage', value: parseInt(e.target.value) }));
+                dispatch(
+                  setField({ key: "mileage", value: parseInt(e.target.value) })
+                );
               }}
             />
           </Form.Group>
         </Row>
+        {!user?.admin && (
+          <Row className="mb-2 gap-2">
+            <Form.Group as={Col} className="p-0">
+              <InputGroup>
+                <Form.Control
+                  className="py-2"
+                  placeholder="Contry"
+                  aria-label="Contry"
+                  disabled
+                  value={
+                    countries.find(
+                      (country) => country.id === user?.city.country.id
+                    )?.title
+                  }
+                />
+                <InputGroup.Text>
+                  <Link
+                    to="../account"
+                    className="fs-12 link-underline-primary link-underline-opacity-0 mainText"
+                  >
+                    Change
+                  </Link>
+                </InputGroup.Text>
+              </InputGroup>
+            </Form.Group>
+            <Form.Group as={Col} className="p-0">
+              <InputGroup>
+                <Form.Control
+                  className="py-2"
+                  placeholder="City"
+                  aria-label="City"
+                  disabled
+                  value={user?.city.title}
+                />
+                <InputGroup.Text>
+                  <Link
+                    to="../account"
+                    className="fs-12 link-underline-primary link-underline-opacity-0 mainText"
+                  >
+                    Change
+                  </Link>
+                </InputGroup.Text>
+              </InputGroup>
+            </Form.Group>
+          </Row>
+        )}
 
-        <Row className="mb-2 gap-2">
-          <Form.Group as={Col} className="p-0">
-            <InputGroup>
-              <Form.Control
+        {user?.admin && (
+          <Row className="mb-2 gap-2">
+            <Form.Group as={Col} className="p-0">
+              <Form.Select
                 className="py-2"
-                placeholder="Contry"
-                aria-label="Contry"
-                disabled
-                value={countries.find((country) => country.id === user?.city.country.id)?.title}
-              />
-              <InputGroup.Text>
-                <Link to="../account" className="fs-12 link-underline-primary link-underline-opacity-0 mainText">
-                  Change
-                </Link>
-              </InputGroup.Text>
-            </InputGroup>
-          </Form.Group>
-          <Form.Group as={Col} className="p-0">
-            <InputGroup>
-              <Form.Control className="py-2" placeholder="City" aria-label="City" disabled value={user?.city.title} />
-              <InputGroup.Text>
-                <Link to="../account" className="fs-12 link-underline-primary link-underline-opacity-0 mainText">
-                  Change
-                </Link>
-              </InputGroup.Text>
-            </InputGroup>
-          </Form.Group>
-        </Row>
+                isInvalid={!placeData.fict_country_id && isSubmitted}
+                value={placeData.fict_country_id || ""}
+                onChange={(e) => {
+                  dispatch(
+                    setField({
+                      key: "fict_country_id",
+                      value: e.target.value,
+                    })
+                  );
+                  dispatch(
+                    setField({
+                      key: "fict_city_id",
+                      value: undefined,
+                    })
+                  );
+                }}
+                aria-label="Country"
+              >
+                <option value="">Country</option>
+                {countries.map((country) => (
+                  <option key={country.id} value={country.id}>
+                    {country.title}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+            <Form.Group as={Col} className="p-0">
+              <Form.Select
+                as={Col}
+                className="py-2"
+                isInvalid={!placeData.fict_city_id && isSubmitted}
+                value={placeData.fict_city_id || ""}
+                onChange={(e) => {
+                  dispatch(
+                    setField({
+                      key: "fict_city_id",
+                      value: e.target.value,
+                    })
+                  );
+                }}
+                disabled={!placeData.fict_country_id}
+                aria-label="City"
+              >
+                <option value="">City</option>
+                {cities.map((city) => (
+                  <option key={city.id} value={city.id}>
+                    {city.title}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+          </Row>
+        )}
 
         {user?.admin && (
           <Row className="mb-2 gap-2">
@@ -344,11 +450,11 @@ const PlaceForm = () => {
                 placeholder="Phone"
                 aria-label="Phone"
                 maxLength={15}
-                value={placeData.fict_phone || ''}
+                value={placeData.fict_phone || ""}
                 onChange={(e) => {
                   dispatch(
                     setField({
-                      key: 'fict_phone',
+                      key: "fict_phone",
                       value: parseInt(e.target.value),
                     })
                   );
@@ -366,7 +472,9 @@ const PlaceForm = () => {
               className="text-start defaultText d-flex align-items-center"
               checked={placeData.commercial}
               onChange={(e) => {
-                dispatch(setField({ key: 'commercial', value: e.target.checked }));
+                dispatch(
+                  setField({ key: "commercial", value: e.target.checked })
+                );
               }}
             />
           </Form.Group>
@@ -383,7 +491,7 @@ const PlaceForm = () => {
               onChange={(e) => {
                 dispatch(
                   setField({
-                    key: 'description',
+                    key: "description",
                     value: e.target.value,
                   })
                 );

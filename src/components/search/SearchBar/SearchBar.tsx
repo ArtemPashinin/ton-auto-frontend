@@ -16,6 +16,7 @@ import { fetchAdvertisements } from "../../../redux/slices/advertisement-slice/t
 import { clearAdvertisements } from "../../../redux/slices/advertisement-slice/advertisement-slice";
 import throttle from "lodash.throttle";
 import { fetchExistsModels } from "../../../utils/fetch-exists-models";
+import { clearPage } from "../../../redux/slices/page-slice/page-slice";
 
 interface SearchBarProps {
   open: boolean;
@@ -38,6 +39,8 @@ const SearchBar = ({ open, setOpen }: SearchBarProps) => {
     value: QueryDto[keyof QueryDto]
   ) => {
     dispatch(setFilter({ key, value }));
+    dispatch(clearAdvertisements());
+    dispatch(clearPage({ pageType: "searchPage" }));
   };
 
   const searchAdvertisements = useCallback(() => {

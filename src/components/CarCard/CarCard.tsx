@@ -13,7 +13,7 @@ import { markFavorite } from "../../redux/slices/favorites-slice/thunks/mark-fav
 import { userSelector } from "../../redux/slices/user-slice/user-slice";
 import { AppDispatch } from "../../redux/store";
 
-import { getNumberWithSpaces } from '../../utils/price';
+import { getNumberWithSpaces } from "../../utils/price";
 
 import style from "./CarCard.module.css";
 
@@ -37,6 +37,7 @@ export const CarCard = ({
   favoritedBy,
   user,
   paid,
+  fict_country,
   isMyAd,
 }: CarCardProps) => {
   const navigate = useNavigate();
@@ -71,35 +72,50 @@ export const CarCard = ({
             {model.make.make} {model.model}
           </p>
         </div>
-        <div style={{ lineHeight: 1.4}}>
+        <div style={{ lineHeight: 1.4 }}>
           <p>
-            <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>📆</span>
+            <span className="d-inline-block" style={{ minWidth: "1.5rem" }}>
+              📆
+            </span>
             {year}
           </p>
           <p>
-            <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>🔘</span>
+            <span className="d-inline-block" style={{ minWidth: "1.5rem" }}>
+              🔘
+            </span>
             {mileage} km
           </p>
           <p>
-            <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>⛽️</span>
+            <span className="d-inline-block" style={{ minWidth: "1.5rem" }}>
+              ⛽️
+            </span>
             {engine.type}
           </p>
           <p>
-            <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>🐎</span>
+            <span className="d-inline-block" style={{ minWidth: "1.5rem" }}>
+              🐎
+            </span>
             {hp}
           </p>
           <p>
-            <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>🌈</span>
+            <span className="d-inline-block" style={{ minWidth: "1.5rem" }}>
+              🌈
+            </span>
             {color.color}
           </p>
           <p>
-            <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>📍</span>
-            {user?.city.country.title}
+            <span className="d-inline-block" style={{ minWidth: "1.5rem" }}>
+              📍
+            </span>
+            {fict_country?.title || user?.city.country.title}
           </p>
           <p className="d-flex align-items-center">
-            <span className="d-inline-block" style={{ minWidth: '1.5rem' }}>🤝</span>
+            <span className="d-inline-block" style={{ minWidth: "1.5rem" }}>
+              🤝
+            </span>
             <span className="d-inline-block lh-1">
-              {getNumberWithSpaces(price)} {user?.city.country.currency}
+              {getNumberWithSpaces(price)}
+              {fict_country?.currency || user?.city.country.currency}
             </span>
           </p>
         </div>

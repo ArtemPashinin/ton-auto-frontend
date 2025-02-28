@@ -19,6 +19,7 @@ import { AppDispatch } from "../../redux/store";
 import { createUser } from "../../redux/slices/user-slice/thunks/create-user";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useAttention } from "../../hooks/useAttention";
 
 const Registretion = () => {
   const navigate = useNavigate();
@@ -78,6 +79,8 @@ const Registretion = () => {
       setCities(await fetchCities(selectedCountryId));
     })();
   }, [selectedCountryId]);
+
+  useAttention();
 
   return (
     <Stack gap={2}>

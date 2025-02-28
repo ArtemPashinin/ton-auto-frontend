@@ -1,4 +1,4 @@
-import { User } from "./user-info.interface";
+import { City, Country, User } from "./user-info.interface";
 import {
   Model,
   EngineType,
@@ -25,4 +25,6 @@ export interface Advertisement {
   condition: Condition;
   fict_phone?: string;
   paid: boolean;
+  fict_country?: Country;
+  fict_city?: City;
 }

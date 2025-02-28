@@ -15,7 +15,7 @@ const RemoveAdButton = ({ asdvertisementAd }: RemoveAdButtonProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const removeAd = useCallback(() => {
-    WebApp.showConfirm("Are yoou shure?", (confirm: boolean) => {
+    WebApp.showConfirm("Are you sure?", (confirm: boolean) => {
       if (confirm) dispatch(removeAdretisement(asdvertisementAd));
     });
   }, [asdvertisementAd, dispatch]);

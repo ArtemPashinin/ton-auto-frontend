@@ -29,6 +29,8 @@ const initialState: InitialState = {
     description: undefined,
     condition_id: undefined,
     commercial: false,
+    fict_city_id: undefined,
+    fict_country_id: undefined,
   },
   images: {
     leftImages: [],
@@ -60,7 +62,10 @@ const placeSlice = createSlice({
       const { side, image } = action.payload;
       state.images[side === "left" ? "leftImages" : "rightImages"].push(image);
     },
-    setImages(state, action: PayloadAction<{ side: "left" | "right"; images: Image[] }>){
+    setImages(
+      state,
+      action: PayloadAction<{ side: "left" | "right"; images: Image[] }>
+    ) {
       const { side, images } = action.payload;
       state.images[side === "left" ? "leftImages" : "rightImages"] = images;
     },
@@ -88,8 +93,14 @@ const placeSlice = createSlice({
   },
 });
 
-export const { setField, clearPlace, clearPlaceError, addImage, setMainImage, setImages } =
-  placeSlice.actions;
+export const {
+  setField,
+  clearPlace,
+  clearPlaceError,
+  addImage,
+  setMainImage,
+  setImages,
+} = placeSlice.actions;
 
 export const placeSelector = (state: RootState) => state.place.placeData;
 export const placeImagesSelector = (state: RootState) => state.place.images;

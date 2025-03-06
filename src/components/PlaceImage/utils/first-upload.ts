@@ -9,6 +9,7 @@ import { AppDispatch } from "../../../redux/store";
 import { Image } from "../PlaceImage";
 
 import { makePaymentLink } from "../../../utils/make-payment-link";
+import { removeAdretisement } from "../../../utils/remove-advertisement";
 
 export const handleFirstUpload = async (
   leftImages: Image[],
@@ -58,16 +59,24 @@ export const handleFirstUpload = async (
   try {
     const response = await dispatch(placeAd(formData)).unwrap();
     if (response) {
-      dispatch(clearPlace());
-      if (later) navigate("../myAds", { replace: true });
+      if (later) {
+        navigate("../myAds", { replace: true });
+        dispatch(clearPlace());
+      }
       if (withPaid) {
         const invoiceLink = await makePaymentLink(response.id);
-        WebApp.openInvoice(invoiceLink, (status) => {
-          if (status === "paid")
+        WebApp.openInvoice(invoiceLink, async (status) => {
+          if (status === "paid") {
             navigate("/purachse/success", { replace: true });
+            dispatch(clearPlace());
+          }
+          if (status === "cancelled") await removeAdretisement(response.id);
         });
       }
-      if (!later && !withPaid) navigate("../place/success");
+      if (!later && !withPaid) {
+        navigate("../place/success");
+        dispatch(clearPlace());
+      }
     }
   } catch {
     WebApp.showAlert("Something wrog.\nTry again later", () => {

@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AdvertisementDto } from "../../../interfaces/dto/advertisement.dto";
-import { SlicesNames } from "../../../enums/slices";
 import { fetchDescription } from "./thunks/fetch-advertisement";
+import { SlicesNames } from "../../../enums/slices";
 import { Advertisement } from "../../../interfaces/advertisement.interface";
+import { AdvertisementDto } from "../../../interfaces/dto/advertisement.dto";
+
 import { RootState } from "../../store";
 
 interface InitialState {
@@ -45,6 +46,7 @@ const initialState: InitialState = {
         },
       },
       admin: false,
+      free_publish: false,
     },
     model: {
       id: 0,

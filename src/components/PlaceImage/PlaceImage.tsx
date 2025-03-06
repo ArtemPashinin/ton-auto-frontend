@@ -43,7 +43,7 @@ const ImageUploader = ({ mainId, left, right }: ImageUploaderProps) => {
 
   useEffect(() => {
     if (user && !user.free_publish && !user.admin) {
-      WebApp.MainButton.setText("Publish 500⭐");
+      WebApp.MainButton.setText("Publish 500 ⭐");
       WebApp.SecondaryButton.setText("Publish later");
       WebApp.SecondaryButton.show();
     } else {

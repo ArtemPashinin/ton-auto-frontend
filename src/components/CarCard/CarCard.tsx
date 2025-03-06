@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Purchase from "./components/Purchase";
 import WebApp from "@twa-dev/sdk";
 import EditButton from "./buttons/EditButton";
+import PurchaseButton from "./buttons/PurchaseButton";
 import RemoveAdButton from "./buttons/RemoveAdButton";
 import { Advertisement } from "../../interfaces/advertisement.interface";
 import { markFavorite } from "../../redux/slices/favorites-slice/thunks/mark-favorite";
@@ -58,7 +59,7 @@ export const CarCard = ({
       className={`${style.carCard} rounded-4 p-2 mb-2`}
       onClick={() => navigate(`../advvertisement/${id}`)}
     >
-      {isMyAd && !paid && <Purchase advertisementId={id} />}
+      {isMyAd && !paid && <Purchase />}
       <Col className="h-100 p-0 me-2">
         <Image src={mainMedia} className={`${style.cardImage} rounded-3`} />
       </Col>
@@ -139,6 +140,7 @@ export const CarCard = ({
 
       {isMyAd && (
         <>
+          {!paid && <PurchaseButton asdvertisementId={id} />}
           <EditButton id={id} title={"Edit"} path={"editDescription"} />
           <EditButton id={id} title={"Manage photos"} path={"editMedia"} />
           <RemoveAdButton asdvertisementAd={id} />

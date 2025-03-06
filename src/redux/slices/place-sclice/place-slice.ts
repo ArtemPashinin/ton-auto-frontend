@@ -29,8 +29,6 @@ const initialState: InitialState = {
     description: undefined,
     condition_id: undefined,
     commercial: false,
-    fict_city_id: undefined,
-    fict_country_id: undefined,
   },
   images: {
     leftImages: [],

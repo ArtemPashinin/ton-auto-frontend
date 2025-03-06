@@ -124,7 +124,7 @@ const EditDescription = ({ data, advertisement }: EditDescriptionProps) => {
   }, [lockForm]);
 
   return (
-    <Form className={`pb-5 ${lockForm ? 'pe-none' : ''}`}>
+    <Form className={`pb-5 ${lockForm ? "pe-none" : ""}`}>
       <Container>
         <Row className="mb-2 gap-2">
           <Form.Group as={Col} className="p-0" id="place-form">
@@ -406,18 +406,23 @@ const EditDescription = ({ data, advertisement }: EditDescriptionProps) => {
                 className="py-2"
                 isInvalid={!newDescription.fict_phone && isSubmitted}
                 type="text"
-                inputMode="numeric"
+                inputMode="decimal"
                 placeholder="Phone"
                 aria-label="Phone"
                 maxLength={15}
                 value={newDescription.fict_phone || ""}
                 onChange={(e) => {
-                  dispatch(
-                    setNewDecriptionField({
-                      key: "fict_phone",
-                      value: parseInt(e.target.value),
-                    })
-                  );
+                  const inputValue = e.target.value;
+
+                  // Проверяем, начинается ли строка с "+" и содержит ли только цифры после него
+                  if (/^\+?\d*$/.test(inputValue)) {
+                    dispatch(
+                      setNewDecriptionField({
+                        key: "fict_phone",
+                        value: inputValue, // Сохраняем как строку, чтобы сохранить "+"
+                      })
+                    );
+                  }
                 }}
               />
             </Form.Group>

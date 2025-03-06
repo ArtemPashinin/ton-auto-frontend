@@ -446,18 +446,23 @@ const PlaceForm = () => {
                 className="py-2"
                 isInvalid={!placeData.fict_phone && isSubmitted}
                 type="text"
-                inputMode="numeric"
+                inputMode="decimal"
                 placeholder="Phone"
                 aria-label="Phone"
                 maxLength={15}
                 value={placeData.fict_phone || ""}
                 onChange={(e) => {
-                  dispatch(
-                    setField({
-                      key: "fict_phone",
-                      value: parseInt(e.target.value),
-                    })
-                  );
+                  const inputValue = e.target.value;
+
+                  // Проверяем, начинается ли строка с "+" и содержит ли только цифры после него
+                  if (/^\+?\d*$/.test(inputValue)) {
+                    dispatch(
+                      setField({
+                        key: "fict_phone",
+                        value: inputValue, // Сохраняем как строку, чтобы сохранить "+"
+                      })
+                    );
+                  }
                 }}
               />
             </Form.Group>

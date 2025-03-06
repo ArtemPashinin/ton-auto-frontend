@@ -1,10 +1,12 @@
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createUser } from "./thunks/create-user";
+import { fetchUser } from "./thunks/fetch-user";
+import { updateUser } from "./thunks/update-user";
 import { SlicesNames } from "../../../enums/slices";
 import { User } from "../../../interfaces/user-info.interface";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { fetchUser } from "./thunks/fetch-user";
+import { placeAd } from "../place-sclice/thunks/place-ad";
+
 import { RootState } from "../../store";
-import { updateUser } from "./thunks/update-user";
-import { createUser } from "./thunks/create-user";
 
 interface UserState {
   user: User | null;
@@ -49,8 +51,11 @@ const userSlice = createSlice({
     builder.addCase(updateUser.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(createUser.pending, (state) =>{
-      state.loading = true
+    builder.addCase(createUser.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(placeAd.fulfilled, (state) => {
+      if (state.user) state.user.free_publish = false;
     });
   },
 });

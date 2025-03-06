@@ -1,23 +1,22 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
-
-import WebApp from "@twa-dev/sdk";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
+import WebApp from "@twa-dev/sdk";
+import DraggableImage from "./DraggableImage";
+import UploadForm from "./UploadForm";
 import {
   addImage,
-  clearPlace,
-  clearPlaceError,
   placeSelector,
   publishLoadingSelector,
   setImages,
   setMainImage,
 } from "../../redux/slices/place-sclice/place-slice";
+import { userSelector } from "../../redux/slices/user-slice/user-slice";
 import { AppDispatch } from "../../redux/store";
 
-import { useNavigate } from "react-router-dom";
-import UploadForm from "./UploadForm";
-import DraggableImage from "./DraggableImage";
-import { placeAd } from "../../redux/slices/place-sclice/thunks/place-ad";
+import { handleFirstUpload } from "./utils/first-upload";
 
 export interface Image {
   id: string;
@@ -37,18 +36,26 @@ const ImageUploader = ({ mainId, left, right }: ImageUploaderProps) => {
 
   const publishLoading = useSelector(publishLoadingSelector);
   const placeData = useSelector(placeSelector);
+  const user = useSelector(userSelector);
   const [leftImages, setLeftImages] = useState<Image[]>(left);
   const [rightImages, setRightImages] = useState<Image[]>(right);
   const [mainImageId, setMainImageId] = useState<string | null>(mainId);
 
   useEffect(() => {
-    WebApp.MainButton.setText("Publish");
+    if (user && !user.free_publish && !user.admin) {
+      WebApp.MainButton.setText("Publish 500⭐");
+      WebApp.SecondaryButton.setText("Publish later");
+      WebApp.SecondaryButton.show();
+    } else {
+      WebApp.MainButton.setText("Publish");
+    }
     WebApp.MainButton.show();
     return () => {
       WebApp.MainButton.hideProgress();
       WebApp.MainButton.hide();
+      WebApp.SecondaryButton.hide();
     };
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (publishLoading) WebApp.MainButton.showProgress();
@@ -116,54 +123,42 @@ const ImageUploader = ({ mainId, left, right }: ImageUploaderProps) => {
   };
 
   const handleUpload = useCallback(async () => {
-    if (leftImages.length + rightImages.length < 1) {
-      WebApp.showAlert("No images");
-      return;
-    }
-    const mediaList = [...leftImages, ...rightImages];
-    if (!mediaList.some((media) => media.file.type.startsWith("image/"))) {
-      WebApp.showAlert("You must upload at least one image.");
-      return;
-    }
-    const formData = new FormData();
-    const orderedImages: Image[] = [];
+    await handleFirstUpload(
+      leftImages,
+      rightImages,
+      mainImageId,
+      placeData,
+      dispatch,
+      navigate,
+      false,
+      false
+    );
+  }, [dispatch, leftImages, mainImageId, navigate, placeData, rightImages]);
 
-    Object.keys(placeData).forEach((key) => {
-      const value = placeData[key] as string | Blob;
-      formData.append(key, value);
-    });
+  const handleUpladLater = useCallback(async () => {
+    await handleFirstUpload(
+      leftImages,
+      rightImages,
+      mainImageId,
+      placeData,
+      dispatch,
+      navigate,
+      true,
+      false
+    );
+  }, [dispatch, leftImages, mainImageId, navigate, placeData, rightImages]);
 
-    // Чередуем изображения: первый из правой, первый из левой и т.д.
-    const maxLength = Math.max(leftImages.length, rightImages.length);
-    for (let i = 0; i < maxLength; i++) {
-      if (leftImages[i]) orderedImages.push(leftImages[i]);
-      if (rightImages[i]) orderedImages.push(rightImages[i]);
-    }
-
-    // Создаем meta данные
-    const metaData = orderedImages.map((image, index) => ({
-      order: index + 1,
-      main: image.id === mainImageId,
-    }));
-
-    // Добавляем файлы и meta в FormData
-    orderedImages.forEach((image) => {
-      formData.append("files", image.file);
-    });
-    formData.append("meta", JSON.stringify(metaData));
-    try {
-      const response = await dispatch(placeAd(formData)).unwrap();
-      if (response) {
-        dispatch(clearPlace());
-        navigate("../place/success");
-      }
-    } catch {
-      WebApp.showAlert("Something wrog.\nTry again later", () => {
-        dispatch(clearPlaceError());
-        navigate("/", { replace: true });
-      });
-    }
-    WebApp.MainButton.hideProgress();
+  const handlePaidUpload = useCallback(async () => {
+    await handleFirstUpload(
+      leftImages,
+      rightImages,
+      mainImageId,
+      placeData,
+      dispatch,
+      navigate,
+      false,
+      true
+    );
   }, [dispatch, leftImages, mainImageId, navigate, placeData, rightImages]);
 
   const onDragEnd = (result: DropResult) => {
@@ -244,12 +239,17 @@ const ImageUploader = ({ mainId, left, right }: ImageUploaderProps) => {
   };
 
   useEffect(() => {
-    WebApp.MainButton.onClick(handleUpload);
+    if (user && !user.free_publish && !user.admin) {
+      WebApp.SecondaryButton.onClick(handleUpladLater);
+      WebApp.MainButton.onClick(handlePaidUpload);
+    } else WebApp.MainButton.onClick(handleUpload);
 
     return () => {
       WebApp.MainButton.offClick(handleUpload);
+      WebApp.SecondaryButton.offClick(handleUpladLater);
+      WebApp.MainButton.offClick(handlePaidUpload);
     };
-  }, [handleUpload]);
+  }, [handlePaidUpload, handleUpladLater, handleUpload, user]);
 
   return (
     <div>

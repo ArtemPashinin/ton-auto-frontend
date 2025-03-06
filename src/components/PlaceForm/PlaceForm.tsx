@@ -12,6 +12,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import WebApp from "@twa-dev/sdk";
 import { AdvertisementDto } from "../../interfaces/dto/advertisement.dto";
+import { City } from "../../interfaces/user-info.interface";
 import { Model } from "../../interfaces/vehicle-info.interface";
 import {
   colorsSelector,
@@ -28,12 +29,11 @@ import {
 import { userSelector } from "../../redux/slices/user-slice/user-slice";
 import { AppDispatch } from "../../redux/store";
 
+import { fetchCities } from "../../utils/fetch-cities";
 import { fetchMakeByModel } from "../../utils/fetch-make-by-model";
 import { fetchModels } from "../../utils/fetch-models";
 import { generateYearsList } from "../../utils/generate-years-list";
 import { useOverflowHidden } from "../../hooks/useOverflow";
-import { City } from "../../interfaces/user-info.interface";
-import { fetchCities } from "../../utils/fetch-cities";
 
 const PlaceForm = () => {
   const navigate = useNavigate();
@@ -134,6 +134,13 @@ const PlaceForm = () => {
         setCities(await fetchCities(placeData.fict_country_id));
       })();
   }, [placeData.fict_country_id, user?.admin]);
+
+  useEffect(() => {
+    if (user && !user.free_publish && !user.admin)
+      WebApp.showAlert(
+        "The publication of the second and subsequent ads is paid"
+      );
+  }, [user]);
 
   return (
     <Form className={`pb-5 ${lockForm ? "pe-none" : ""}`}>

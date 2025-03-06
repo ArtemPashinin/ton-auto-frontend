@@ -49,7 +49,6 @@ export const CarCard = ({
     media.find(({ main }) => main)?.image_url ??
       "https://imgholder.ru/600x300/8493a8/adb9ca&text=No+image"
   );
-
   useEffect(() => {
     setFavorited(favoritedBy.some((user) => user.id === currentUser?.id));
   }, [currentUser, currentUser?.id, favoritedBy, user]);

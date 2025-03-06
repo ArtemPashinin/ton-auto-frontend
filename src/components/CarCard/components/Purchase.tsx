@@ -2,6 +2,7 @@ import { Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 import { faLock } from "@awesome.me/kit-7090d2ba88/icons/classic/regular";
+import { faStar } from "@awesome.me/kit-7090d2ba88/icons/classic/solid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface PurchaseProps {
@@ -24,7 +25,8 @@ const Purchase = ({ advertisementId }: PurchaseProps) => {
           navigate(`/purchase/${advertisementId}`);
         }}
       >
-        Purchase
+        Purchase 500
+        <FontAwesomeIcon icon={faStar} color="#F8A917" />
       </a>
     </Col>
   );

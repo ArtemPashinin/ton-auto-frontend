@@ -1,3 +1,4 @@
+
 export interface Country {
   id: number;
   title: string;
@@ -20,5 +21,6 @@ export interface User {
   phone?: string;
   language_code?: string;
   city: City;
-  admin: boolean
+  admin: boolean;
+  free_publish: boolean;
 }

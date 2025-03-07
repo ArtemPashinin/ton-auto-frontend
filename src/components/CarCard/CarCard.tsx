@@ -123,18 +123,20 @@ export const CarCard = ({
           <p className={`${style.dateText}`}>
             {format(new Date(createdAt), "MMM dd, yyyy")}
           </p>
-          <i
-            className={`lg fa-heart ${style.favoriteIcon} ${
-              favorited ? `${style.favorited} fa-solid` : "fa-regular"
-            }`}
-            onClick={(event) => {
-              event.stopPropagation();
-              dispatch(
-                markFavorite({ user: currentUser!, advertisementId: id })
-              );
-              WebApp.HapticFeedback.impactOccurred("medium");
-            }}
-          ></i>
+          {paid && (
+            <i
+              className={`lg fa-heart ${style.favoriteIcon} ${
+                favorited ? `${style.favorited} fa-solid` : "fa-regular"
+              }`}
+              onClick={(event) => {
+                event.stopPropagation();
+                dispatch(
+                  markFavorite({ user: currentUser!, advertisementId: id })
+                );
+                WebApp.HapticFeedback.impactOccurred("medium");
+              }}
+            ></i>
+          )}
         </div>
       </Col>
 

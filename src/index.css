@@ -156,3 +156,11 @@ a {
 .sectionBgColor {
   background-color: var(--tg-theme-section-bg-color);
 }
+
+/* Для добавления градиентной рамки */
+.gradient-background {
+  background: linear-gradient(to right, #007BFF, #FF40F1); /* Градиент от синего к фиолетовому */
+  border-radius: 0.5rem; /* Закругление углов */
+  padding: 10px; /* Немного пространства вокруг содержимого */
+
+}

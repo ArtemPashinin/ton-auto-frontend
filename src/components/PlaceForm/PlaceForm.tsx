@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import WebApp from "@twa-dev/sdk";
+import Banner from "./Banner";
 import { AdvertisementDto } from "../../interfaces/dto/advertisement.dto";
 import { City } from "../../interfaces/user-info.interface";
 import { Model } from "../../interfaces/vehicle-info.interface";
@@ -55,6 +56,11 @@ const PlaceForm = () => {
   const [selectedMakeId, setSelectedMakeId] = useState<string | number>("");
   const [lockForm, setLockForm] = useState<boolean>(false);
   const [cities, setCities] = useState<City[]>([]);
+  const [showBanner, setShowBanner] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (user && !user.free_publish && !user.admin) setShowBanner(true);
+  }, [user]);
 
   const isAdvertisementDataValid = useCallback(() => {
     const requiredFields: (keyof AdvertisementDto)[] = [
@@ -135,17 +141,11 @@ const PlaceForm = () => {
       })();
   }, [placeData.fict_country_id, user?.admin]);
 
-  useEffect(() => {
-    if (user && !user.free_publish && !user.admin)
-      WebApp.showAlert(
-        "The publication of the second and subsequent ads is paid"
-      );
-  }, [user]);
-
   return (
     <Form className={`pb-5 ${lockForm ? "pe-none" : ""}`}>
       <Container>
         <Row className="mb-2 gap-2">
+          {showBanner && <Banner />}
           <Form.Group as={Col} className="p-0" id="place-form">
             <Form.Select
               className="py-2"

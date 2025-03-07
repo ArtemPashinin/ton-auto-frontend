@@ -12,14 +12,14 @@ const PurchaseButton = ({ asdvertisementId }: PurchaseButtonProps) => {
   return (
     <Col className="p-0  mt-2" xs={12}>
       <Button
-        className="w-100 fade-outline-button py-2 d-flex align-items-center justify-content-center gap-2"
+        className="w-100 main-button py-2 d-flex align-items-center justify-content-center gap-2 gradient-background border-0"
         onClick={(e) => {
           e.stopPropagation();
           navigate(`/purchase/${asdvertisementId}`);
         }}
       >
         <p>
-          Purchase 500&nbsp;
+          Publish 500&nbsp;
           <FontAwesomeIcon icon={faStar} color="#F8A917" />
         </p>
       </Button>

@@ -1,16 +1,19 @@
-import { Image } from "react-bootstrap";
-import startLogo from "../../assets/images/start.png";
-import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { myAdsSelector } from "../../redux/slices/my-ads-slice/my-ads-slice";
 import { useEffect, useState } from "react";
+import { Image } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+
+import { faStar } from "@awesome.me/kit-7090d2ba88/icons/classic/solid";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import WebApp from "@twa-dev/sdk";
+import startLogo from "../../assets/images/start.png";
 import { Advertisement } from "../../interfaces/advertisement.interface";
 import { makeSelector } from "../../redux/slices/data-slice/data-slice";
-import WebApp from "@twa-dev/sdk";
-import style from "./Purchase.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@awesome.me/kit-7090d2ba88/icons/classic/solid";
+import { myAdsSelector } from "../../redux/slices/my-ads-slice/my-ads-slice";
+
 import { makePaymentLink } from "../../utils/make-payment-link";
+
+import style from "./Purchase.module.css";
 
 const Purchase = () => {
   const navigate = useNavigate();
@@ -40,7 +43,7 @@ const Purchase = () => {
     };
     WebApp.MainButton.onClick(openInvoice);
     WebApp.MainButton.setParams({
-      text: "Purchase",
+      text: "Publish",
       has_shine_effect: true,
       is_visible: true,
     });

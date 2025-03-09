@@ -8,7 +8,7 @@ import {
   Spinner,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import WebApp from "@twa-dev/sdk";
 import Banner from "./Banner";
@@ -57,6 +57,14 @@ const PlaceForm = () => {
   const [lockForm, setLockForm] = useState<boolean>(false);
   const [cities, setCities] = useState<City[]>([]);
   const [showBanner, setShowBanner] = useState<boolean>(false);
+  const [currency, setCurrency] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    setCurrency(
+      countries.find((country) => country.id == placeData.fict_country_id)
+        ?.currency
+    );
+  }, [countries, placeData.fict_country_id]);
 
   useEffect(() => {
     if (user && !user.free_publish && !user.admin) setShowBanner(true);
@@ -73,10 +81,12 @@ const PlaceForm = () => {
       "mileage",
       "condition_id",
       "description",
+      "fict_country_id",
+      "fict_city_id",
     ];
 
     if (user?.admin) {
-      requiredFields.push("fict_phone", "fict_country_id", "fict_city_id");
+      requiredFields.push("fict_phone");
     }
 
     const valid = requiredFields.every((field) => {
@@ -125,6 +135,26 @@ const PlaceForm = () => {
   }, [selectedMakeId]);
 
   useEffect(() => {
+    if (user) {
+      if (!placeData.fict_country_id)
+        dispatch(
+          setField({
+            key: "fict_country_id",
+            value: user?.city.country.id,
+          })
+        );
+      if (!placeData.fict_city_id)
+        dispatch(
+          setField({
+            key: "fict_city_id",
+            value: user?.city.id,
+          })
+        );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, user]);
+
+  useEffect(() => {
     const findMake = async () => {
       if (placeData.model_id && selectedMakeId === "") {
         const make = await fetchMakeByModel(placeData.model_id);
@@ -135,11 +165,10 @@ const PlaceForm = () => {
   }, [placeData.model_id, selectedMakeId]);
 
   useEffect(() => {
-    if (user?.admin)
-      (async () => {
-        setCities(await fetchCities(placeData.fict_country_id));
-      })();
-  }, [placeData.fict_country_id, user?.admin]);
+    (async () => {
+      setCities(await fetchCities(placeData.fict_country_id));
+    })();
+  }, [placeData.fict_country_id]);
 
   return (
     <Form className={`pb-5 ${lockForm ? "pe-none" : ""}`}>
@@ -290,7 +319,7 @@ const PlaceForm = () => {
                 }}
               />
               <InputGroup.Text id="basic-addon1">
-                {user?.city?.country.currency || (
+                {currency || user?.city?.country.currency || (
                   <Spinner animation="border" role="status" size="sm">
                     <span className="visually-hidden">Loading...</span>
                   </Spinner>
@@ -340,111 +369,63 @@ const PlaceForm = () => {
             />
           </Form.Group>
         </Row>
-        {!user?.admin && (
-          <Row className="mb-2 gap-2">
-            <Form.Group as={Col} className="p-0">
-              <InputGroup>
-                <Form.Control
-                  className="py-2"
-                  placeholder="Contry"
-                  aria-label="Contry"
-                  disabled
-                  value={
-                    countries.find(
-                      (country) => country.id === user?.city.country.id
-                    )?.title
-                  }
-                />
-                <InputGroup.Text>
-                  <Link
-                    to="../account"
-                    className="fs-12 link-underline-primary link-underline-opacity-0 mainText"
-                  >
-                    Change
-                  </Link>
-                </InputGroup.Text>
-              </InputGroup>
-            </Form.Group>
-            <Form.Group as={Col} className="p-0">
-              <InputGroup>
-                <Form.Control
-                  className="py-2"
-                  placeholder="City"
-                  aria-label="City"
-                  disabled
-                  value={user?.city.title}
-                />
-                <InputGroup.Text>
-                  <Link
-                    to="../account"
-                    className="fs-12 link-underline-primary link-underline-opacity-0 mainText"
-                  >
-                    Change
-                  </Link>
-                </InputGroup.Text>
-              </InputGroup>
-            </Form.Group>
-          </Row>
-        )}
 
-        {user?.admin && (
-          <Row className="mb-2 gap-2">
-            <Form.Group as={Col} className="p-0">
-              <Form.Select
-                className="py-2"
-                isInvalid={!placeData.fict_country_id && isSubmitted}
-                value={placeData.fict_country_id || ""}
-                onChange={(e) => {
-                  dispatch(
-                    setField({
-                      key: "fict_country_id",
-                      value: e.target.value,
-                    })
-                  );
-                  dispatch(
-                    setField({
-                      key: "fict_city_id",
-                      value: undefined,
-                    })
-                  );
-                }}
-                aria-label="Country"
-              >
-                <option value="">Country</option>
-                {countries.map((country) => (
-                  <option key={country.id} value={country.id}>
-                    {country.title}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-            <Form.Group as={Col} className="p-0">
-              <Form.Select
-                as={Col}
-                className="py-2"
-                isInvalid={!placeData.fict_city_id && isSubmitted}
-                value={placeData.fict_city_id || ""}
-                onChange={(e) => {
-                  dispatch(
-                    setField({
-                      key: "fict_city_id",
-                      value: e.target.value,
-                    })
-                  );
-                }}
-                disabled={!placeData.fict_country_id}
-                aria-label="City"
-              >
-                <option value="">City</option>
-                {cities.map((city) => (
-                  <option key={city.id} value={city.id}>
-                    {city.title}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-          </Row>
-        )}
+        <Row className="mb-2 gap-2">
+          <Form.Group as={Col} className="p-0">
+            <Form.Select
+              className="py-2"
+              isInvalid={!placeData.fict_country_id && isSubmitted}
+              value={placeData.fict_country_id || ""}
+              onChange={(e) => {
+                dispatch(
+                  setField({
+                    key: "fict_country_id",
+                    value: e.target.value,
+                  })
+                );
+                dispatch(
+                  setField({
+                    key: "fict_city_id",
+                    value: undefined,
+                  })
+                );
+              }}
+              aria-label="Country"
+            >
+              <option value="">Country</option>
+              {countries.map((country) => (
+                <option key={country.id} value={country.id}>
+                  {country.title}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group as={Col} className="p-0">
+            <Form.Select
+              as={Col}
+              className="py-2"
+              isInvalid={!placeData.fict_city_id && isSubmitted}
+              value={placeData.fict_city_id || ""}
+              onChange={(e) => {
+                dispatch(
+                  setField({
+                    key: "fict_city_id",
+                    value: e.target.value,
+                  })
+                );
+              }}
+              disabled={!placeData.fict_country_id}
+              aria-label="City"
+            >
+              <option value="">City</option>
+              {cities.map((city) => (
+                <option key={city.id} value={city.id}>
+                  {city.title}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+        </Row>
 
         {user?.admin && (
           <Row className="mb-2 gap-2">

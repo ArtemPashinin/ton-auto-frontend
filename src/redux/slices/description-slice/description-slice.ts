@@ -28,6 +28,8 @@ const initialState: InitialState = {
     condition_id: undefined,
     commercial: false,
     fict_phone: undefined,
+    fict_city_id: undefined,
+    fict_country_id: undefined,
   },
   loading: false,
   error: false,
@@ -80,6 +82,22 @@ const initialState: InitialState = {
     },
     fict_phone: "",
     paid: false,
+    fict_city: {
+      id: 0,
+      title: "",
+      country: {
+        id: 0,
+        title: "",
+        currency: "",
+        phone_code: "",
+      },
+    },
+    fict_country: {
+      id: 0,
+      title: "",
+      currency: "",
+      phone_code: "",
+    },
   },
 };
 
@@ -119,6 +137,8 @@ const descriptionSlice = createSlice({
           description: advertisement.description,
           commercial: advertisement.commercial,
           fict_phone: advertisement.fict_phone,
+          fict_city_id: advertisement.fict_city.id,
+          fict_country_id: advertisement.fict_country.id,
         };
         state.advertisiment = advertisement;
       }

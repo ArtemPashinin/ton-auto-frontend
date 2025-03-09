@@ -1,9 +1,10 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AdvertisementDto } from "../../../interfaces/dto/advertisement.dto";
-import { SlicesNames } from "../../../enums/slices";
-import { RootState } from "../../store";
-import { placeAd } from "./thunks/place-ad";
 import { Image } from "../../../components/PlaceImage/PlaceImage";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { placeAd } from "./thunks/place-ad";
+import { SlicesNames } from "../../../enums/slices";
+import { AdvertisementDto } from "../../../interfaces/dto/advertisement.dto";
+
+import { RootState } from "../../store";
 
 interface InitialState {
   placeData: AdvertisementDto;
@@ -29,6 +30,8 @@ const initialState: InitialState = {
     description: undefined,
     condition_id: undefined,
     commercial: false,
+    fict_city_id: undefined,
+    fict_country_id: undefined,
   },
   images: {
     leftImages: [],

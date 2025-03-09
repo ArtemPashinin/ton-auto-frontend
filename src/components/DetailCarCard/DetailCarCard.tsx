@@ -38,7 +38,8 @@ export const DetailCardCard = ({
           {model.make.make} {model.model}
         </p>
         <p>
-          🤝 {getNumberWithSpaces(price)} {fict_country?.currency || user.city.country.currency}
+          🤝 {getNumberWithSpaces(price)}
+          {fict_country?.currency || user.city.country.currency}
         </p>
       </div>
 
@@ -81,7 +82,7 @@ export const DetailCardCard = ({
           <span className="d-inline-block" style={{ minWidth: "1.5rem" }}>
             📍
           </span>
-          {fict_country?.title || user.city.country.title},{" "}
+          {fict_country?.title || user.city.country.title},
           {fict_city?.title || user.city.title}
         </p>
       </div>

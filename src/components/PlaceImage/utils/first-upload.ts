@@ -56,6 +56,7 @@ export const handleFirstUpload = async (
     formData.append("files", image.file);
   });
   formData.append("meta", JSON.stringify(metaData));
+
   try {
     const response = await dispatch(placeAd(formData)).unwrap();
     if (response) {

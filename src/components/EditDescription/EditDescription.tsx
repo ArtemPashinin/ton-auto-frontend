@@ -8,11 +8,12 @@ import {
   Spinner,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import WebApp from "@twa-dev/sdk";
 import { Advertisement } from "../../interfaces/advertisement.interface";
 import { AdvertisementDto } from "../../interfaces/dto/advertisement.dto";
+import { City } from "../../interfaces/user-info.interface";
 import { Model } from "../../interfaces/vehicle-info.interface";
 import { DataState } from "../../redux/slices/data-slice/data-slice";
 import {
@@ -22,6 +23,7 @@ import {
 import { userSelector } from "../../redux/slices/user-slice/user-slice";
 import { AppDispatch } from "../../redux/store";
 
+import { fetchCities } from "../../utils/fetch-cities";
 import { fetchModels } from "../../utils/fetch-models";
 import { generateYearsList } from "../../utils/generate-years-list";
 import { updateAdvertisement } from "../../utils/update-advertsement";
@@ -50,8 +52,17 @@ const EditDescription = ({ data, advertisement }: EditDescriptionProps) => {
   const [selectedMakeId, setSelectedMakeId] = useState<string | number>(
     modelMakeId
   );
+  const [cities, setCities] = useState<City[]>([]);
   const [models, setModels] = useState<Model[]>([]);
   const [lockForm, setLockForm] = useState<boolean>(false);
+  const [currency, setCurrency] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    setCurrency(
+      countries.find((country) => country.id == newDescription.fict_country_id)
+        ?.currency
+    );
+  }, [countries, newDescription.fict_country_id]);
 
   const isAdvertisementDataValid = useCallback(() => {
     const requiredFields: (keyof AdvertisementDto)[] = [
@@ -64,6 +75,8 @@ const EditDescription = ({ data, advertisement }: EditDescriptionProps) => {
       "mileage",
       "condition_id",
       "description",
+      "fict_country_id",
+      "fict_city_id",
     ];
 
     if (user?.admin) {
@@ -122,6 +135,12 @@ const EditDescription = ({ data, advertisement }: EditDescriptionProps) => {
   useEffect(() => {
     setTimeout(() => setLockForm(false), 500);
   }, [lockForm]);
+
+  useEffect(() => {
+    (async () => {
+      setCities(await fetchCities(newDescription.fict_country_id));
+    })();
+  }, [newDescription.fict_country_id]);
 
   return (
     <Form className={`pb-5 ${lockForm ? "pe-none" : ""}`}>
@@ -293,7 +312,7 @@ const EditDescription = ({ data, advertisement }: EditDescriptionProps) => {
                 }}
               />
               <InputGroup.Text id="basic-addon1">
-                {user?.city?.country.currency || (
+                {currency || user?.city?.country.currency || (
                   <Spinner animation="border" role="status" size="sm">
                     <span className="visually-hidden">Loading...</span>
                   </Spinner>
@@ -352,50 +371,58 @@ const EditDescription = ({ data, advertisement }: EditDescriptionProps) => {
 
         <Row className="mb-2 gap-2">
           <Form.Group as={Col} className="p-0">
-            <InputGroup>
-              <Form.Control
-                className="py-2"
-                placeholder="Contry"
-                aria-label="Contry"
-                disabled
-                value={
-                  countries.find(
-                    (country) => country.id === user?.city.country.id
-                  )?.title
-                }
-              />
-              <InputGroup.Text>
-                <Link
-                  to="../account"
-                  className="fs-12 link-underline-primary link-underline-opacity-0 mainText"
-                >
-                  Change
-                </Link>
-              </InputGroup.Text>
-            </InputGroup>
+            <Form.Select
+              className="py-2"
+              isInvalid={!newDescription.fict_country_id && isSubmitted}
+              value={newDescription.fict_country_id || ""}
+              onChange={(e) => {
+                dispatch(
+                  setNewDecriptionField({
+                    key: "fict_country_id",
+                    value: e.target.value,
+                  })
+                );
+                dispatch(
+                  setNewDecriptionField({
+                    key: "fict_city_id",
+                    value: undefined,
+                  })
+                );
+              }}
+              aria-label="Country"
+            >
+              <option value="">Country</option>
+              {countries.map((country) => (
+                <option key={country.id} value={country.id}>
+                  {country.title}
+                </option>
+              ))}
+            </Form.Select>
           </Form.Group>
           <Form.Group as={Col} className="p-0">
-            <InputGroup>
-              <Form.Control
-                className="py-2"
-                placeholder="Contry"
-                aria-label="Contry"
-                disabled
-                value={
-                  countries.find(
-                    (country) => country.id === user?.city.country.id
-                  )?.title
-                }
-              />
-              <InputGroup.Text>
-                <Link
-                  to="../account"
-                  className="fs-12 link-underline-primary link-underline-opacity-0 mainText"
-                >
-                  Change
-                </Link>
-              </InputGroup.Text>
-            </InputGroup>
+            <Form.Select
+              as={Col}
+              className="py-2"
+              isInvalid={!newDescription.fict_city_id && isSubmitted}
+              value={newDescription.fict_city_id || ""}
+              onChange={(e) => {
+                dispatch(
+                  setNewDecriptionField({
+                    key: "fict_city_id",
+                    value: e.target.value,
+                  })
+                );
+              }}
+              disabled={!newDescription.fict_country_id}
+              aria-label="City"
+            >
+              <option value="">City</option>
+              {cities.map((city) => (
+                <option key={city.id} value={city.id}>
+                  {city.title}
+                </option>
+              ))}
+            </Form.Select>
           </Form.Group>
         </Row>
 

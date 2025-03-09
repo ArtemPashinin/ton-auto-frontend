@@ -25,6 +25,6 @@ export interface Advertisement {
   condition: Condition;
   fict_phone?: string;
   paid: boolean;
-  fict_country?: Country;
-  fict_city?: City;
+  fict_country: Country;
+  fict_city: City;
 }

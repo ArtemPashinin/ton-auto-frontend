@@ -1,27 +1,22 @@
-import { Swiper, SwiperSlide } from "swiper/react";
+import { useState } from "react";
 import { Pagination } from "swiper/modules";
-import "swiper/swiper-bundle.css"; // Общий стиль
+import { Swiper, SwiperSlide } from "swiper/react";
+
+import VideoPreview from "./VideoPreview";
+import { Media } from "../../interfaces/vehicle-info.interface";
 
 import style from "./CarCard.module.css";
-import { Media } from "../../interfaces/vehicle-info.interface";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import VideoPreview from "./VideoPreview";
+import "swiper/swiper-bundle.css";
 
 interface MediaSwiperProps {
   media: Media[];
+  handleImageClick: (index: number) => void;
 }
 
-export const MediaSwiper = ({ media }: MediaSwiperProps) => {
-  const navigate = useNavigate();
-
+export const MediaSwiper = ({ media, handleImageClick }: MediaSwiperProps) => {
   const [mediaData] = useState<Media[]>(
     [...media].sort((a, b) => a.order - b.order)
   );
-
-  const handleMediaClick = (url: string) => {
-    navigate(`../media/${encodeURIComponent(url)}`);
-  };
 
   return (
     <Swiper
@@ -30,7 +25,7 @@ export const MediaSwiper = ({ media }: MediaSwiperProps) => {
       modules={[Pagination]}
       className="rounded-4"
     >
-      {mediaData.map(({ id, image_url }) => {
+      {mediaData.map(({ id, image_url }, index) => {
         const extensionList = [
           "mov", // QuickTime Movie
           "webm", // WebM формат
@@ -55,14 +50,14 @@ export const MediaSwiper = ({ media }: MediaSwiperProps) => {
         return (
           <SwiperSlide key={id}>
             {isVideo ? (
-              <VideoPreview onClick={() => handleMediaClick(image_url)} />
+              <VideoPreview onClick={() => handleImageClick(index)} />
             ) : (
               // Для других типов медиа просто изображение
               <img
                 className={`${style.swiperImg} rounded-4`}
                 src={image_url}
                 alt=""
-                onClick={() => handleMediaClick(image_url)} // Переход на страницу с изображением
+                onClick={() => handleImageClick(index)} // Переход на страницу с изображением
               />
             )}
           </SwiperSlide>

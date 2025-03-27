@@ -9,12 +9,12 @@ import { Advertisement } from "../../interfaces/advertisement.interface";
 import { Media } from "../../interfaces/vehicle-info.interface";
 import PageSpinner from "../placeholders/PageSpinner";
 
+import { extensionList } from "../../utils/constants";
 import { fetchAdvertisement } from "../../utils/fetch-advertisement";
 import { removeFile } from "../../utils/remove-media";
 import { updateMain } from "../../utils/update-main-media";
 import { updateMediaOrder } from "../../utils/update-media-order";
 import { uploadOneMedia } from "../../utils/upload-one-media";
-import { extensionList } from "../../utils/constants";
 
 const EditMedia = () => {
   const navigate = useNavigate();
@@ -116,6 +116,8 @@ const EditMedia = () => {
         (image) =>
           image.image_url !== id && !image.image_url.startsWith("video/")
       );
+      if (remainingImages.length > 0)
+        await updateMain(advertisement?.id, remainingImages[0].id);
       setMainImageId(
         remainingImages.length > 0 ? remainingImages[0].image_url : null
       );

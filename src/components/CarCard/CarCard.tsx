@@ -113,7 +113,7 @@ export const CarCard = ({
             <span className="d-inline-block" style={{ minWidth: "1.5rem" }}>
               🤝
             </span>
-            <span className="d-inline-block lh-1">
+            <span className="d-inline-block lh-1 text-break">
               {getNumberWithSpaces(price)}
               {fict_country?.currency || user?.city.country.currency}
             </span>

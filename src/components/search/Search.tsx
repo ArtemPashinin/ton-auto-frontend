@@ -1,19 +1,23 @@
-import { useDispatch, useSelector } from "react-redux";
-import { VehicleTypeList } from "../VehicleTypeBar/VehicleTypeList";
-import InfoBar from "./InfoBar";
-import { AppDispatch } from "../../redux/store";
 import { useCallback, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import InfoBar from "./InfoBar";
 import SearchBar from "./SearchBar/SearchBar";
-import CarCardList from "../CarCard/CarCardList";
 import {
   advertisementCountSelector,
   advertisementLoadingSelector,
   advertisementsSelector,
 } from "../../redux/slices/advertisement-slice/advertisement-slice";
 import { setNextPage } from "../../redux/slices/page-slice/page-slice";
+import { AppDispatch } from "../../redux/store";
+import CarCardList from "../CarCard/CarCardList";
+import { VehicleTypeList } from "../VehicleTypeBar/VehicleTypeList";
+
 import { useAdvertisements } from "../../hooks/useAdvertisements";
+import { useStartApp } from "../../hooks/useStartApp";
 
 const Search = () => {
+  useStartApp();
   const dispatch = useDispatch<AppDispatch>();
   const advertisementsCount = useSelector(advertisementCountSelector);
   const advertisements = useSelector(advertisementsSelector);

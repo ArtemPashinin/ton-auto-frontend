@@ -1,11 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { fetchMyAds } from "./thunks/fetch-my-ads";
+import { removeAdretisement } from "./thunks/remove-advertisement";
 import { SlicesNames } from "../../../enums/slices";
 import { Advertisement } from "../../../interfaces/advertisement.interface";
-import { fetchMyAds } from "./thunks/fetch-my-ads";
 import { SearchResultDto } from "../../../interfaces/dto/search-result.dto";
+import {
+  FavoriteDto,
+  markFavorite,
+} from "../favorites-slice/thunks/mark-favorite";
+
 import { RootState } from "../../store";
-import { removeAdretisement } from "./thunks/remove-advertisement";
-import { FavoriteDto, markFavorite } from "../favorites-slice/thunks/mark-favorite";
 
 interface CustomPayloadAction extends PayloadAction<FavoriteDto | null> {
   meta: {
@@ -31,6 +35,13 @@ const myAdsSlice = createSlice({
   reducers: {
     clearMyAds() {
       return initialState;
+    },
+    setPaid(state, action: PayloadAction<string>) {
+      const id = action.payload;
+      state.advertisements = state.advertisements.map((ad) => {
+        if (ad.id === id) return { ...ad, paid: true };
+        return { ...ad };
+      });
     },
   },
   extraReducers: (builder) => {
@@ -75,7 +86,7 @@ const myAdsSlice = createSlice({
   },
 });
 
-export const { clearMyAds } = myAdsSlice.actions;
+export const { clearMyAds, setPaid } = myAdsSlice.actions;
 
 export const myAdsLoadingSelector = (state: RootState) => state.myAds.loading;
 export const myAdsCountSelector = (state: RootState) => state.myAds.count;

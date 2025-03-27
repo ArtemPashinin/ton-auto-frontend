@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
-import TabBar from "../TabBar/TabBar";
-import WebApp from "@twa-dev/sdk";
 import { useNavigate } from "react-router-dom";
+
+import WebApp from "@twa-dev/sdk";
+import TabBar from "../TabBar/TabBar";
 
 interface PageWrapperProps {
   children: React.ReactNode;
@@ -18,7 +19,11 @@ const PageWrapper = ({
 
   useEffect(() => {
     if (backButton && WebApp) {
-      const goBack = () => navigate(-1); // Определяем функцию локально
+      const goBack = () => {
+        navigate(-1);
+        navigate("/", { replace: true });
+      };
+
       WebApp.BackButton.show();
       WebApp.BackButton.onClick(goBack);
 

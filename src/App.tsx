@@ -1,29 +1,32 @@
-import "./App.css";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
-import Search from "./pages/Search/SearchPage";
-import Favorites from "./pages/Favorites/Favorites";
-import Place from "./pages/Place/Place";
-import MyAds from "./pages/MyAds/MyAdsPage";
-import Account from "./pages/Account/AccountPage";
-import { useAppData } from "./hooks/useAppData";
-import Advertisement from "./pages/Advertisement/AdvertisementPage";
-import NotFoundPage from "./pages/404/404";
-import RegistrationPage from "./pages/Registration/RegistrationPage";
+
 import RequireAuth from "./components/RequireAuth/RequireAuth";
-import PlaceImagesPage from "./pages/PlaceImages/PlaceImagesPage";
-import SuccessPage from "./pages/Success/SuccessPage";
+import NotFoundPage from "./pages/404/404";
+import Account from "./pages/Account/AccountPage";
+import Advertisement from "./pages/Advertisement/AdvertisementPage";
 import EditDescriptionPage from "./pages/EditDescription/EditDescriptionPage";
-import MediaPage from "./pages/Media/MediaPage";
-import PurchasePage from "./pages/Purchase/PurchasePage";
-import SuccessPaymentPage from "./pages/SuccessPayment/SuccessPayment";
 import EditMediaPage from "./pages/EditMedia/EditMedia";
+import Favorites from "./pages/Favorites/Favorites";
+import MediaPage from "./pages/Media/MediaPage";
+import MyAds from "./pages/MyAds/MyAdsPage";
+import Place from "./pages/Place/Place";
+import PlaceImagesPage from "./pages/PlaceImages/PlaceImagesPage";
+import PurchasePage from "./pages/Purchase/PurchasePage";
+import RegistrationPage from "./pages/Registration/RegistrationPage";
+import Search from "./pages/Search/SearchPage";
+import SuccessPage from "./pages/Success/SuccessPage";
+import SuccessPaymentPage from "./pages/SuccessPayment/SuccessPayment";
+
+import { useAppData } from "./hooks/useAppData";
 import { useOverflowHidden } from "./hooks/useOverflow";
 import { useZoomControl } from "./hooks/useZoomcontrol";
 
+import "./App.css";
+
 function App() {
   useAppData();
-  useOverflowHidden(true)
-  useZoomControl()
+  useOverflowHidden(true);
+  useZoomControl();
 
   return (
     <>

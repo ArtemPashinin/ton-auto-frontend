@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { format } from "date-fns";
-import FsLightbox from "fslightbox-react";
+import Lightbox from "yet-another-react-lightbox";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
 
 import { CallButton } from "./CallButton";
 import { CopyButton } from "./CopyButton";
@@ -12,6 +13,7 @@ import { Advertisement } from "../../interfaces/advertisement.interface";
 import { getNumberWithSpaces } from "../../utils/price";
 
 import style from "./CarCard.module.css";
+import "yet-another-react-lightbox/styles.css";
 
 type DetailCardCardProps = Advertisement;
 
@@ -117,14 +119,16 @@ export const DetailCardCard = ({
         </div>
       </div>
       <div>
-        <FsLightbox
-          toggler={toggler}
-          sources={[...media]
+        <Lightbox
+          open={toggler}
+          close={() => {
+            setToggler(false);
+          }}
+          slides={[...media]
             .sort((a, b) => a.order - b.order)
-            .map((img) => img.image_url)}
-          sourceIndex={selectedImageIndex}
-          types={[...new Array(media.length).fill("image")]}
-          key={media.length}
+            .map((img) => ({ src: img.image_url }))}
+          index={selectedImageIndex}
+          plugins={[Zoom]}
         />
       </div>
     </>

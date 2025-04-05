@@ -33,6 +33,7 @@ import { AppDispatch } from "../../redux/store";
 import { fetchCities } from "../../utils/fetch-cities";
 import { fetchMakeByModel } from "../../utils/fetch-make-by-model";
 import { fetchModels } from "../../utils/fetch-models";
+import { generateHpList } from "../../utils/generate-hp-list";
 import { generateYearsList } from "../../utils/generate-years-list";
 import { useOverflowHidden } from "../../hooks/useOverflow";
 
@@ -48,6 +49,7 @@ const PlaceForm = () => {
   const conditions = useSelector(conditionsSelector);
 
   const years = useMemo(generateYearsList, []);
+  const hp = useMemo(generateHpList, []);
 
   useOverflowHidden(false);
 
@@ -279,19 +281,23 @@ const PlaceForm = () => {
             </Form.Select>
           </Form.Group>
           <Form.Group as={Col} className="p-0">
-            <Form.Control
+            <Form.Select
               className="py-2"
               isInvalid={!placeData.hp && isSubmitted}
-              type="text"
-              inputMode="numeric"
-              placeholder="Horse powers"
-              aria-label="Horse powers"
-              maxLength={4}
               value={placeData.hp || ""}
               onChange={(e) => {
+                setLockForm(true);
                 dispatch(setField({ key: "hp", value: e.target.value }));
               }}
-            />
+              aria-label="Select hp"
+            >
+              <option value="">Horse powers</option>
+              {hp.map((v) => (
+                <option key={v} value={v}>
+                  {v}
+                </option>
+              ))}
+            </Form.Select>
           </Form.Group>
         </Row>
 

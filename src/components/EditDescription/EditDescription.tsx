@@ -25,6 +25,7 @@ import { AppDispatch } from "../../redux/store";
 
 import { fetchCities } from "../../utils/fetch-cities";
 import { fetchModels } from "../../utils/fetch-models";
+import { generateHpList } from "../../utils/generate-hp-list";
 import { generateYearsList } from "../../utils/generate-years-list";
 import { updateAdvertisement } from "../../utils/update-advertsement";
 import { useOverflowHidden } from "../../hooks/useOverflow";
@@ -47,6 +48,7 @@ const EditDescription = ({ data, advertisement }: EditDescriptionProps) => {
   const { countries, makes, engineTypes, colors, conditions } = data;
 
   const years = useMemo(generateYearsList, []);
+  const hp = useMemo(generateHpList, []);
 
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [selectedMakeId, setSelectedMakeId] = useState<string | number>(
@@ -270,21 +272,25 @@ const EditDescription = ({ data, advertisement }: EditDescriptionProps) => {
             </Form.Select>
           </Form.Group>
           <Form.Group as={Col} className="p-0">
-            <Form.Control
+            <Form.Select
               className="py-2"
               isInvalid={!newDescription.hp && isSubmitted}
-              type="text"
-              inputMode="numeric"
-              placeholder="Horse powers"
-              aria-label="Horse powers"
-              maxLength={4}
               value={newDescription.hp || ""}
               onChange={(e) => {
+                setLockForm(true);
                 dispatch(
                   setNewDecriptionField({ key: "hp", value: e.target.value })
                 );
               }}
-            />
+              aria-label="Select hp"
+            >
+              <option value="">Horse powers</option>
+              {hp.map((v) => (
+                <option key={v} value={v}>
+                  {v}
+                </option>
+              ))}
+            </Form.Select>
           </Form.Group>
         </Row>
 

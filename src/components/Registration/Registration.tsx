@@ -1,25 +1,28 @@
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Button, Form, Spinner, Stack } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import validator from "validator";
+
 import { faMapLocationDot } from "@awesome.me/kit-7090d2ba88/icons/classic/thin";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Form, InputGroup, Spinner, Stack } from "react-bootstrap";
-import { countriesSelector } from "../../redux/slices/data-slice/data-slice";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import WebApp from "@twa-dev/sdk";
 import { UserDto } from "../../interfaces/dto/user.dto";
 import { City } from "../../interfaces/user-info.interface";
-import { fetchCities } from "../../utils/fetch-cities";
-import CountrySelect from "../account/CountrySelect";
-import CitySelect from "../account/CitySelect";
-import WebApp from "@twa-dev/sdk";
-import { handleContactRequested } from "../../utils/handleContactRequested";
-import style from "./Registration.module.css";
+import { countriesSelector } from "../../redux/slices/data-slice/data-slice";
+import { createUser } from "../../redux/slices/user-slice/thunks/create-user";
 import {
   userLoadingSelector,
   userSelector,
 } from "../../redux/slices/user-slice/user-slice";
 import { AppDispatch } from "../../redux/store";
-import { createUser } from "../../redux/slices/user-slice/thunks/create-user";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import CitySelect from "../account/CitySelect";
+import CountrySelect from "../account/CountrySelect";
+
+import { fetchCities } from "../../utils/fetch-cities";
 import { useAttention } from "../../hooks/useAttention";
+
+import style from "./Registration.module.css";
 
 const Registretion = () => {
   const navigate = useNavigate();
@@ -33,12 +36,12 @@ const Registretion = () => {
   );
   const [formData, setFormData] = useState<Partial<UserDto> | undefined>();
 
-  const shareNumber = useCallback(() => {
-    WebApp.requestContact();
-  }, []);
-
   const isFormValid = useMemo(() => {
-    return Boolean(formData?.city_id && formData?.phone && selectedCountryId);
+    return Boolean(
+      formData?.city_id &&
+        validator.isMobilePhone(formData.phone || "") &&
+        selectedCountryId
+    );
   }, [formData?.city_id, formData?.phone, selectedCountryId]);
 
   const save = useCallback(async () => {
@@ -63,16 +66,6 @@ const Registretion = () => {
       navigate("/"); // Перенаправляем на главную страницу
     }
   }, [navigate, user]);
-
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handle = (data: any) => handleContactRequested(data, setFormData);
-    WebApp.onEvent("contactRequested", handle);
-
-    return () => {
-      WebApp.offEvent("contactRequested", handle);
-    };
-  }, [countries, selectedCountryId]);
 
   useEffect(() => {
     (async () => {
@@ -102,29 +95,27 @@ const Registretion = () => {
         formData={formData}
       />
       <div className="mb-2">
-        {formData?.phone ? (
-          <InputGroup>
-            <InputGroup.Text
-              id="basic-addon1"
-              className={`${style.telegramIconContainter}`}
-            >
-              <i className={`fa-brands fa-telegram ${style.telegramIcon}`}></i>
-            </InputGroup.Text>
-            <Form.Control
-              disabled
-              className="py-2"
-              aria-label="Phone number"
-              value={formData?.phone}
-            />
-          </InputGroup>
-        ) : (
-          <Button
-            className="main-outline-button py-2 w-100"
-            onClick={shareNumber}
-          >
-            Share my phone number
-          </Button>
-        )}
+        <Form.Control
+          className="py-2"
+          type="text"
+          inputMode="decimal"
+          placeholder="Phone"
+          aria-label="Phone"
+          maxLength={15}
+          value={formData?.phone || ""}
+          onChange={(e) => {
+            const inputValue = e.target.value;
+
+            if (/^\+?\d*$/.test(inputValue)) {
+              setFormData((prev) => ({
+                ...prev,
+                phone: inputValue.startsWith("+")
+                  ? inputValue
+                  : `+${inputValue}`,
+              }));
+            }
+          }}
+        />
       </div>
       <p className={`text-start ${style.text} hintcolor`}>
         You can change settings later

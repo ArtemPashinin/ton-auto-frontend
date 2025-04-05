@@ -1,24 +1,25 @@
-import { faUser } from "@awesome.me/kit-7090d2ba88/icons/classic/light";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import WebApp from "@twa-dev/sdk";
 import { useState, useMemo, useEffect } from "react";
 import { Stack, InputGroup, Spinner, Button, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import validator from "validator";
+
+import { faUser } from "@awesome.me/kit-7090d2ba88/icons/classic/light";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import WebApp from "@twa-dev/sdk";
+import CitySelect from "./CitySelect";
+import CountrySelect from "./CountrySelect";
 import { UserDto } from "../../interfaces/dto/user.dto";
 import { City } from "../../interfaces/user-info.interface";
 import { countriesSelector } from "../../redux/slices/data-slice/data-slice";
+import { updateUser } from "../../redux/slices/user-slice/thunks/update-user";
 import {
   userSelector,
   userLoadingSelector,
 } from "../../redux/slices/user-slice/user-slice";
 import { AppDispatch } from "../../redux/store";
+
 import { fetchCities } from "../../utils/fetch-cities";
-import { handleContactRequested } from "../../utils/handleContactRequested";
-import CitySelect from "./CitySelect";
-import CountrySelect from "./CountrySelect";
-import { updateUser } from "../../redux/slices/user-slice/thunks/update-user";
-import style from "./Account.module.css";
 
 const Account = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -39,7 +40,11 @@ const Account = () => {
   };
 
   const isFormValid = useMemo(() => {
-    return Boolean(formData?.city_id && formData?.phone && selectedCountryId);
+    return Boolean(
+      formData?.city_id &&
+        validator.isMobilePhone(formData.phone || "") &&
+        selectedCountryId
+    );
   }, [formData?.city_id, formData?.phone, selectedCountryId]);
 
   const update = async () => {
@@ -48,16 +53,6 @@ const Account = () => {
       WebApp.showAlert("Your data has been successfully updated", handleGoBack);
     }
   };
-
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handle = (data: any) => handleContactRequested(data, setFormData);
-    WebApp.onEvent("contactRequested", handle);
-
-    return () => {
-      WebApp.offEvent("contactRequested", handle);
-    };
-  }, [countries, selectedCountryId]);
 
   useEffect(() => {
     if (user) {
@@ -92,17 +87,26 @@ const Account = () => {
         formData={formData}
       />
       <InputGroup>
-        <InputGroup.Text
-          id="basic-addon1"
-          className={`${style.telegramIconContainter}`}
-        >
-          <i className={`fa-brands fa-telegram ${style.telegramIcon}`}></i>
-        </InputGroup.Text>
         <Form.Control
-          disabled
           className="py-2"
-          aria-label="Phone number"
-          value={formData?.phone}
+          type="text"
+          inputMode="decimal"
+          placeholder="Phone"
+          aria-label="Phone"
+          maxLength={15}
+          value={formData?.phone || ""}
+          onChange={(e) => {
+            const inputValue = e.target.value;
+
+            if (/^\+?\d*$/.test(inputValue)) {
+              setFormData((prev) => ({
+                ...prev,
+                phone: inputValue.startsWith("+")
+                  ? inputValue
+                  : `+${inputValue}`,
+              }));
+            }
+          }}
         />
       </InputGroup>
       <Button

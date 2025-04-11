@@ -87,17 +87,13 @@ const PlaceForm = () => {
       "fict_city_id",
     ];
 
-    if (user?.admin) {
-      requiredFields.push("fict_phone");
-    }
-
     const valid = requiredFields.every((field) => {
       const value = placeData?.[field];
       return value !== undefined && value !== "" && !Number.isNaN(value);
     });
 
     return valid;
-  }, [placeData, user?.admin]);
+  }, [placeData]);
 
   useEffect(() => {
     WebApp.MainButton.text = "Next";
@@ -433,35 +429,33 @@ const PlaceForm = () => {
           </Form.Group>
         </Row>
 
-        {user?.admin && (
-          <Row className="mb-2 gap-2">
-            <Form.Group as={Col} className="p-0">
-              <Form.Control
-                className="py-2"
-                isInvalid={!placeData.fict_phone && isSubmitted}
-                type="text"
-                inputMode="decimal"
-                placeholder="Phone"
-                aria-label="Phone"
-                maxLength={15}
-                value={placeData.fict_phone || ""}
-                onChange={(e) => {
-                  const inputValue = e.target.value;
+        {/* <Row className="mb-2 gap-2">
+          <Form.Group as={Col} className="p-0">
+            <Form.Control
+              className="py-2"
+              isInvalid={!placeData.fict_phone && isSubmitted}
+              type="text"
+              inputMode="decimal"
+              placeholder="Phone"
+              aria-label="Phone"
+              maxLength={15}
+              value={placeData.fict_phone || ""}
+              onChange={(e) => {
+                const inputValue = e.target.value;
 
-                  // Проверяем, начинается ли строка с "+" и содержит ли только цифры после него
-                  if (/^\+?\d*$/.test(inputValue)) {
-                    dispatch(
-                      setField({
-                        key: "fict_phone",
-                        value: inputValue, // Сохраняем как строку, чтобы сохранить "+"
-                      })
-                    );
-                  }
-                }}
-              />
-            </Form.Group>
-          </Row>
-        )}
+                // Проверяем, начинается ли строка с "+" и содержит ли только цифры после него
+                if (/^\+?\d*$/.test(inputValue)) {
+                  dispatch(
+                    setField({
+                      key: "fict_phone",
+                      value: inputValue, // Сохраняем как строку, чтобы сохранить "+"
+                    })
+                  );
+                }
+              }}
+            />
+          </Form.Group>
+        </Row> */}
 
         <Row className="my-4">
           <Form.Group as={Col} className="p-0">

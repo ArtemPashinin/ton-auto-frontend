@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Button, Form, Spinner, Stack } from "react-bootstrap";
+import { Button, Spinner, Stack } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import validator from "validator";
 
 import { faMapLocationDot } from "@awesome.me/kit-7090d2ba88/icons/classic/thin";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -37,12 +36,8 @@ const Registretion = () => {
   const [formData, setFormData] = useState<Partial<UserDto> | undefined>();
 
   const isFormValid = useMemo(() => {
-    return Boolean(
-      formData?.city_id &&
-        validator.isMobilePhone(formData.phone || "") &&
-        selectedCountryId
-    );
-  }, [formData?.city_id, formData?.phone, selectedCountryId]);
+    return Boolean(formData?.city_id && selectedCountryId);
+  }, [formData?.city_id, selectedCountryId]);
 
   const save = useCallback(async () => {
     if (!isFormValid) return;
@@ -55,11 +50,10 @@ const Registretion = () => {
         first_name,
         last_name,
         language_code,
-        phone: formData?.phone,
         city_id: formData?.city_id,
       })
     );
-  }, [dispatch, formData?.city_id, formData?.phone, isFormValid]);
+  }, [dispatch, formData?.city_id, isFormValid]);
 
   useEffect(() => {
     if (user) {
@@ -94,29 +88,7 @@ const Registretion = () => {
         setFormData={setFormData}
         formData={formData}
       />
-      <div className="mb-2">
-        <Form.Control
-          className="py-2"
-          type="text"
-          inputMode="decimal"
-          placeholder="Phone"
-          aria-label="Phone"
-          maxLength={15}
-          value={formData?.phone || ""}
-          onChange={(e) => {
-            const inputValue = e.target.value;
 
-            if (/^\+?\d*$/.test(inputValue)) {
-              setFormData((prev) => ({
-                ...prev,
-                phone: inputValue.startsWith("+")
-                  ? inputValue
-                  : `+${inputValue}`,
-              }));
-            }
-          }}
-        />
-      </div>
       <p className={`text-start ${style.text} hintcolor`}>
         You can change settings later
       </p>

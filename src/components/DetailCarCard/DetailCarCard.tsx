@@ -3,9 +3,10 @@ import { format } from "date-fns";
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 
-import { CallButton } from "./CallButton";
-import { CopyButton } from "./CopyButton";
+// import { CallButton } from "./CallButton";
+// import { CopyButton } from "./CopyButton";
 import { FavoriteButton } from "./FavoriteButton";
+import { SendButton } from "./SendButton";
 import { ShareButton } from "./ShareButton";
 import { MediaSwiper } from "./Swiper";
 import { Advertisement } from "../../interfaces/advertisement.interface";
@@ -31,13 +32,13 @@ export const DetailCardCard = ({
   description,
   createdAt,
   favoritedBy,
-  fict_phone,
+  // fict_phone,
   fict_city,
   fict_country,
 }: DetailCardCardProps) => {
   const [toggler, setToggler] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const displayPhone = fict_phone || user!.phone!;
+  // const displayPhone = fict_phone || user!.phone!;
 
   const handleImageClick = (index: number) => {
     setSelectedImageIndex(index);
@@ -108,13 +109,27 @@ export const DetailCardCard = ({
         </div>
 
         <div className="d-flex gap-2 flex-wrap">
-          <div className="d-flex gap-2 w-100">
+          {/* <div className="d-flex gap-2 w-100">
             <CallButton phoneNumber={displayPhone} />
             <CopyButton phoneNumber={displayPhone} />
-          </div>
+          </div> */}
+          {user.username && !user.admin && (
+            <div className="w-100 d-flex">
+              <SendButton username={user.username} />
+            </div>
+          )}
           <div className="w-100 d-flex gap-2">
             <FavoriteButton advertisementId={id} favoritedBy={favoritedBy} />
-            <ShareButton advertisementId={id} model={model} />
+            <ShareButton
+              advertisementId={id}
+              model={model}
+              year={year}
+              mileage={mileage}
+              engine={engine}
+              hp={0}
+              color={color}
+              fict_country={fict_country}
+            />
           </div>
         </div>
       </div>

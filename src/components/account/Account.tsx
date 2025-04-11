@@ -2,7 +2,6 @@ import { useState, useMemo, useEffect } from "react";
 import { Stack, InputGroup, Spinner, Button, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import validator from "validator";
 
 import { faUser } from "@awesome.me/kit-7090d2ba88/icons/classic/light";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -40,12 +39,8 @@ const Account = () => {
   };
 
   const isFormValid = useMemo(() => {
-    return Boolean(
-      formData?.city_id &&
-        validator.isMobilePhone(formData.phone || "") &&
-        selectedCountryId
-    );
-  }, [formData?.city_id, formData?.phone, selectedCountryId]);
+    return Boolean(formData?.city_id && selectedCountryId);
+  }, [formData?.city_id, selectedCountryId]);
 
   const update = async () => {
     if (formData && user) {
@@ -60,7 +55,7 @@ const Account = () => {
       setFormData({
         user_id: user.user_id,
         city_id: user.city.id,
-        phone: user.phone,
+        username: user.username,
       });
     }
   }, [user]);
@@ -86,26 +81,24 @@ const Account = () => {
         setFormData={setFormData}
         formData={formData}
       />
+
       <InputGroup>
+        <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
         <Form.Control
           className="py-2"
           type="text"
-          inputMode="decimal"
-          placeholder="Phone"
-          aria-label="Phone"
-          maxLength={15}
-          value={formData?.phone || ""}
+          inputMode="text"
+          placeholder="@username"
+          aria-label="@username"
+          maxLength={30}
+          value={formData?.username || ""}
           onChange={(e) => {
             const inputValue = e.target.value;
 
-            if (/^\+?\d*$/.test(inputValue)) {
-              setFormData((prev) => ({
-                ...prev,
-                phone: inputValue.startsWith("+")
-                  ? inputValue
-                  : `+${inputValue}`,
-              }));
-            }
+            setFormData((prev) => ({
+              ...prev,
+              username: inputValue,
+            }));
           }}
         />
       </InputGroup>

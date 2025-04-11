@@ -88,8 +88,8 @@ const Account = () => {
           className="py-2"
           type="text"
           inputMode="text"
-          placeholder="@username"
-          aria-label="@username"
+          placeholder="username"
+          aria-label="username"
           maxLength={30}
           value={formData?.username || ""}
           onChange={(e) => {

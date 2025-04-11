@@ -11,13 +11,17 @@ interface SendButtonProps {
 export const SendButton = ({ username }: SendButtonProps) => {
   return (
     <Button
-      className="w-100 main-outline-button fw-400 py-2 d-flex justify-content-center align-items-center gap-3"
+      className="w-100 main-button fw-400 py-2 d-flex justify-content-center align-items-center gap-3"
       onClick={() => {
         WebApp.openTelegramLink(`https://t.me/${username}`);
       }}
     >
-      <FontAwesomeIcon icon={faPaperPlane} style={{ fontSize: "20px" }} /> Send
-      message
+      <FontAwesomeIcon
+        icon={faPaperPlane}
+        style={{ fontSize: "20px" }}
+        color="white"
+      />{" "}
+      Send message
     </Button>
   );
 };

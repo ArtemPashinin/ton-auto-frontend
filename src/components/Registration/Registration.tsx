@@ -90,7 +90,7 @@ const Registretion = () => {
       />
 
       <p className={`text-start ${style.text} hintcolor`}>
-        You can change settings later
+        You can change settings later.
       </p>
       <Button
         className="main-button py-2"

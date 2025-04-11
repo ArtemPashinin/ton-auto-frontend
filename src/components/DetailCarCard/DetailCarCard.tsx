@@ -113,7 +113,7 @@ export const DetailCardCard = ({
             <CallButton phoneNumber={displayPhone} />
             <CopyButton phoneNumber={displayPhone} />
           </div> */}
-          {user.username && !user.admin && (
+          {user.username && (
             <div className="w-100 d-flex">
               <SendButton username={user.username} />
             </div>

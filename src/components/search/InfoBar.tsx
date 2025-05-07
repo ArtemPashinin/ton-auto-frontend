@@ -1,20 +1,22 @@
-import { Col, Container, Row, Spinner } from "react-bootstrap";
 import { useEffect, useState } from "react";
+import { Col, Container, Row, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   advertisementCountSelector,
   advertisementLoadingSelector,
 } from "../../redux/slices/advertisement-slice/advertisement-slice";
-import { AppDispatch } from "../../redux/store";
+import { countriesSelector } from "../../redux/slices/data-slice/data-slice";
+import { clearPage } from "../../redux/slices/page-slice/page-slice";
 import {
   resetFilters,
   searchFiltersSelector,
   setFilter,
 } from "../../redux/slices/search-filters-slice/search-filters-slice";
-import { countriesSelector } from "../../redux/slices/data-slice/data-slice";
-import { fetchCities } from "../../utils/fetch-cities";
-import { clearPage } from "../../redux/slices/page-slice/page-slice";
 import { userSelector } from "../../redux/slices/user-slice/user-slice";
+import { AppDispatch } from "../../redux/store";
+
+import { fetchCities } from "../../utils/fetch-cities";
 
 interface InfoBarProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -85,9 +87,7 @@ const InfoBar = ({ setOpen }: InfoBarProps) => {
             onClick={() => {
               dispatch(resetFilters());
               if (user)
-                dispatch(
-                  setFilter({ key: "country", value: user.city.country.id })
-                );
+                dispatch(setFilter({ key: "country", value: user.country.id }));
               dispatch(clearPage({ pageType: "searchPage" }));
             }}
           >

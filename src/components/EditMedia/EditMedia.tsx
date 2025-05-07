@@ -42,8 +42,8 @@ const EditMedia = () => {
     }
 
     // Проверка на размер файла
-    if (file.size > 10 * 1024 * 1024) {
-      WebApp.showAlert("The size of the media should not exceed 5 MB.");
+    if (file.size > 18 * 1024 * 1024) {
+      WebApp.showAlert("The size of the media should not exceed 18 MB.");
       return;
     }
 

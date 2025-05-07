@@ -15,17 +15,18 @@ export const VehicleTypeButton = ({ title, type, commercial, condition }: Vehicl
     dispatch(setFilter({ key: 'commercial', value: commercial }));
     dispatch(setFilter({ key: 'type', value: type }));
     dispatch(setFilter({ key: 'condition', value: condition }));
-  }, [commercial, condition, dispatch, type]);
+    console.log(filters.type)
+  }, [commercial, condition, dispatch, filters.type, type]);
 
   const isEnabled = type === filters.type && commercial === filters.commercial && condition === filters.condition;
 
   const buttonClass = `${style.vehicleTypeButton} p-0 fs-087 ${
-    isEnabled ? style.enabled : style.disabled
-  } border rounded-pill user-select-none py-1 text-center d-flex flex-grow-1 justify-content-center`;
+      isEnabled ? style.enabled : style.disabled
+  } rounded-pill user-select-none py-1 text-center d-flex flex-grow-1 justify-content-center`;
 
   return (
-    <button onClick={handleTypeOrConditionUpdate} className={buttonClass}>
-      {title}
-    </button>
+      <button onClick={handleTypeOrConditionUpdate} className={buttonClass}>
+        {title}
+      </button>
   );
 };

@@ -80,8 +80,8 @@ const ImageUploader = ({ mainId, left, right }: ImageUploaderProps) => {
         rightImages.reduce((acc, img) => acc + img.url.length, 0);
       const newSize = currentSize + totalSize;
 
-      if (newSize > 40 * 1024 * 1024) {
-        WebApp.showAlert("The total size of images should not exceed 40 MB.");
+      if (newSize > 100 * 1024 * 1024) {
+        WebApp.showAlert("The total size of images should not exceed 100 MB.");
         return;
       }
 

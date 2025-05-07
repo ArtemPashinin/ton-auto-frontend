@@ -36,13 +36,14 @@ const Registretion = () => {
   const [formData, setFormData] = useState<Partial<UserDto> | undefined>();
 
   const isFormValid = useMemo(() => {
-    return Boolean(formData?.city_id && selectedCountryId);
-  }, [formData?.city_id, selectedCountryId]);
+    return Boolean(selectedCountryId);
+  }, [selectedCountryId]);
 
   const save = useCallback(async () => {
     if (!isFormValid) return;
     const { id, username, first_name, last_name, language_code } =
       WebApp.initDataUnsafe.user!;
+    console.log(formData);
     dispatch(
       createUser({
         user_id: id,
@@ -51,9 +52,10 @@ const Registretion = () => {
         last_name,
         language_code,
         city_id: formData?.city_id,
+        country_id: formData?.country_id,
       })
     );
-  }, [dispatch, formData?.city_id, isFormValid]);
+  }, [dispatch, formData, isFormValid]);
 
   useEffect(() => {
     if (user) {

@@ -39,10 +39,14 @@ const Account = () => {
   };
 
   const isFormValid = useMemo(() => {
-    return Boolean(formData?.city_id && selectedCountryId);
-  }, [formData?.city_id, selectedCountryId]);
+    return Boolean(selectedCountryId);
+  }, [selectedCountryId]);
 
   const update = async () => {
+    if(!formData?.username || formData.username.trim() === ""){
+      WebApp.showAlert("Telegram username is required for clients to contact you. Otherwise, your listing will remain in draft.")
+      return
+    }
     if (formData && user) {
       dispatch(updateUser(formData));
       WebApp.showAlert("Your data has been successfully updated", handleGoBack);
@@ -50,14 +54,14 @@ const Account = () => {
   };
 
   useEffect(() => {
-    if (user) {
-      setSelectedCountryId(user.city.country.id);
-      setFormData({
-        user_id: user.user_id,
-        city_id: user.city.id,
-        username: user.username,
-      });
-    }
+    if (!user) return;
+    setSelectedCountryId(user.country.id);
+    setFormData({
+      user_id: user.user_id,
+      username: user.username,
+      city_id: user.city?.id,
+      country_id: user.country.id,
+    });
   }, [user]);
 
   useEffect(() => {
@@ -93,7 +97,8 @@ const Account = () => {
           maxLength={30}
           value={formData?.username || ""}
           onChange={(e) => {
-            const inputValue = e.target.value;
+            const inputValue = e.target.value.replace("@", "")            
+            .replace(/[^a-zA-Z_]/g, "");
 
             setFormData((prev) => ({
               ...prev,

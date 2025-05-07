@@ -107,7 +107,7 @@ export const CarCard = ({
             <span className="d-inline-block" style={{ minWidth: "1.5rem" }}>
               📍
             </span>
-            {fict_country?.title || user?.city.country.title}
+            {fict_country?.title || ""}
           </p>
           <p className="d-flex align-items-center">
             <span className="d-inline-block" style={{ minWidth: "1.5rem" }}>
@@ -115,7 +115,7 @@ export const CarCard = ({
             </span>
             <span className="d-inline-block lh-1 text-break">
               {getNumberWithSpaces(price)}
-              {fict_country?.currency || user?.city.country.currency}
+              {fict_country?.currency || ""}
             </span>
           </p>
         </div>

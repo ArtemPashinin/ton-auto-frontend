@@ -62,6 +62,17 @@ const PlaceForm = () => {
   const [currency, setCurrency] = useState<string | undefined>(undefined);
 
   useEffect(() => {
+    if (!user) return;
+    if (user.username === "" || !user.username)
+      WebApp.showAlert(
+        "Please, fill the username in your account tab to allow clients send messages to you.",
+        () => {
+          navigate("/account", { replace: false });
+        }
+      );
+  }, [navigate, user]);
+
+  useEffect(() => {
     setCurrency(
       countries.find((country) => country.id == placeData.fict_country_id)
         ?.currency
@@ -138,14 +149,14 @@ const PlaceForm = () => {
         dispatch(
           setField({
             key: "fict_country_id",
-            value: user?.city.country.id,
+            value: user.country.id,
           })
         );
       if (!placeData.fict_city_id)
         dispatch(
           setField({
             key: "fict_city_id",
-            value: user?.city.id,
+            value: user.city ? user.city.id : undefined,
           })
         );
     }
@@ -321,7 +332,7 @@ const PlaceForm = () => {
                 }}
               />
               <InputGroup.Text id="basic-addon1">
-                {currency || user?.city?.country.currency || (
+                {currency || user?.country.currency || (
                   <Spinner animation="border" role="status" size="sm">
                     <span className="visually-hidden">Loading...</span>
                   </Spinner>

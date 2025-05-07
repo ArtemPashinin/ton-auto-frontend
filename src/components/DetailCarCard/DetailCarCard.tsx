@@ -54,7 +54,7 @@ export const DetailCardCard = ({
           </p>
           <p>
             🤝 {getNumberWithSpaces(price)}
-            {fict_country?.currency || user.city.country.currency}
+            {fict_country?.currency}
           </p>
         </div>
 
@@ -97,8 +97,7 @@ export const DetailCardCard = ({
             <span className="d-inline-block" style={{ minWidth: "1.5rem" }}>
               📍
             </span>
-            {fict_country?.title || user.city.country.title},
-            {fict_city?.title || user.city.title}
+            {fict_country?.title},{fict_city?.title}
           </p>
         </div>
         <div className="text-start">

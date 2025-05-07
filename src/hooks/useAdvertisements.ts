@@ -1,8 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import {useEffect} from "react";
 import { AppDispatch } from "../redux/store";
 import { fetchAdvertisements } from "../redux/slices/advertisement-slice/thunks/fetch-advertisement";
-import { clearAdvertisements } from "../redux/slices/advertisement-slice/advertisement-slice";
+import {
+  advertisementsSelector,
+  clearAdvertisements
+} from "../redux/slices/advertisement-slice/advertisement-slice";
 import {
   // resetFilters,
   searchFiltersSelector,
@@ -16,19 +19,24 @@ import {
 
 export const useAdvertisements = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const advertisements = useSelector(advertisementsSelector)
   const filters = useSelector(searchFiltersSelector);
   const user = useSelector(userSelector);
   const searchPage = useSelector(searchPageSelector);
 
+
   useEffect(() => {
-    if (user) {
+    if (user && searchPage === 1) {
       dispatch(clearAdvertisements());
       dispatch(fetchAdvertisements(filters));
     }
   }, [dispatch, filters, user]);
 
   useEffect(() => {
-    if (user && searchPage > 1) dispatch(fetchAdvertisements(filters));
+    const adsCount = advertisements.length === 0 ? 1 : advertisements.length / 10;
+    if (user && searchPage > adsCount){
+      dispatch(fetchAdvertisements(filters))
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchPage]);
 

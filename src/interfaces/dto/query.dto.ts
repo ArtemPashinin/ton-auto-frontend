@@ -1,3 +1,4 @@
+
 export interface QueryDto {
   make?: number | string;
   model?: number | string;

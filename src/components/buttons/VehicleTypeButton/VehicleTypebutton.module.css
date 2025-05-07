@@ -2,6 +2,9 @@
   color: var(--tg-theme-text-color);
   background-color: transparent;
   line-height: 1;
+  border:solid;
+  border-color: var(--tg-theme-text-color);
+  border-width: 1px
 }
 
 .disabled {
@@ -9,5 +12,5 @@
 }
 
 .enabled {
-  border-color: #F8A917 !important;
+  border-color: #F8A917 !important ;
 }

@@ -1,6 +1,7 @@
 import { Form } from "react-bootstrap";
-import { City } from "../../interfaces/user-info.interface";
+
 import { UserDto } from "../../interfaces/dto/user.dto";
+import { City } from "../../interfaces/user-info.interface";
 
 interface CitySelectProps {
   cities: City[];
@@ -26,7 +27,10 @@ const CitySelect = ({
     if (onChange) {
       onChange(selectedValue);
     } else if (setFormData) {
-      setFormData((prev) => ({ ...prev, city_id: selectedValue }));
+      setFormData((prev) => ({
+        ...prev,
+        city_id: selectedValue !== "" ? selectedValue : null,
+      }));
     }
   };
 

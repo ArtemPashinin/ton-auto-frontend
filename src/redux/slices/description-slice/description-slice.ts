@@ -47,6 +47,12 @@ const initialState: InitialState = {
           phone_code: "",
         },
       },
+      country: {
+        id: 0,
+        title: "",
+        currency: "",
+        phone_code: "",
+      },
       admin: false,
       free_publish: false,
     },

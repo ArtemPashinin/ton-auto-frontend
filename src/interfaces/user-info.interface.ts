@@ -20,7 +20,8 @@ export interface User {
   last_name?: string;
   phone?: string;
   language_code?: string;
-  city: City;
+  city: City | null;
+  country: Country;
   admin: boolean;
   free_publish: boolean;
 }

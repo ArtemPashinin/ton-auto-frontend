@@ -14,11 +14,25 @@
       src="https://kit.fontawesome.com/b3e1d33533.js"
       crossorigin="anonymous"
     ></script>
-
+    <script
+      async
+      src="https://tganalytics.xyz/index.js"
+      onload="initAnalytics()"
+      type="text/javascript"
+    ></script>
     <title>Drivio</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      function initAnalytics() {
+        window.telegramAnalytics.init({
+          token:
+            "eyJhcHBfbmFtZSI6ImRyaXZpb19hcHAiLCJhcHBfdXJsIjoiaHR0cHM6Ly90Lm1lL2RyaXZpb19ib3QiLCJhcHBfZG9tYWluIjoiaHR0cHM6Ly9kcml2aW8uc3BhY2UvIn0=!XOUXpPyE3nDqS18Zv9nZJ1K4QAbQNr/JPc7XHZu4yAg=",
+          appName: "drivio_app",
+        });
+      }
+    </script>
   </body>
 </html>

@@ -1,10 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { QueryDto } from "../../../interfaces/dto/query.dto";
 import { SlicesNames } from "../../../enums/slices";
-import { RootState } from "../../store";
-import { fetchUser } from "../user-slice/thunks/fetch-user";
+import { QueryDto } from "../../../interfaces/dto/query.dto";
 import { User } from "../../../interfaces/user-info.interface";
+import { createUser } from "../user-slice/thunks/create-user";
+import { fetchUser } from "../user-slice/thunks/fetch-user";
 import { updateUser } from "../user-slice/thunks/update-user";
+
+import { RootState } from "../../store";
 
 const initialState: QueryDto = {
   make: undefined,
@@ -47,15 +49,21 @@ const querySlice = createSlice({
     builder.addCase(
       fetchUser.fulfilled,
       (state, action: PayloadAction<User | null>) => {
-        if (action.payload && action.payload?.city?.country?.id) {
-          state.country = action.payload.city.country.id;
+        if (action.payload) {
+          state.country = action.payload.country.id;
         }
       }
     );
     builder.addCase(
       updateUser.fulfilled,
       (state, action: PayloadAction<User>) => {
-        state.country = action.payload.city.country.id;
+        state.country = action.payload.country.id;
+      }
+    );
+    builder.addCase(
+      createUser.fulfilled,
+      (state, action: PayloadAction<User>) => {
+        state.country = action.payload.country.id;
       }
     );
   },

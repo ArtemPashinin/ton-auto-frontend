@@ -1,4 +1,5 @@
 import { Form } from "react-bootstrap";
+
 import { UserDto } from "../../interfaces/dto/user.dto";
 import { Country } from "../../interfaces/user-info.interface";
 
@@ -24,7 +25,11 @@ const CountrySelect = ({
       value={selectedCountryId}
       onChange={(event) => {
         setSelectedCountryId(event.target.value);
-        setFormData((prev) => ({ ...prev, city_id: "" }));
+        setFormData((prev) => ({
+          ...prev,
+          city_id: null,
+          country_id: event.target.value,
+        }));
       }}
     >
       <option value="">Select your country</option>

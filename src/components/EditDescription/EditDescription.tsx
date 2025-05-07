@@ -318,7 +318,7 @@ const EditDescription = ({ data, advertisement }: EditDescriptionProps) => {
                 }}
               />
               <InputGroup.Text id="basic-addon1">
-                {currency || user?.city?.country.currency || (
+                {currency || user?.country.currency || (
                   <Spinner animation="border" role="status" size="sm">
                     <span className="visually-hidden">Loading...</span>
                   </Spinner>
@@ -432,7 +432,7 @@ const EditDescription = ({ data, advertisement }: EditDescriptionProps) => {
           </Form.Group>
         </Row>
 
-        {user?.admin && (
+        {/* {user?.admin && (
           <Row className="mb-2 gap-2">
             <Form.Group as={Col} className="p-0">
               <Form.Control
@@ -460,7 +460,7 @@ const EditDescription = ({ data, advertisement }: EditDescriptionProps) => {
               />
             </Form.Group>
           </Row>
-        )}
+        )} */}
 
         <Row className="my-4">
           <Form.Group as={Col} className="p-0">

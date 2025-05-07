@@ -22,6 +22,7 @@ import { useOverflowHidden } from "./hooks/useOverflow";
 import { useZoomControl } from "./hooks/useZoomcontrol";
 
 import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   useAppData();

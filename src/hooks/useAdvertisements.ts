@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import {useEffect} from "react";
+import {useEffect, useRef} from "react";
 import { AppDispatch } from "../redux/store";
 import { fetchAdvertisements } from "../redux/slices/advertisement-slice/thunks/fetch-advertisement";
 import {
@@ -14,7 +14,7 @@ import {
 import { userSelector } from "../redux/slices/user-slice/user-slice";
 import {
   // clearPage,
-  searchPageSelector,
+  searchPageSelector, setPage,
 } from "../redux/slices/page-slice/page-slice";
 
 export const useAdvertisements = () => {
@@ -23,17 +23,28 @@ export const useAdvertisements = () => {
   const filters = useSelector(searchFiltersSelector);
   const user = useSelector(userSelector);
   const searchPage = useSelector(searchPageSelector);
-
+  const flag = useRef<boolean>(true)
 
   useEffect(() => {
-    if (user && searchPage === 1) {
+    if (user) {
       dispatch(clearAdvertisements());
       dispatch(fetchAdvertisements(filters));
+      dispatch(setPage({pageType: "searchPage", page:1}))
+    }
+    return () => {
+      dispatch(clearAdvertisements());
+      // dispatch(fetchAdvertisements(filters));
+      dispatch(setPage({pageType: "searchPage", page:1}))
     }
   }, [dispatch, filters, user]);
 
   useEffect(() => {
-    const adsCount = advertisements.length === 0 ? 1 : advertisements.length / 10;
+    if (flag.current) {
+      flag.current = false;
+      return;
+    }
+
+    const adsCount = advertisements.length < 10 ? 1 : advertisements.length / 10;
     if (user && searchPage > adsCount){
       dispatch(fetchAdvertisements(filters))
     }

@@ -1,50 +1,90 @@
-# React + TypeScript + Vite
+# TON Auto Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Краткое описание
+**TON Auto Frontend** — это фронтенд Telegram Mini App для автомобильного маркетплейса. Приложение позволяет пользователю внутри Telegram просматривать объявления о продаже авто, добавлять объявления в избранное, публиковать собственные объявления и управлять ими.
 
-Currently, two official plugins are available:
+## Зачем нужно приложение
+Проект решает задачу быстрого и удобного размещения/поиска автообъявлений прямо в Telegram без перехода на отдельный сайт или установку мобильного приложения.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Пользователь получает:
+- единый интерфейс для поиска и публикации автообъявлений;
+- нативный UX внутри Telegram;
+- быстрый доступ к своим объявлениям и избранному.
 
-## Expanding the ESLint configuration
+## Что делает приложение
+Основные сценарии:
+- **Поиск объявлений** с фильтрами (марка, модель, параметры авто и т.д.);
+- **Просмотр карточек авто** с фото и деталями;
+- **Добавление в избранное** и просмотр списка избранных объявлений;
+- **Публикация объявления** (форма, загрузка медиа);
+- **Управление своими объявлениями**: редактирование, удаление, изменение порядка фото;
+- **Работа с аккаунтом пользователя** через Telegram-профиль.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## На базе чего работает
+Приложение построено как **SPA (Single Page Application)** и запускается как **Telegram WebApp / Mini App**.
 
-- Configure the top-level `parserOptions` property like this:
+Технически взаимодействует с backend API (через `VITE_APP_API_URL`) для:
+- получения данных пользователя;
+- получения и фильтрации объявлений;
+- создания/обновления/удаления объявлений;
+- работы с медиа и избранным.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Технологический стек
+### Frontend
+- **React 18**
+- **TypeScript**
+- **Vite**
+- **CSS Modules + глобальные стили**
+
+### UI и UX
+- **React Bootstrap**
+- **Swiper** (галереи/слайдеры)
+- **Font Awesome**
+- **@hello-pangea/dnd** (drag-and-drop)
+
+### Интеграции
+- **@twa-dev/sdk** и **@telegram-apps/sdk-react** для Telegram Mini App
+- **@telegram-apps/analytics** для аналитики
+- **Axios** для HTTP-запросов к API
+- **date-fns** для работы с датами
+
+## Структура проекта (кратко)
+- `src/components` — UI-компоненты и экраны (поиск, избранное, размещение, мои объявления, аккаунт и т.д.);
+- `src/utils` — функции для API-запросов и вспомогательная логика;
+- `src/interfaces` — типы и DTO;
+- `src/enums` — перечисления и конфигурации меню/типов;
+- `src/styles` — общие стили.
+
+## Запуск локально
+### Требования
+- Node.js 18+
+- npm
+
+### Установка
+```bash
+npm install
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+### Разработка
+```bash
+npm run dev
 ```
+
+### Сборка
+```bash
+npm run build
+```
+
+### Линтинг
+```bash
+npm run lint
+```
+
+## Переменные окружения
+Создайте `.env` файл в корне проекта и добавьте:
+
+```env
+VITE_APP_API_URL=https://your-api-url
+```
+
+> Используется как базовый URL для запросов к backend API.
